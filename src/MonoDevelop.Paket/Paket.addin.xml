@@ -24,7 +24,7 @@
 			icon="md-paket"
 			_description="Paket references"
 			isText="true">
-			<File pattern="paket.references" />
+			<File pattern="paket.references|*.paket.references" />
 		</MimeType>
 		<MimeType
 			id="application/paket-template"
@@ -54,5 +54,9 @@
 		<SyntaxMode
 			mimeTypes="application/paket-dependencies"
 			class="MonoDevelop.Paket.PaketDependenciesSyntaxMode" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/SourceEditor2/SyntaxModes">
+		<Templates resource="PaketReferencesSyntaxMode.xml" />
 	</Extension>
 </ExtensionModel>

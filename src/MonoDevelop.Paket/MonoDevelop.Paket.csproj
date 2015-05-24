@@ -71,5 +71,8 @@
     <EmbeddedResource Include="Resources\paket-16%402x.png">
       <LogicalName>paket-16@2x.png</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PaketReferencesSyntaxMode.xml">
+      <LogicalName>PaketReferencesSyntaxMode.xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
