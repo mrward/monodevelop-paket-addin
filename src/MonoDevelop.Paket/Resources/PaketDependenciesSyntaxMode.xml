@@ -1,8 +1,10 @@
 ﻿<SyntaxMode name="Paket.Dependencies" mimeTypes="application/paket-dependencies;text/paket-dependencies">
 
 	<Property name="LineComment">//</Property>
+	<Property name="LineComment">#</Property>
 
 	<EolSpan color="Script Comment" rule="Comment">//</EolSpan>
+	<EolSpan color="Script Comment" rule="Comment">#</EolSpan>
 
 	<Span color="Script Comment" rule="Comment">
 		<Begin>/*</Begin>
@@ -27,6 +29,23 @@
 		<Word>http</Word>
 		<Word>gist</Word>
 		<Word>github</Word>
+	</Keywords>
+
+	<Keywords color="Keyword(Other)">
+		<Word>content</Word>
+		<Word>copy_local</Word>
+		<Word>import_targets</Word>
+		<Word>framework</Word>
+		<Word>redirects</Word>
+		<Word>references</Word>
+	</Keywords>
+
+	<Keywords color = "Keyword(Constants)">
+		<Word>true</Word>
+		<Word>false</Word>
+		<Word>strict</Word>
+		<Word>none</Word>
+		<Word>on</Word>
 	</Keywords>
 
 	<Rule name="Comment">
