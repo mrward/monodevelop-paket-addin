@@ -55,29 +55,30 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Resources\" />
     <Folder Include="Templates\" />
     <Folder Include="MonoDevelop.Paket\" />
+    <Folder Include="SyntaxModes\" />
+    <Folder Include="Icons\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Paket.addin.xml" />
-    <EmbeddedResource Include="Resources\PaketDependenciesSyntaxMode.xml">
-      <LogicalName>PaketDependenciesSyntaxMode.xml</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Templates\PaketDependencies.xft.xml">
       <LogicalName>PaketDependencies.xft.xml</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\paket-16.png">
-      <LogicalName>paket-16.png</LogicalName>
+    <EmbeddedResource Include="SyntaxModes\PaketDependenciesSyntaxMode.xml">
+      <LogicalName>PaketDependenciesSyntaxMode.xml</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\paket-16%402x.png">
-      <LogicalName>paket-16@2x.png</LogicalName>
+    <EmbeddedResource Include="SyntaxModes\PaketLockSyntaxMode.xml">
+      <LogicalName>PaketLockSyntaxMode.xml</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PaketReferencesSyntaxMode.xml">
+    <EmbeddedResource Include="SyntaxModes\PaketReferencesSyntaxMode.xml">
       <LogicalName>PaketReferencesSyntaxMode.xml</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PaketLockSyntaxMode.xml">
-      <LogicalName>PaketLockSyntaxMode.xml</LogicalName>
+    <EmbeddedResource Include="Icons\paket-16.png">
+      <LogicalName>paket-16.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\paket-16%402x.png">
+      <LogicalName>paket-16@2x.png</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
