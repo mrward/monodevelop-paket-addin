@@ -1,0 +1,29 @@
+﻿<?xml version="1.0"?>
+<Template
+	Originator="Matt Ward"
+	Language="Paket"
+	Created="24/05/2015"
+	LastModified="24/05/2015">
+
+	<TemplateConfiguration>
+		<_Name>Paket Template File</_Name>
+		<_Category>Paket</_Category>
+		<_Description>Creates a Paket Template file.</_Description>
+		<DefaultFilename>paket.template</DefaultFilename>
+	</TemplateConfiguration>
+
+	<TemplateFiles>
+		<File name="paket.template">
+<![CDATA[type project
+summary
+    summary description
+releasenotes
+    Item 1:
+    Item 2:
+licenseurl http://opensource.org/licenses/MIT
+]]>
+		</File>
+	</TemplateFiles>
+</Template>
+
+

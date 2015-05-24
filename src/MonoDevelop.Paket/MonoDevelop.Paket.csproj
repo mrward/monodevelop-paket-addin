@@ -52,6 +52,7 @@
     <Compile Include="MonoDevelop.Paket\PaketDependenciesSyntaxMode.cs" />
     <Compile Include="MonoDevelop.Paket\PaketLockSyntaxMode.cs" />
     <Compile Include="MonoDevelop.Paket\PaketSyntaxMode.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketTemplateSyntaxMode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -79,6 +80,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Icons\paket-16%402x.png">
       <LogicalName>paket-16@2x.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SyntaxModes\PaketTemplateSyntaxMode.xml">
+      <LogicalName>PaketTemplateSyntaxMode.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\PaketTemplate.xft.xml">
+      <LogicalName>PaketTemplate.xft.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

@@ -31,12 +31,13 @@
 			icon="md-paket"
 			_description="Paket template"
 			isText="true">
-			<File pattern="paket.template" />
+			<File pattern="paket.template|*.paket.template" />
 		</MimeType>
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/FileTemplates">
 		<FileTemplate id="Paket.Dependencies" resource="PaketDependencies.xft.xml" />
+		<FileTemplate id="Paket.Template" resource="PaketTemplate.xft.xml" />
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/FileFilters">
@@ -57,6 +58,9 @@
 		<SyntaxMode
 			mimeTypes="application/paket-lock"
 			class="MonoDevelop.Paket.PaketLockSyntaxMode" />
+		<SyntaxMode
+			mimeTypes="application/paket-template"
+			class="MonoDevelop.Paket.PaketTemplateSyntaxMode" />
 	</Extension>
 
 	<Extension path="/MonoDevelop/SourceEditor2/SyntaxModes">
