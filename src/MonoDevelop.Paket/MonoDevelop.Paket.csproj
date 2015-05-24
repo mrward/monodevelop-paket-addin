@@ -50,6 +50,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AddinInfo.cs" />
     <Compile Include="MonoDevelop.Paket\PaketDependenciesSyntaxMode.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketLockSyntaxMode.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketSyntaxMode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -73,6 +75,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PaketReferencesSyntaxMode.xml">
       <LogicalName>PaketReferencesSyntaxMode.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PaketLockSyntaxMode.xml">
+      <LogicalName>PaketLockSyntaxMode.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

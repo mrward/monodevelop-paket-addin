@@ -1,5 +1,5 @@
 ﻿//
-// PaketDependenciesSyntaxMode.cs
+// PaketSyntaxMode.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,13 +25,29 @@
 // THE SOFTWARE.
 //
 
+using System.Collections.Generic;
+using Mono.TextEditor;
+using Mono.TextEditor.Highlighting;
+
 namespace MonoDevelop.Paket
 {
-	public class PaketDependenciesSyntaxMode : PaketSyntaxMode
+	public abstract class PaketSyntaxMode : SyntaxMode
 	{
-		public PaketDependenciesSyntaxMode ()
-			: base ("PaketDependenciesSyntaxMode.xml")
+		protected PaketSyntaxMode (string manifestResourceName)
 		{
+			var provider = new ResourceStreamProvider (typeof(PaketSyntaxMode).Assembly, manifestResourceName);
+			using (var reader = provider.Open ()) {
+				SyntaxMode mode = SyntaxMode.Read (reader);
+				rules = new List<Rule> (mode.Rules);
+				keywords = new List<Keywords> (mode.Keywords);
+				spans = mode.Spans;
+				matches = mode.Matches;
+				prevMarker = mode.PrevMarker;
+				SemanticRules = new List<SemanticRule> (mode.SemanticRules);
+				SemanticRules.Add (new HighlightUrlSemanticRule ("String"));
+				keywordTable = mode.keywordTable;
+				keywordTableIgnoreCase = mode.keywordTableIgnoreCase;
+			}
 		}
 	}
 }

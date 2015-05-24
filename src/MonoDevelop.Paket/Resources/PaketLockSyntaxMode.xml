@@ -1,0 +1,40 @@
+﻿<SyntaxMode name="Paket.Lock" mimeTypes="application/paket-lock;text/paket-lock">
+
+	<Property name="LineComment">//</Property>
+	<Property name="LineComment">#</Property>
+
+	<EolSpan color="Script Comment" rule="Comment">//</EolSpan>
+	<EolSpan color="Script Comment" rule="Comment">#</EolSpan>
+
+	<Span color="Script Comment" rule="Comment">
+		<Begin>/*</Begin>
+		<End>*/</End>
+	</Span>
+
+	<Span color="Script String" stopateol="true" escape='\'>
+		<Begin>"</Begin>
+		<End>"</End>
+	</Span>
+
+	<Span color="Script String" stopateol="true" escape='\'>
+		<Begin>&apos;</Begin>
+		<End>&apos;</End>
+	</Span>
+
+	<Match color="Script Number">CSharpNumber</Match>
+
+	<Match color="Script String" ignorecase="True">(http|ftp)s?\:\/\/[\w\d\.,;_/\-~%@()+:?&amp;^=#!]*[\w\d/]</Match>
+
+	<Keywords color="Script Keyword">
+		<Word>NUGET</Word>
+		<Word>HTTP</Word>
+		<Word>GIST</Word>
+		<Word>GITHUB</Word>
+	</Keywords>
+
+	<Keywords color="Keyword(Other)">
+		<Word>remote</Word>
+		<Word>specs</Word>
+	</Keywords>
+</SyntaxMode>
+

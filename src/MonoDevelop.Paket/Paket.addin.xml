@@ -54,6 +54,9 @@
 		<SyntaxMode
 			mimeTypes="application/paket-dependencies"
 			class="MonoDevelop.Paket.PaketDependenciesSyntaxMode" />
+		<SyntaxMode
+			mimeTypes="application/paket-lock"
+			class="MonoDevelop.Paket.PaketLockSyntaxMode" />
 	</Extension>
 
 	<Extension path="/MonoDevelop/SourceEditor2/SyntaxModes">

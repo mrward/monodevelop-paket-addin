@@ -1,5 +1,5 @@
 ﻿//
-// PaketDependenciesSyntaxMode.cs
+// PaketLockSyntaxMode.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,10 +27,10 @@
 
 namespace MonoDevelop.Paket
 {
-	public class PaketDependenciesSyntaxMode : PaketSyntaxMode
+	public class PaketLockSyntaxMode : PaketSyntaxMode
 	{
-		public PaketDependenciesSyntaxMode ()
-			: base ("PaketDependenciesSyntaxMode.xml")
+		public PaketLockSyntaxMode ()
+			: base ("PaketLockSyntaxMode.xml")
 		{
 		}
 	}
