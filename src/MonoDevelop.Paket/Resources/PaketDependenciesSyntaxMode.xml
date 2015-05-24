@@ -23,6 +23,8 @@
 
 	<Match color="Script Number">CSharpNumber</Match>
 
+	<Match color="Script String" ignorecase="True">(http|ftp)s?\:\/\/[\w\d\.,;_/\-~%@()+:?&amp;^=#!]*[\w\d/]</Match>
+
 	<Keywords color="Script Keyword">
 		<Word>nuget</Word>
 		<Word>source</Word>

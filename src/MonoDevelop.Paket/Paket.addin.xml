@@ -50,7 +50,9 @@
 		<StockIcon stockid="md-paket" resource="paket-16.png" size="Menu" />
 	</Extension>
 
-	<Extension path="/MonoDevelop/SourceEditor2/SyntaxModes">
-		<Templates resource="PaketDependenciesSyntaxMode.xml" />
+	<Extension path="/MonoDevelop/SourceEditor2/CustomModes">
+		<SyntaxMode
+			mimeTypes="application/paket-dependencies"
+			class="MonoDevelop.Paket.PaketDependenciesSyntaxMode" />
 	</Extension>
 </ExtensionModel>
