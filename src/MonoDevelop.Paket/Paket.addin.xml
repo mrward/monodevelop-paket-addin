@@ -1,0 +1,56 @@
+﻿<ExtensionModel>
+
+	<Runtime>
+		<Import assembly="MonoDevelop.Paket.dll" />
+	</Runtime>
+
+	<Extension path="/MonoDevelop/Core/MimeTypes">
+		<MimeType
+			id="application/paket-dependencies"
+			icon="md-paket"
+			_description="Paket dependencies"
+			isText="true">
+			<File pattern="paket.dependencies" />
+		</MimeType>
+		<MimeType
+			id="application/paket-lock"
+			icon="md-paket"
+			_description="Paket lock"
+			isText="true">
+			<File pattern="paket.lock" />
+		</MimeType>
+		<MimeType
+			id="application/paket-references"
+			icon="md-paket"
+			_description="Paket references"
+			isText="true">
+			<File pattern="paket.references" />
+		</MimeType>
+		<MimeType
+			id="application/paket-template"
+			icon="md-paket"
+			_description="Paket template"
+			isText="true">
+			<File pattern="paket.template" />
+		</MimeType>
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/FileTemplates">
+		<FileTemplate id="Paket.Dependencies" resource="PaketDependencies.xft.xml" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/FileFilters">
+		<FileFilter
+			id="PaketFiles"
+			_label = "Paket Files"
+			extensions = "paket.*" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/Core/StockIcons">
+		<StockIcon stockid="md-paket" resource="paket-16.png" size="Menu" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/SourceEditor2/SyntaxModes">
+		<Templates resource="PaketDependenciesSyntaxMode.xml" />
+	</Extension>
+</ExtensionModel>

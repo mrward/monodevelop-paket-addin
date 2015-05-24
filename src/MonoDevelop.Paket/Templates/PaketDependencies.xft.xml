@@ -1,0 +1,35 @@
+﻿<?xml version="1.0"?>
+<Template
+	Originator="Matt Ward"
+	Language="Paket"
+	Created="23/05/2015"
+	LastModified="23/05/2015">
+
+	<TemplateConfiguration>
+		<_Name>Paket Dependencies File</_Name>
+		<_Category>Paket</_Category>
+		<_Description>Creates a Paket Dependencies file.</_Description>
+		<DefaultFilename IsFixed="True">paket.dependencies</DefaultFilename>
+	</TemplateConfiguration>
+
+	<TemplateFiles>
+		<File name="paket.dependencies">
+<![CDATA[source https://nuget.org/api/v2
+
+// NuGet packages
+//nuget NUnit ~> 2.6.4
+
+// Files from GitHub repositories
+//github forki/FsUnit FsUnit.fs
+
+// Gist files
+//gist Thorium/1972349 timestamp.fs
+
+// HTTP resources
+//http http://www.fssnip.net/1n decrypt.fs
+]]>
+		</File>
+	</TemplateFiles>
+</Template>
+
+

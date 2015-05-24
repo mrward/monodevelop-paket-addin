@@ -1,0 +1,41 @@
+﻿<SyntaxMode name="Paket.Dependencies" mimeTypes="application/paket-dependencies;text/paket-dependencies">
+
+	<Property name="LineComment">//</Property>
+
+	<EolSpan color="Script Comment" rule="Comment">//</EolSpan>
+
+	<Span color="Script Comment" rule="Comment">
+		<Begin>/*</Begin>
+		<End>*/</End>
+	</Span>
+
+	<Span color="Script String" stopateol="true" escape='\'>
+		<Begin>"</Begin>
+		<End>"</End>
+	</Span>
+
+	<Span color="Script String" stopateol="true" escape='\'>
+		<Begin>&apos;</Begin>
+		<End>&apos;</End>
+	</Span>
+
+	<Match color="Script Number">CSharpNumber</Match>
+
+	<Keywords color="Script Keyword">
+		<Word>nuget</Word>
+		<Word>source</Word>
+		<Word>http</Word>
+		<Word>gist</Word>
+		<Word>github</Word>
+	</Keywords>
+
+	<Rule name="Comment">
+		<Keywords color="Comment Tag" ignorecase="True">
+			<Word>TODO</Word>
+			<Word>FIXME</Word>
+			<Word>HACK</Word>
+			<Word>UNDONE</Word>
+		</Keywords>
+	</Rule>
+</SyntaxMode>
+
