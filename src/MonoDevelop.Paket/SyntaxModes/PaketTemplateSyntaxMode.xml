@@ -1,16 +1,5 @@
 ﻿<SyntaxMode name="Paket.Template" mimeTypes="application/paket-template;text/paket-template">
 
-	<Property name="LineComment">//</Property>
-	<Property name="LineComment">#</Property>
-
-	<EolSpan color="Script Comment" rule="Comment">//</EolSpan>
-	<EolSpan color="Script Comment" rule="Comment">#</EolSpan>
-
-	<Span color="Script Comment" rule="Comment">
-		<Begin>/*</Begin>
-		<End>*/</End>
-	</Span>
-
 	<Span color="Script String" stopateol="true" escape='\'>
 		<Begin>"</Begin>
 		<End>"</End>

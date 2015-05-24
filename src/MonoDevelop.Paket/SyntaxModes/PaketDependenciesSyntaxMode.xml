@@ -3,13 +3,8 @@
 	<Property name="LineComment">//</Property>
 	<Property name="LineComment">#</Property>
 
-	<EolSpan color="Script Comment" rule="Comment">//</EolSpan>
-	<EolSpan color="Script Comment" rule="Comment">#</EolSpan>
-
-	<Span color="Script Comment" rule="Comment">
-		<Begin>/*</Begin>
-		<End>*/</End>
-	</Span>
+	<Match color="Script Comment">^\s*//.*?$</Match>
+	<Match color="Script Comment">^\s*#.*?$</Match>
 
 	<Span color="Script String" stopateol="true" escape='\'>
 		<Begin>"</Begin>
