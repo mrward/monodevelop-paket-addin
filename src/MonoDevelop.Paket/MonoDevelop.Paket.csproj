@@ -45,6 +45,14 @@
       <HintPath>..\..\lib\Mono.TextEditor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\lib\ICSharpCode.NRefactory.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Xwt">
+      <HintPath>..\..\lib\Xwt.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,6 +61,19 @@
     <Compile Include="MonoDevelop.Paket\PaketLockSyntaxMode.cs" />
     <Compile Include="MonoDevelop.Paket\PaketSyntaxMode.cs" />
     <Compile Include="MonoDevelop.Paket\PaketTemplateSyntaxMode.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketSearchCategory.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketSearchDataSource.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketInitSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketSearchCommands.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketApplicationPath.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketCommandRunner.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketCommandLine.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketServices.cs" />
+    <Compile Include="MonoDevelop.Paket\ProgressMonitorStatusMessage.cs" />
+    <Compile Include="MonoDevelop.Paket\ProgressMonitorStatusMessageFactory.cs" />
+    <Compile Include="MonoDevelop.Paket\ProgressMonitorFactory.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketConsolePad.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
