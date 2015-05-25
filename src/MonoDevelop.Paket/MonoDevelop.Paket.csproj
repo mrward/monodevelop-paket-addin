@@ -88,4 +88,10 @@
       <LogicalName>PaketTemplate.xft.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\packages\Paket\tools\paket.exe">
+      <Link>paket.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
