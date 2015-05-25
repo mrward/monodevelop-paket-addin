@@ -2,6 +2,7 @@
 
 	<Runtime>
 		<Import assembly="MonoDevelop.Paket.dll" />
+		<Import file="paket.exe" />
 	</Runtime>
 
 	<Extension path="/MonoDevelop/Core/MimeTypes">
