@@ -1,5 +1,5 @@
 ﻿//
-// PackageSearchCommands.cs
+// PaketUpdateSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,37 +25,27 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Paket
 {
-	public static class PaketSearchCommands
+	public class PaketUpdateSearchCommand : PaketSearchCommand
 	{
-		static readonly List<PaketSearchCommand> commands;
-
-		static PaketSearchCommands ()
+		public PaketUpdateSearchCommand ()
+			: base ("update")
 		{
-			commands = CreateCommands ().ToList ();
 		}
 
-		static IEnumerable<PaketSearchCommand> CreateCommands ()
+		public override void Run ()
 		{
-			return new PaketSearchCommand[] {
-				new PaketInitSearchCommand (),
-				new PaketInstallSearchCommand (),
-				new PaketUpdateSearchCommand (),
-				new PaketRestoreSearchCommand (),
-				new PaketAutoRestoreOnSearchCommand (),
-				new PaketAutoRestoreOffSearchCommand (),
-				new PaketConvertFromNuGetSearchCommand (),
-				new PaketSimplifySearchCommand ()
-			};
+			var commandLine = PaketCommandLine.CreateCommandLine ("update");
+			var message = ProgressMonitorStatusMessageFactory.CreateUpdateMessage ();
+			PaketServices.CommandRunner.Run (commandLine, message);
 		}
 
-		public static IEnumerable<PaketSearchCommand> FilterCommands (string search)
+		public override string GetDescriptionMarkup ()
 		{
-			return commands;
+			return GettextCatalog.GetString ("Recomputes the dependencies and updates packages.");
 		}
 	}
 }

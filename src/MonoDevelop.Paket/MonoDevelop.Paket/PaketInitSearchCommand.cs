@@ -37,7 +37,7 @@ namespace MonoDevelop.Paket
 
 		public override void Run ()
 		{
-			var commandLine = PaketCommandLine.CreateInitCommandLine ();
+			var commandLine = PaketCommandLine.CreateCommandLine ("init");
 			var message = ProgressMonitorStatusMessageFactory.CreateInitMessage ();
 			PaketServices.CommandRunner.Run (commandLine, message);
 		}

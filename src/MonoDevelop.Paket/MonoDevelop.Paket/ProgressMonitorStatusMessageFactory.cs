@@ -31,13 +31,83 @@ namespace MonoDevelop.Paket
 {
 	public static class ProgressMonitorStatusMessageFactory
 	{
+		public static ProgressMonitorStatusMessage CreateAutoRestoreOnMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Enabling automatic paket restore..."),
+				GetString ("Automatic paket restore enabled successfully."),
+				GetString ("Could not enable automatic paket restore."),
+				GetString ("Automatic paket restore enabled with warnings.")
+			);
+		}
+
+		public static ProgressMonitorStatusMessage CreateAutoRestoreOffMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Disabling automatic paket restore..."),
+				GetString ("Automatic paket restore disabled successfully."),
+				GetString ("Could not disable automatic paket restore."),
+				GetString ("Automatic paket restore disabled with warnings.")
+			);
+		}
+
+		public static ProgressMonitorStatusMessage CreateConvertFromNuGetMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Converting from NuGet to Paket..."),
+				GetString ("Conversion to Paket completed successfully."),
+				GetString ("Could not convert from NuGet to Paket."),
+				GetString ("Conversion to Paket completed with warnings.")
+			);
+		}
+
 		public static ProgressMonitorStatusMessage CreateInitMessage ()
 		{
 			return new ProgressMonitorStatusMessage (
-				GetString ("Creating paket.dependencies file for solution..."),
+				GetString ("Creating paket.dependencies file..."),
 				GetString ("paket.dependencies created successfully."),
 				GetString ("Could not create paket.dependencies file."),
 				GetString ("paket.dependencies created with warnings.")
+			);
+		}
+
+		public static ProgressMonitorStatusMessage CreateInstallMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Install paket dependencies..."),
+				GetString ("Paket dependencies installed successfully."),
+				GetString ("Could not install paket dependencies."),
+				GetString ("Paket dependencies installed with warnings.")
+			);
+		}
+
+		public static ProgressMonitorStatusMessage CreateUpdateMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Updating paket dependencies..."),
+				GetString ("Paket dependencies updated successfully."),
+				GetString ("Could not update paket dependencies."),
+				GetString ("Paket dependencies updated with warnings.")
+			);
+		}
+
+		public static ProgressMonitorStatusMessage CreateRestoreMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Restoring paket dependencies..."),
+				GetString ("Paket dependencies restored successfully."),
+				GetString ("Could not restore paket dependencies."),
+				GetString ("Paket dependencies restored with warnings.")
+			);
+		}
+
+		public static ProgressMonitorStatusMessage CreateSimplifyMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Simplifying paket dependencies..."),
+				GetString ("Paket dependencies simplified successfully."),
+				GetString ("Could not simplify paket dependencies."),
+				GetString ("Paket dependencies simplified with warnings.")
 			);
 		}
 

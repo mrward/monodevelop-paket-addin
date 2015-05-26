@@ -74,6 +74,13 @@
     <Compile Include="MonoDevelop.Paket\ProgressMonitorStatusMessageFactory.cs" />
     <Compile Include="MonoDevelop.Paket\ProgressMonitorFactory.cs" />
     <Compile Include="MonoDevelop.Paket\PaketConsolePad.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketRestoreSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketInstallSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketUpdateSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketAutoRestoreOnSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketAutoRestoreOffSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketConvertFromNuGetSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketSimplifySearchCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

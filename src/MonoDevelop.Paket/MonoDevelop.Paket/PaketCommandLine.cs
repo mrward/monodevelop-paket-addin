@@ -61,11 +61,6 @@ namespace MonoDevelop.Paket
 			GenerateWorkingDirectory ();
 		}
 
-		public static PaketCommandLine CreateInitCommandLine ()
-		{
-			return CreateCommandLine ("init");
-		}
-
 		public static PaketCommandLine CreateCommandLine (string arguments)
 		{
 			FilePath solutionDirectory = IdeApp.ProjectOperations.CurrentSelectedSolution.BaseDirectory;

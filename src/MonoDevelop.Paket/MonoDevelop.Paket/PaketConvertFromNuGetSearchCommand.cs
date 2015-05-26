@@ -1,5 +1,5 @@
 ﻿//
-// PackageSearchCommands.cs
+// PaketConvertFromNuGetSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,37 +25,27 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Paket
 {
-	public static class PaketSearchCommands
+	public class PaketConvertFromNuGetSearchCommand : PaketSearchCommand
 	{
-		static readonly List<PaketSearchCommand> commands;
-
-		static PaketSearchCommands ()
+		public PaketConvertFromNuGetSearchCommand ()
+			: base ("convert-from-nuget")
 		{
-			commands = CreateCommands ().ToList ();
 		}
 
-		static IEnumerable<PaketSearchCommand> CreateCommands ()
+		public override void Run ()
 		{
-			return new PaketSearchCommand[] {
-				new PaketInitSearchCommand (),
-				new PaketInstallSearchCommand (),
-				new PaketUpdateSearchCommand (),
-				new PaketRestoreSearchCommand (),
-				new PaketAutoRestoreOnSearchCommand (),
-				new PaketAutoRestoreOffSearchCommand (),
-				new PaketConvertFromNuGetSearchCommand (),
-				new PaketSimplifySearchCommand ()
-			};
+			var commandLine = PaketCommandLine.CreateCommandLine ("convert-from-nuget");
+			var message = ProgressMonitorStatusMessageFactory.CreateConvertFromNuGetMessage ();
+			PaketServices.CommandRunner.Run (commandLine, message);
 		}
 
-		public static IEnumerable<PaketSearchCommand> FilterCommands (string search)
+		public override string GetDescriptionMarkup ()
 		{
-			return commands;
+			return GettextCatalog.GetString ("Converts from NuGet to Paket.");
 		}
 	}
 }
