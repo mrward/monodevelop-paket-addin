@@ -1,5 +1,5 @@
 ﻿//
-// PaketAutoRestoreOffSearchCommand.cs
+// PaketInitSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -24,28 +24,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-
 using MonoDevelop.Core;
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
-	public class PaketAutoRestoreOffSearchCommand : PaketSearchCommand
+	public class PaketInitSearchCommand : PaketSearchCommand
 	{
-		public PaketAutoRestoreOffSearchCommand ()
-			: base ("auto-restore off")
+		public PaketInitSearchCommand ()
+			: base ("init")
 		{
 		}
 
 		public override void Run ()
 		{
-			var commandLine = PaketCommandLine.CreateCommandLine ("auto-restore off");
-			var message = ProgressMonitorStatusMessageFactory.CreateAutoRestoreOffMessage ();
+			var commandLine = PaketCommandLine.CreateCommandLine ("init");
+			var message = ProgressMonitorStatusMessageFactory.CreateInitMessage ();
 			PaketServices.CommandRunner.Run (commandLine, message);
 		}
 
 		public override string GetDescriptionMarkup ()
 		{
-			return GettextCatalog.GetString ("Disables automatic package restore whening build projects.");
+			return GettextCatalog.GetString ("Creates an empty paket.dependencies file in the solution directory.");
 		}
 	}
 }

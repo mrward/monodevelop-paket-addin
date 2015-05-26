@@ -1,5 +1,5 @@
 ﻿//
-// PaketInitSearchCommand.cs
+// PaketSimplifySearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -24,27 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
 using MonoDevelop.Core;
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
-	public class PaketInitSearchCommand : PaketSearchCommand
+	public class PaketSimplifySearchCommand : PaketSearchCommand
 	{
-		public PaketInitSearchCommand ()
-			: base ("init")
+		public PaketSimplifySearchCommand ()
+			: base ("simplify")
 		{
 		}
 
 		public override void Run ()
 		{
-			var commandLine = PaketCommandLine.CreateCommandLine ("init");
-			var message = ProgressMonitorStatusMessageFactory.CreateInitMessage ();
+			var commandLine = PaketCommandLine.CreateCommandLine ("simplify");
+			var message = ProgressMonitorStatusMessageFactory.CreateSimplifyMessage ();
 			PaketServices.CommandRunner.Run (commandLine, message);
 		}
 
 		public override string GetDescriptionMarkup ()
 		{
-			return GettextCatalog.GetString ("Creates an empty paket.dependencies file in the solution directory.");
+			return GettextCatalog.GetString ("Simplifies your paket.dependencies.");
 		}
 	}
 }

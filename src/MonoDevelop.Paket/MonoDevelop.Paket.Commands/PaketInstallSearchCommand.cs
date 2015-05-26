@@ -27,7 +27,7 @@
 
 using MonoDevelop.Core;
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
 	public class PaketInstallSearchCommand : PaketSearchCommand
 	{

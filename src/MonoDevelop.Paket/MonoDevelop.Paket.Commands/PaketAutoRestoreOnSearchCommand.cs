@@ -1,5 +1,5 @@
 ﻿//
-// PaketUpdateSearchCommand.cs
+// PaketAutoRestoreOffSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,25 +27,25 @@
 
 using MonoDevelop.Core;
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
-	public class PaketUpdateSearchCommand : PaketSearchCommand
+	public class PaketAutoRestoreOnSearchCommand : PaketSearchCommand
 	{
-		public PaketUpdateSearchCommand ()
-			: base ("update")
+		public PaketAutoRestoreOnSearchCommand ()
+			: base ("auto-restore on")
 		{
 		}
 
 		public override void Run ()
 		{
-			var commandLine = PaketCommandLine.CreateCommandLine ("update");
-			var message = ProgressMonitorStatusMessageFactory.CreateUpdateMessage ();
+			var commandLine = PaketCommandLine.CreateCommandLine ("auto-restore on");
+			var message = ProgressMonitorStatusMessageFactory.CreateAutoRestoreOnMessage ();
 			PaketServices.CommandRunner.Run (commandLine, message);
 		}
 
 		public override string GetDescriptionMarkup ()
 		{
-			return GettextCatalog.GetString ("Recomputes the dependencies and updates packages.");
+			return GettextCatalog.GetString ("Enables automatic package restore whening build projects.");
 		}
 	}
 }

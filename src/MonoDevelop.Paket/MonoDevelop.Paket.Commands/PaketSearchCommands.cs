@@ -1,5 +1,5 @@
 ﻿//
-// PaketAutoRestoreOffSearchCommand.cs
+// PackageSearchCommands.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,27 +25,37 @@
 // THE SOFTWARE.
 //
 
-using MonoDevelop.Core;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
-	public class PaketAutoRestoreOnSearchCommand : PaketSearchCommand
+	public static class PaketSearchCommands
 	{
-		public PaketAutoRestoreOnSearchCommand ()
-			: base ("auto-restore on")
+		static readonly List<PaketSearchCommand> commands;
+
+		static PaketSearchCommands ()
 		{
+			commands = CreateCommands ().ToList ();
 		}
 
-		public override void Run ()
+		static IEnumerable<PaketSearchCommand> CreateCommands ()
 		{
-			var commandLine = PaketCommandLine.CreateCommandLine ("auto-restore on");
-			var message = ProgressMonitorStatusMessageFactory.CreateAutoRestoreOnMessage ();
-			PaketServices.CommandRunner.Run (commandLine, message);
+			return new PaketSearchCommand[] {
+				new PaketInitSearchCommand (),
+				new PaketInstallSearchCommand (),
+				new PaketUpdateSearchCommand (),
+				new PaketRestoreSearchCommand (),
+				new PaketAutoRestoreOnSearchCommand (),
+				new PaketAutoRestoreOffSearchCommand (),
+				new PaketConvertFromNuGetSearchCommand (),
+				new PaketSimplifySearchCommand ()
+			};
 		}
 
-		public override string GetDescriptionMarkup ()
+		public static IEnumerable<PaketSearchCommand> FilterCommands (string search)
 		{
-			return GettextCatalog.GetString ("Enables automatic package restore whening build projects.");
+			return commands;
 		}
 	}
 }

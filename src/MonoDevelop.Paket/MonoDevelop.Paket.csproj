@@ -63,9 +63,6 @@
     <Compile Include="MonoDevelop.Paket\PaketTemplateSyntaxMode.cs" />
     <Compile Include="MonoDevelop.Paket\PaketSearchCategory.cs" />
     <Compile Include="MonoDevelop.Paket\PaketSearchDataSource.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketInitSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketSearchCommands.cs" />
     <Compile Include="MonoDevelop.Paket\PaketApplicationPath.cs" />
     <Compile Include="MonoDevelop.Paket\PaketCommandRunner.cs" />
     <Compile Include="MonoDevelop.Paket\PaketCommandLine.cs" />
@@ -74,13 +71,16 @@
     <Compile Include="MonoDevelop.Paket\ProgressMonitorStatusMessageFactory.cs" />
     <Compile Include="MonoDevelop.Paket\ProgressMonitorFactory.cs" />
     <Compile Include="MonoDevelop.Paket\PaketConsolePad.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketRestoreSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketInstallSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketUpdateSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketAutoRestoreOnSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketAutoRestoreOffSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketConvertFromNuGetSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketSimplifySearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketUpdateSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketSimplifySearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketSearchCommands.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketRestoreSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketInstallSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketInitSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketConvertFromNuGetSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketAutoRestoreOnSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketAutoRestoreOffSearchCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -88,6 +88,7 @@
     <Folder Include="MonoDevelop.Paket\" />
     <Folder Include="SyntaxModes\" />
     <Folder Include="Icons\" />
+    <Folder Include="MonoDevelop.Paket.Commands\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Paket.addin.xml" />
@@ -123,4 +124,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="Flat" ResourceNamePolicy="FileFormatDefault" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

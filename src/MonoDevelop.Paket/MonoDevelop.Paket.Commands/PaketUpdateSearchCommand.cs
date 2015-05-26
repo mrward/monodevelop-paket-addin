@@ -1,5 +1,5 @@
 ﻿//
-// PaketSimplifySearchCommand.cs
+// PaketUpdateSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,25 +27,25 @@
 
 using MonoDevelop.Core;
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
-	public class PaketSimplifySearchCommand : PaketSearchCommand
+	public class PaketUpdateSearchCommand : PaketSearchCommand
 	{
-		public PaketSimplifySearchCommand ()
-			: base ("simplify")
+		public PaketUpdateSearchCommand ()
+			: base ("update")
 		{
 		}
 
 		public override void Run ()
 		{
-			var commandLine = PaketCommandLine.CreateCommandLine ("simplify");
-			var message = ProgressMonitorStatusMessageFactory.CreateSimplifyMessage ();
+			var commandLine = PaketCommandLine.CreateCommandLine ("update");
+			var message = ProgressMonitorStatusMessageFactory.CreateUpdateMessage ();
 			PaketServices.CommandRunner.Run (commandLine, message);
 		}
 
 		public override string GetDescriptionMarkup ()
 		{
-			return GettextCatalog.GetString ("Simplifies your paket.dependencies.");
+			return GettextCatalog.GetString ("Recomputes the dependencies and updates packages.");
 		}
 	}
 }

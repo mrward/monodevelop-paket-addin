@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
 	public abstract class PaketSearchCommand
 	{

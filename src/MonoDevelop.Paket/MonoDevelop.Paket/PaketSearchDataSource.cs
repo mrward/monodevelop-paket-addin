@@ -30,6 +30,7 @@ using System.Linq;
 using ICSharpCode.NRefactory.TypeSystem;
 using MonoDevelop.Components.MainToolbar;
 using MonoDevelop.Ide.CodeCompletion;
+using MonoDevelop.Paket.Commands;
 using Xwt.Drawing;
 
 namespace MonoDevelop.Paket
