@@ -32,25 +32,19 @@ namespace MonoDevelop.Paket.Commands
 {
 	public static class PaketSearchCommands
 	{
-		static readonly List<PaketSearchCommand> commands;
-
-		static PaketSearchCommands ()
+		static IEnumerable<PaketSearchCommand> CreateCommands (string search)
 		{
-			commands = CreateCommands ().ToList ();
-		}
-
-		static IEnumerable<PaketSearchCommand> CreateCommands ()
-		{
-			return new PaketSearchCommand[] {
+			return new PaketSearchCommand [] {
 				new PaketInitSearchCommand (),
 				new PaketInstallSearchCommand (),
 				new PaketUpdateSearchCommand (),
 				new PaketRestoreSearchCommand (),
+				new PaketAddNuGetSearchCommand (search),
+				new PaketSimplifySearchCommand (),
+				new PaketOutdatedSearchCommand (),
+				new PaketConvertFromNuGetSearchCommand (),
 				new PaketAutoRestoreOnSearchCommand (),
 				new PaketAutoRestoreOffSearchCommand (),
-				new PaketConvertFromNuGetSearchCommand (),
-				new PaketSimplifySearchCommand (),
-				new PaketOutdatedSearchCommand ()
 			};
 		}
 
@@ -59,7 +53,8 @@ namespace MonoDevelop.Paket.Commands
 			var query = new PaketSearchCommandQuery (search);
 			query.Parse ();
 			if (query.IsPaketSearchCommand) {
-				return commands.Where (command => command.IsMatch (query));
+				return CreateCommands (search)
+					.Where (command => command.IsMatch (query));
 			}
 
 			return Enumerable.Empty <PaketSearchCommand> ();

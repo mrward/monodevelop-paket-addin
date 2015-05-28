@@ -31,6 +31,16 @@ namespace MonoDevelop.Paket
 {
 	public static class ProgressMonitorStatusMessageFactory
 	{
+		public static ProgressMonitorStatusMessage CreateAddNuGetPackageMessage (string packageId)
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Adding {0} ...", packageId),
+				GetString ("{0} added successfully.", packageId),
+				GetString ("Could not add {0}.", packageId),
+				GetString ("{0} added with warnings.", packageId)
+			);
+		}
+
 		public static ProgressMonitorStatusMessage CreateAutoRestoreOnMessage ()
 		{
 			return new ProgressMonitorStatusMessage (

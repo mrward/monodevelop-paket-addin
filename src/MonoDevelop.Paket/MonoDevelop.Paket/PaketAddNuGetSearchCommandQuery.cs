@@ -1,10 +1,10 @@
 ﻿//
-// PaketSearchCommandQuery.cs
+// PaketAddNuGetSearchCommandQuery.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,52 +29,34 @@ using System;
 
 namespace MonoDevelop.Paket
 {
-	public class PaketSearchCommandQuery
+	public class PaketAddNuGetSearchCommandQuery
 	{
-		string search;
-		string[] arguments;
+		readonly PaketSearchCommandQuery query;
 
-		public PaketSearchCommandQuery (string search)
+		public PaketAddNuGetSearchCommandQuery (string search)
 		{
-			this.search = search;
-			IsPaketSearchCommand = false;
+			query = new PaketSearchCommandQuery (search);
 		}
 
 		public void Parse ()
 		{
-			if (String.IsNullOrWhiteSpace (search)) {
-				arguments = new string [0];
-			} else {
-				arguments = search.Trim ().Split (new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-			}
+			query.Parse ();
 
-			CheckIfPaketCommand ();
-			CommandType = GetArgument (1);
+			PackageId = query.GetArgument (3);
+			PackageVersion = query.GetArgument (4);
 		}
 
-		public bool IsPaketSearchCommand { get; private set; }
-		public string CommandType { get; private set; }
+		public string PackageId { get; private set; }
+		public string PackageVersion { get; private set; }
 
-		public string GetArgument (int index)
+		public bool HasPackageId ()
 		{
-			if (index < arguments.Length) {
-				return arguments [index];
-			}
-			return String.Empty;
+			return !string.IsNullOrEmpty (PackageId);
 		}
 
-		static readonly string paketCommand = "paket";
-
-		void CheckIfPaketCommand ()
+		public bool HasVersion ()
 		{
-			if (arguments.Length < 1)
-				return;
-
-			string firstPart = arguments [0];
-			if (firstPart.Length > paketCommand.Length)
-				return;
-
-			IsPaketSearchCommand = paketCommand.StartsWith (firstPart, StringComparison.OrdinalIgnoreCase);
+			return !string.IsNullOrEmpty (PackageVersion);
 		}
 	}
 }

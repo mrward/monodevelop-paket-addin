@@ -38,7 +38,7 @@ namespace MonoDevelop.Paket.Commands
 
 		public string Name { get; private set; }
 
-		public string GetMarkup ()
+		public virtual string GetMarkup ()
 		{
 			return string.Format ("paket {0}", Name);
 		}
