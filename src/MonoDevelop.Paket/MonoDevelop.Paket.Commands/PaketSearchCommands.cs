@@ -56,7 +56,13 @@ namespace MonoDevelop.Paket.Commands
 
 		public static IEnumerable<PaketSearchCommand> FilterCommands (string search)
 		{
-			return commands;
+			var query = new PaketSearchCommandQuery (search);
+			query.Parse ();
+			if (query.IsPaketSearchCommand) {
+				return commands.Where (command => command.IsMatch (query));
+			}
+
+			return Enumerable.Empty <PaketSearchCommand> ();
 		}
 	}
 }

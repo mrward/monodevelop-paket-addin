@@ -1,5 +1,5 @@
 ﻿//
-// PaketInitSearchCommand.cs
+// PaketSearchCommandQuery.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,35 +27,54 @@
 
 using System;
 
-namespace MonoDevelop.Paket.Commands
+namespace MonoDevelop.Paket
 {
-	public abstract class PaketSearchCommand
+	public class PaketSearchCommandQuery
 	{
-		protected PaketSearchCommand (string name)
+		string search;
+		string[] arguments;
+
+		public PaketSearchCommandQuery (string search)
 		{
-			Name = name;
+			this.search = search;
+			IsPaketSearchCommand = false;
 		}
 
-		public string Name { get; private set; }
-
-		public string GetMarkup ()
+		public void Parse ()
 		{
-			return string.Format ("paket {0}", Name);
+			if (String.IsNullOrWhiteSpace (search)) {
+				arguments = new string [0];
+			} else {
+				arguments = search.Trim ().Split (new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+			}
+
+			CheckIfPaketCommand ();
+			CommandType = GetArgument (1);
 		}
 
-		public virtual string GetDescriptionMarkup ()
+		public bool IsPaketSearchCommand { get; private set; }
+		public string CommandType { get; private set; }
+
+		string GetArgument (int index)
 		{
-			return null;
+			if (index < arguments.Length) {
+				return arguments [index];
+			}
+			return String.Empty;
 		}
 
-		public abstract void Run ();
+		static readonly string paketCommand = "paket";
 
-		public virtual bool IsMatch (PaketSearchCommandQuery query)
+		void CheckIfPaketCommand ()
 		{
-			if (String.IsNullOrEmpty (query.CommandType))
-				return true;
+			if (arguments.Length < 1)
+				return;
 
-			return Name.StartsWith (query.CommandType, StringComparison.OrdinalIgnoreCase);
+			string firstPart = arguments [0];
+			if (firstPart.Length > paketCommand.Length)
+				return;
+
+			IsPaketSearchCommand = paketCommand.StartsWith (firstPart, StringComparison.OrdinalIgnoreCase);
 		}
 	}
 }
