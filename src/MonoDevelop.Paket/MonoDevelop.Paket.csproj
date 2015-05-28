@@ -81,6 +81,7 @@
     <Compile Include="MonoDevelop.Paket.Commands\PaketConvertFromNuGetSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketAutoRestoreOnSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketAutoRestoreOffSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketOutdatedSearchCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿//
-// PackageSearchCommands.cs
+// PaketOutdatedSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,38 +25,36 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
+using MonoDevelop.Core;
+using MonoDevelop.Core.ProgressMonitoring;
 
 namespace MonoDevelop.Paket.Commands
 {
-	public static class PaketSearchCommands
+	public class PaketOutdatedSearchCommand : PaketSearchCommand
 	{
-		static readonly List<PaketSearchCommand> commands;
-
-		static PaketSearchCommands ()
+		public PaketOutdatedSearchCommand ()
+			: base ("outdated")
 		{
-			commands = CreateCommands ().ToList ();
 		}
 
-		static IEnumerable<PaketSearchCommand> CreateCommands ()
+		public override void Run ()
 		{
-			return new PaketSearchCommand[] {
-				new PaketInitSearchCommand (),
-				new PaketInstallSearchCommand (),
-				new PaketUpdateSearchCommand (),
-				new PaketRestoreSearchCommand (),
-				new PaketAutoRestoreOnSearchCommand (),
-				new PaketAutoRestoreOffSearchCommand (),
-				new PaketConvertFromNuGetSearchCommand (),
-				new PaketSimplifySearchCommand (),
-				new PaketOutdatedSearchCommand ()
-			};
+			var commandLine = PaketCommandLine.CreateCommandLine ("outdated");
+			var message = ProgressMonitorStatusMessageFactory.CreateOutdatedMessage ();
+			AggregatedProgressMonitor progressMonitor = CreateProgressMonitor (message);
+			PaketConsolePad.Show (progressMonitor);
+			PaketServices.CommandRunner.Run (commandLine, message, progressMonitor);
 		}
 
-		public static IEnumerable<PaketSearchCommand> FilterCommands (string search)
+		AggregatedProgressMonitor CreateProgressMonitor (ProgressMonitorStatusMessage progressMessage)
 		{
-			return commands;
+			var factory = new ProgressMonitorFactory ();
+			return (AggregatedProgressMonitor)factory.CreateProgressMonitor (progressMessage.Status);
+		}
+
+		public override string GetDescriptionMarkup ()
+		{
+			return GettextCatalog.GetString ("Checks for outdated dependencies.");
 		}
 	}
 }

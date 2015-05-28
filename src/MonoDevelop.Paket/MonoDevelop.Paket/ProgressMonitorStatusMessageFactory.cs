@@ -81,6 +81,16 @@ namespace MonoDevelop.Paket
 			);
 		}
 
+		public static ProgressMonitorStatusMessage CreateOutdatedMessage ()
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Checking for outdated paket dependencies..."),
+				GetString ("Outdated paket dependencies checked successfully."),
+				GetString ("Could not check for outdated paket dependencies."),
+				GetString ("Outdated paket dependencies checked with warnings.")
+			);
+		}
+
 		public static ProgressMonitorStatusMessage CreateUpdateMessage ()
 		{
 			return new ProgressMonitorStatusMessage (

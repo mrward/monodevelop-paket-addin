@@ -37,6 +37,14 @@ namespace MonoDevelop.Paket
 		public void Run (PaketCommandLine command, ProgressMonitorStatusMessage progressMessage)
 		{
 			AggregatedProgressMonitor progressMonitor = CreateProgressMonitor (progressMessage);
+			Run (command, progressMessage, progressMonitor);
+		}
+
+		public void Run (
+			PaketCommandLine command,
+			ProgressMonitorStatusMessage progressMessage,
+			AggregatedProgressMonitor progressMonitor)
+		{
 			try {
 				Run (command, progressMonitor, progressMessage);
 			} catch (Exception ex) {
