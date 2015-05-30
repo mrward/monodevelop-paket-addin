@@ -71,4 +71,9 @@
 	<Extension path="/MonoDevelop/Ide/SearchCategories">
 		<Class class="MonoDevelop.Paket.PaketSearchCategory" />
 	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/Pads/ProjectPad">
+		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesNodeBuilderExtension" />
+		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNodeBuilder" />
+	</Extension>
 </ExtensionModel>

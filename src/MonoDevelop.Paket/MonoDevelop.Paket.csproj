@@ -91,6 +91,10 @@
     <Compile Include="MonoDevelop.Paket.Commands\PaketNuGetSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketUpdateNuGetSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket\PaketFileChangedNotifier.cs" />
+    <Compile Include="MonoDevelop.Paket\SolutionExtensions.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\SolutionPaketDependenciesFolderNode.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\SolutionPaketDependenciesFolderNodeBuilder.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\SolutionPaketDependenciesNodeBuilderExtension.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -99,6 +103,7 @@
     <Folder Include="SyntaxModes\" />
     <Folder Include="Icons\" />
     <Folder Include="MonoDevelop.Paket.Commands\" />
+    <Folder Include="MonoDevelop.Paket.NodeBuilders\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Paket.addin.xml" />
