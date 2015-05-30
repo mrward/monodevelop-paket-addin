@@ -1,3 +1,4 @@
 source https://nuget.org/api/v2
 
 nuget paket 1.5.3
+nuget paket.core 1.5.3

@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 //
 
+using System.Collections.Generic;
+using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Projects;
@@ -51,6 +53,12 @@ namespace MonoDevelop.Paket.NodeBuilders
 		public string GetLabel ()
 		{
 			return GettextCatalog.GetString ("Paket Dependencies");
+		}
+
+		public IEnumerable<NuGetPackageDependencyNode> GetPackageDependencies ()
+		{
+			return solution.GetPackageRequirements ()
+				.Select (packageReference => new NuGetPackageDependencyNode (packageReference));
 		}
 	}
 }

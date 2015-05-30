@@ -1,8 +1,8 @@
 ﻿//
-// ProjectPaketReferencesFolderNodeBuilder.cs
+// NuGetPackageReferenceNodeBuilder.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <ward..matt@gmail.com>
 //
 // Copyright (c) 2015 Matthew Ward
 //
@@ -27,50 +27,26 @@
 
 using System;
 using MonoDevelop.Ide.Gui.Components;
-using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class ProjectPaketReferencesFolderNodeBuilder : TypeNodeBuilder
+	public class NuGetPackageReferenceNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(ProjectPaketReferencesFolderNode); }
+			get { return typeof(NuGetPackageReferenceNode); }
 		}
 
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return "PaketReferences";
+			var node = (NuGetPackageReferenceNode)dataObject;
+			return node.Name;
 		}
 
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
 		{
-			var node = (ProjectPaketReferencesFolderNode)dataObject;
+			var node = (NuGetPackageReferenceNode)dataObject;
 			nodeInfo.Label = node.GetLabel ();
-			nodeInfo.Icon = Context.GetIcon (node.Icon);
-			nodeInfo.ClosedIcon = Context.GetIcon (node.ClosedIcon);
-		}
-
-		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
-		{
-			if (otherNode.DataItem is ProjectReferenceCollection) {
-				return 1;
-			} else if (otherNode.NodeName == "Packages") {
-				return 1;
-			}
-			return -1;
-		}
-
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
-		{
-			return true;
-		}
-
-		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
-		{
-			var node = (ProjectPaketReferencesFolderNode)dataObject;
-			foreach (NuGetPackageReferenceNode packageReference in node.GetPackageReferences ()) {
-				treeBuilder.AddChild (packageReference);
-			}
+			nodeInfo.Icon = Context.GetIcon (node.GetIconId ());
 		}
 	}
 }

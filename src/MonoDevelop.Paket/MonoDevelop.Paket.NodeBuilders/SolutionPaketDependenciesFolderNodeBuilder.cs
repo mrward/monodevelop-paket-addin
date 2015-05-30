@@ -61,6 +61,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
 		{
+			var node = (SolutionPaketDependenciesFolderNode)dataObject;
+			foreach (NuGetPackageDependencyNode dependency in node.GetPackageDependencies ()) {
+				treeBuilder.AddChild (dependency);
+			}
 		}
 	}
 }

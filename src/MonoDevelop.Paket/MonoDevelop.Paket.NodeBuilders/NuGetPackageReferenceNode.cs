@@ -1,10 +1,10 @@
 ﻿//
-// ProjectPaketReferencesFolderNode.cs
+// NuGetPackageReferenceNode.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,40 +25,37 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
 using MonoDevelop.Core;
-using MonoDevelop.Projects;
 using MonoDevelop.Ide.Gui;
+using Paket;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class ProjectPaketReferencesFolderNode
+	public class NuGetPackageReferenceNode
 	{
-		readonly DotNetProject project;
+		readonly PackageInstallSettings installSettings;
 
-		public ProjectPaketReferencesFolderNode (DotNetProject project)
+		public NuGetPackageReferenceNode (PackageInstallSettings installSettings)
 		{
-			this.project = project;
+			this.installSettings = installSettings;
 		}
 
-		public IconId Icon {
-			get { return Stock.OpenReferenceFolder; }
+		public string Name {
+			get { return installSettings.Name.ToString (); }
 		}
 
-		public IconId ClosedIcon {
-			get { return Stock.ClosedReferenceFolder; }
+		public string Id {
+			get { return Name; }
 		}
 
 		public string GetLabel ()
 		{
-			return GettextCatalog.GetString ("Paket References");
+			return Name;
 		}
 
-		public IEnumerable<NuGetPackageReferenceNode> GetPackageReferences ()
+		public IconId GetIconId ()
 		{
-			return project.GetPackageInstallSettings ()
-				.Select (installSettings => new NuGetPackageReferenceNode (installSettings));
+			return Stock.Reference;
 		}
 	}
 }

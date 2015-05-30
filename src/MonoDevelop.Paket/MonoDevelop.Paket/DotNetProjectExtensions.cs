@@ -25,9 +25,13 @@
 // THE SOFTWARE.
 //
 
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
+using Paket;
 
 namespace MonoDevelop.Paket
 {
@@ -50,6 +54,22 @@ namespace MonoDevelop.Paket
 		public static bool HasPaketReferences (this DotNetProject project)
 		{
 			return !project.GetPaketReferencesFile ().IsNull;
+		}
+
+		public static IEnumerable<PackageInstallSettings> GetPackageInstallSettings (this DotNetProject project)
+		{
+			try {
+				var referencesFileName = project.GetPaketReferencesFile ();
+				if (referencesFileName.IsNotNull) {
+					return ReferencesFile
+						.FromFile (referencesFileName)
+						.NugetPackages;
+				}
+			} catch (Exception ex) {
+				LoggingService.LogError ("GetPaketDependencies error.", ex);
+			}
+
+			return Enumerable.Empty <PackageInstallSettings> ();
 		}
 	}
 }

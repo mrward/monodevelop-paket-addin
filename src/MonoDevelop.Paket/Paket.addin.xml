@@ -77,5 +77,7 @@
 		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNodeBuilder" />
 		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.ProjectPaketReferencesNodeBuilderExtension" />
 		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.ProjectPaketReferencesFolderNodeBuilder" />
+		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.NuGetPackageDependencyNodeBuilder" />
+		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.NuGetPackageReferenceNodeBuilder" />
 	</Extension>
 </ExtensionModel>

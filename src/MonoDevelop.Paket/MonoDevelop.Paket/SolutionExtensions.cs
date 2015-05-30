@@ -25,9 +25,13 @@
 // THE SOFTWARE.
 //
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
-using System.IO;
+using Paket;
 
 namespace MonoDevelop.Paket
 {
@@ -50,6 +54,22 @@ namespace MonoDevelop.Paket
 		public static bool HasPaketDependencies (this Solution solution)
 		{
 			return !solution.GetPaketDependenciesFile ().IsNull;
+		}
+
+		public static IEnumerable<Requirements.PackageRequirement> GetPackageRequirements (this Solution solution)
+		{
+			try {
+				var dependenciesFileName = solution.GetPaketDependenciesFile ();
+				if (dependenciesFileName.IsNotNull) {
+					return DependenciesFile
+						.ReadFromFile (dependenciesFileName)
+						.Packages;
+				}
+			} catch (Exception ex) {
+				LoggingService.LogError ("GetPaketDependencies error.", ex);
+			}
+
+			return Enumerable.Empty <Requirements.PackageRequirement> ();
 		}
 	}
 }
