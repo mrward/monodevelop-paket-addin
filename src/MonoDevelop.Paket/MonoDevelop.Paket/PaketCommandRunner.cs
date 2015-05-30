@@ -34,10 +34,20 @@ namespace MonoDevelop.Paket
 {
 	public class PaketCommandRunner
 	{
+		static Action defaultAfterRun = () => { };
+
 		public void Run (PaketCommandLine command, ProgressMonitorStatusMessage progressMessage)
 		{
+			Run (command, progressMessage, defaultAfterRun);
+		}
+
+		public void Run (
+			PaketCommandLine command,
+			ProgressMonitorStatusMessage progressMessage,
+			Action afterRun)
+		{
 			AggregatedProgressMonitor progressMonitor = CreateProgressMonitor (progressMessage);
-			Run (command, progressMessage, progressMonitor);
+			Run (command, progressMessage, progressMonitor, afterRun);
 		}
 
 		public void Run (
@@ -45,8 +55,17 @@ namespace MonoDevelop.Paket
 			ProgressMonitorStatusMessage progressMessage,
 			AggregatedProgressMonitor progressMonitor)
 		{
+			Run (command, progressMessage, progressMonitor, defaultAfterRun);
+		}
+
+		public void Run (
+			PaketCommandLine command,
+			ProgressMonitorStatusMessage progressMessage,
+			AggregatedProgressMonitor progressMonitor,
+			Action afterRun)
+		{
 			try {
-				Run (command, progressMonitor, progressMessage);
+				Run (command, progressMonitor, progressMessage, afterRun);
 			} catch (Exception ex) {
 				LoggingService.LogError ("Error running paket command", ex);
 				progressMonitor.Log.WriteLine (ex.Message);
@@ -62,7 +81,11 @@ namespace MonoDevelop.Paket
 			return (AggregatedProgressMonitor)factory.CreateProgressMonitor (progressMessage.Status);
 		}
 
-		void Run (PaketCommandLine commandLine, AggregatedProgressMonitor progressMonitor, ProgressMonitorStatusMessage progressMessage)
+		void Run (
+			PaketCommandLine commandLine,
+			AggregatedProgressMonitor progressMonitor,
+			ProgressMonitorStatusMessage progressMessage,
+			Action afterRun)
 		{
 			progressMonitor.Log.WriteLine (commandLine);
 			IProcessAsyncOperation operation = Runtime.ProcessService.StartConsoleProcess (
@@ -73,6 +96,7 @@ namespace MonoDevelop.Paket
 				(sender, e) => {
 					using (progressMonitor) {
 						OnCommandCompleted ((IAsyncOperation)sender, progressMonitor, progressMessage);
+						afterRun ();
 					}
 				}
 			);

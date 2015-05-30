@@ -1,5 +1,5 @@
 ﻿//
-// PackageSearchCommands.cs
+// PaketAddNuGetToProjectSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,40 +25,20 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
+using MonoDevelop.Ide;
 
 namespace MonoDevelop.Paket.Commands
 {
-	public static class PaketSearchCommands
+	public class PaketAddNuGetToProjectSearchCommand : PaketAddNuGetSearchCommand
 	{
-		static IEnumerable<PaketSearchCommand> CreateCommands (string search)
+		public PaketAddNuGetToProjectSearchCommand (string search)
+			: base (search, IdeApp.ProjectOperations.CurrentSelectedProject)
 		{
-			return new PaketSearchCommand [] {
-				new PaketInitSearchCommand (),
-				new PaketInstallSearchCommand (),
-				new PaketUpdateSearchCommand (),
-				new PaketRestoreSearchCommand (),
-				new PaketAddNuGetSearchCommand (search),
-				new PaketAddNuGetToProjectSearchCommand (search),
-				new PaketSimplifySearchCommand (),
-				new PaketOutdatedSearchCommand (),
-				new PaketConvertFromNuGetSearchCommand (),
-				new PaketAutoRestoreOnSearchCommand (),
-				new PaketAutoRestoreOffSearchCommand (),
-			};
 		}
 
-		public static IEnumerable<PaketSearchCommand> FilterCommands (string search)
+		public override bool IsMatch (PaketSearchCommandQuery query)
 		{
-			var query = new PaketSearchCommandQuery (search);
-			query.Parse ();
-			if (query.IsPaketSearchCommand) {
-				return CreateCommands (search)
-					.Where (command => command.IsMatch (query));
-			}
-
-			return Enumerable.Empty <PaketSearchCommand> ();
+			return (Project != null) && base.IsMatch (query);
 		}
 	}
 }
