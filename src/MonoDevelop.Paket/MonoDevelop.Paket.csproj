@@ -94,6 +94,10 @@
     <Compile Include="MonoDevelop.Paket\SolutionExtensions.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\SolutionPaketDependenciesFolderNode.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\SolutionPaketDependenciesFolderNodeBuilder.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\ProjectPaketReferencesNodeBuilderExtension.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\ProjectPaketReferencesFolderNode.cs" />
+    <Compile Include="MonoDevelop.Paket\DotNetProjectExtensions.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\ProjectPaketReferencesFolderNodeBuilder.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\SolutionPaketDependenciesNodeBuilderExtension.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

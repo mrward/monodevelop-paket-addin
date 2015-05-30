@@ -1,5 +1,5 @@
 ﻿//
-// SolutionPaketDependenciesFolderNodeBuilder.cs
+// ProjectPaketReferencesFolderNodeBuilder.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,23 +27,24 @@
 
 using System;
 using MonoDevelop.Ide.Gui.Components;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class SolutionPaketDependenciesFolderNodeBuilder : TypeNodeBuilder
+	public class ProjectPaketReferencesFolderNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(SolutionPaketDependenciesFolderNode); }
+			get { return typeof(ProjectPaketReferencesFolderNode); }
 		}
 
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return "PaketDependencies";
+			return "PaketReferences";
 		}
 
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
 		{
-			var node = (SolutionPaketDependenciesFolderNode)dataObject;
+			var node = (ProjectPaketReferencesFolderNode)dataObject;
 			nodeInfo.Label = node.GetLabel ();
 			nodeInfo.Icon = Context.GetIcon (node.Icon);
 			nodeInfo.ClosedIcon = Context.GetIcon (node.ClosedIcon);
@@ -51,6 +52,11 @@ namespace MonoDevelop.Paket.NodeBuilders
 
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
+			if (otherNode.DataItem is ProjectReferenceCollection) {
+				return 1;
+			} else if (otherNode.NodeName == "Packages") {
+				return 1;
+			}
 			return -1;
 		}
 

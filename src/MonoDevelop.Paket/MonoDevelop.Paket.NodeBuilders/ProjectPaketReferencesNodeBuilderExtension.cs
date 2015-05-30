@@ -1,5 +1,5 @@
 ﻿//
-// SolutionPaketDependenciesFolderNodeBuilder.cs
+// ProjectPaketReferencesNodeBuilderExtension.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,40 +27,34 @@
 
 using System;
 using MonoDevelop.Ide.Gui.Components;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class SolutionPaketDependenciesFolderNodeBuilder : TypeNodeBuilder
+	public class ProjectPaketReferencesNodeBuilderExtension : NodeBuilderExtension
 	{
-		public override Type NodeDataType {
-			get { return typeof(SolutionPaketDependenciesFolderNode); }
-		}
-
-		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
+		public override bool CanBuildNode (Type dataType)
 		{
-			return "PaketDependencies";
-		}
-
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
-		{
-			var node = (SolutionPaketDependenciesFolderNode)dataObject;
-			nodeInfo.Label = node.GetLabel ();
-			nodeInfo.Icon = Context.GetIcon (node.Icon);
-			nodeInfo.ClosedIcon = Context.GetIcon (node.ClosedIcon);
-		}
-
-		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
-		{
-			return -1;
+			return typeof(DotNetProject).IsAssignableFrom (dataType);
 		}
 
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return true;
+			return ProjectHasPaketReferences (dataObject);
+		}
+
+		bool ProjectHasPaketReferences (object dataObject)
+		{
+			var project = (DotNetProject) dataObject;
+			return project.HasPaketReferences ();
 		}
 
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
 		{
+			var project = (DotNetProject)dataObject;
+			if (ProjectHasPaketReferences (project)) {
+				treeBuilder.AddChild (new ProjectPaketReferencesFolderNode (project));
+			}
 		}
 	}
 }

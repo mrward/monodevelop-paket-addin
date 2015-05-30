@@ -1,5 +1,5 @@
 ﻿//
-// SolutionPaketDependenciesFolderNodeBuilder.cs
+// ProjectPaketReferencesFolderNode.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,42 +25,32 @@
 // THE SOFTWARE.
 //
 
-using System;
-using MonoDevelop.Ide.Gui.Components;
+using MonoDevelop.Core;
+using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class SolutionPaketDependenciesFolderNodeBuilder : TypeNodeBuilder
+	public class ProjectPaketReferencesFolderNode
 	{
-		public override Type NodeDataType {
-			get { return typeof(SolutionPaketDependenciesFolderNode); }
+		readonly Project project;
+
+		public ProjectPaketReferencesFolderNode (Project project)
+		{
+			this.project = project;
 		}
 
-		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
-		{
-			return "PaketDependencies";
+		public IconId Icon {
+			get { return Stock.OpenReferenceFolder; }
 		}
 
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
-		{
-			var node = (SolutionPaketDependenciesFolderNode)dataObject;
-			nodeInfo.Label = node.GetLabel ();
-			nodeInfo.Icon = Context.GetIcon (node.Icon);
-			nodeInfo.ClosedIcon = Context.GetIcon (node.ClosedIcon);
+		public IconId ClosedIcon {
+			get { return Stock.ClosedReferenceFolder; }
 		}
 
-		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
+		public string GetLabel ()
 		{
-			return -1;
-		}
-
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
-		{
-			return true;
-		}
-
-		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
-		{
+			return GettextCatalog.GetString ("Paket References");
 		}
 	}
 }

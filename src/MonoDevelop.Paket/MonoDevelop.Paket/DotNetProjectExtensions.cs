@@ -1,5 +1,5 @@
 ﻿//
-// SolutionPaketDependenciesFolderNodeBuilder.cs
+// DotNetProjectExtensions.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,42 +25,31 @@
 // THE SOFTWARE.
 //
 
-using System;
-using MonoDevelop.Ide.Gui.Components;
+using System.IO;
+using MonoDevelop.Core;
+using MonoDevelop.Projects;
 
-namespace MonoDevelop.Paket.NodeBuilders
+namespace MonoDevelop.Paket
 {
-	public class SolutionPaketDependenciesFolderNodeBuilder : TypeNodeBuilder
+	public static class DotNetProjectExtensions
 	{
-		public override Type NodeDataType {
-			get { return typeof(SolutionPaketDependenciesFolderNode); }
+		public static FilePath GetPaketReferencesFile (this DotNetProject project)
+		{
+			FilePath path = BuildPaketReferencesFileName (project);
+			if (File.Exists (path))
+				return path;
+
+			return FilePath.Null;
 		}
 
-		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
+		static FilePath BuildPaketReferencesFileName (DotNetProject project)
 		{
-			return "PaketDependencies";
+			return Path.Combine (project.BaseDirectory, "paket.references");
 		}
 
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
+		public static bool HasPaketReferences (this DotNetProject project)
 		{
-			var node = (SolutionPaketDependenciesFolderNode)dataObject;
-			nodeInfo.Label = node.GetLabel ();
-			nodeInfo.Icon = Context.GetIcon (node.Icon);
-			nodeInfo.ClosedIcon = Context.GetIcon (node.ClosedIcon);
-		}
-
-		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
-		{
-			return -1;
-		}
-
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
-		{
-			return true;
-		}
-
-		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
-		{
+			return !project.GetPaketReferencesFile ().IsNull;
 		}
 	}
 }

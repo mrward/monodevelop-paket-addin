@@ -75,5 +75,7 @@
 	<Extension path="/MonoDevelop/Ide/Pads/ProjectPad">
 		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesNodeBuilderExtension" />
 		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNodeBuilder" />
+		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.ProjectPaketReferencesNodeBuilderExtension" />
+		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.ProjectPaketReferencesFolderNodeBuilder" />
 	</Extension>
 </ExtensionModel>
