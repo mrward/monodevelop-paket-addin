@@ -111,6 +111,16 @@ namespace MonoDevelop.Paket
 			);
 		}
 
+		public static ProgressMonitorStatusMessage CreateUpdateNuGetPackageMessage (string packageId)
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Updating {0} ...", packageId),
+				GetString ("{0} updated successfully.", packageId),
+				GetString ("Could not update {0}.", packageId),
+				GetString ("{0} updated with warnings.", packageId)
+			);
+		}
+
 		public static ProgressMonitorStatusMessage CreateUpdateMessage ()
 		{
 			return new ProgressMonitorStatusMessage (

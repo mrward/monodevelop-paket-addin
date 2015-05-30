@@ -1,5 +1,5 @@
 ﻿//
-// PackageSearchCommands.cs
+// PaketUpdateNuGetSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,43 +25,34 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
+using MonoDevelop.Core;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.Commands
 {
-	public static class PaketSearchCommands
+	public class PaketUpdateNuGetSearchCommand : PaketNuGetSearchCommand
 	{
-		static IEnumerable<PaketSearchCommand> CreateCommands (string search)
+		public PaketUpdateNuGetSearchCommand (string search, Project project = null)
+			: base ("update", search, project)
 		{
-			return new PaketSearchCommand [] {
-				new PaketInitSearchCommand (),
-				new PaketInstallSearchCommand (),
-				new PaketUpdateSearchCommand (),
-				new PaketRestoreSearchCommand (),
-				new PaketAddNuGetSearchCommand (search),
-				new PaketRemoveNuGetSearchCommand (search),
-				new PaketUpdateNuGetSearchCommand (search),
-				new PaketSimplifySearchCommand (),
-				new PaketOutdatedSearchCommand (),
-				new PaketAddNuGetToProjectSearchCommand (search),
-				new PaketRemoveNuGetFromProjectSearchCommand (search),
-				new PaketConvertFromNuGetSearchCommand (),
-				new PaketAutoRestoreOnSearchCommand (),
-				new PaketAutoRestoreOffSearchCommand (),
-			};
 		}
 
-		public static IEnumerable<PaketSearchCommand> FilterCommands (string search)
+		protected override string ProjectNameMarkupStart {
+			get { return "in"; }
+		}
+
+		protected override ProgressMonitorStatusMessage GetProgressMessage (string packageId)
 		{
-			var query = new PaketSearchCommandQuery (search);
-			query.Parse ();
-			if (query.IsPaketSearchCommand) {
-				return CreateCommands (search)
-					.Where (command => command.IsMatch (query));
+			return ProgressMonitorStatusMessageFactory.CreateUpdateNuGetPackageMessage (packageId);
+		}
+
+		public override string GetDescriptionMarkup ()
+		{
+			if (Project != null) {
+				return GettextCatalog.GetString ("Updates a NuGet package in the current project.");
 			}
 
-			return Enumerable.Empty <PaketSearchCommand> ();
+			return GettextCatalog.GetString ("Updates a NuGet package.");
 		}
 	}
 }
