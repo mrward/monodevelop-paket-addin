@@ -84,8 +84,10 @@
     <Compile Include="MonoDevelop.Paket.Commands\PaketOutdatedSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket\PaketSearchCommandQuery.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketAddNuGetSearchCommand.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketAddNuGetSearchCommandQuery.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketAddNuGetToProjectSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketRemoveNuGetSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketNuGetSearchCommandQuery.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketRemoveNuGetFromProjectSearchCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

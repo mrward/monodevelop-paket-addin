@@ -101,6 +101,16 @@ namespace MonoDevelop.Paket
 			);
 		}
 
+		public static ProgressMonitorStatusMessage CreateRemoveNuGetPackageMessage (string packageId)
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Removing {0} ...", packageId),
+				GetString ("{0} removed successfully.", packageId),
+				GetString ("Could not remove {0}.", packageId),
+				GetString ("{0} removed with warnings.", packageId)
+			);
+		}
+
 		public static ProgressMonitorStatusMessage CreateUpdateMessage ()
 		{
 			return new ProgressMonitorStatusMessage (

@@ -1,5 +1,5 @@
 ﻿//
-// PaketAddNuGetSearchCommand.cs
+// PaketAddRemoveSearchCommand.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -31,12 +31,12 @@ using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.Commands
 {
-	public class PaketAddNuGetSearchCommand : PaketSearchCommand
+	public class PaketRemoveNuGetSearchCommand : PaketSearchCommand
 	{
 		PaketNuGetSearchCommandQuery query;
 
-		public PaketAddNuGetSearchCommand (string search, Project project = null)
-			: base ("add nuget")
+		public PaketRemoveNuGetSearchCommand (string search, Project project = null)
+			: base ("remove nuget")
 		{
 			query = new PaketNuGetSearchCommandQuery (search);
 			query.Parse ();
@@ -46,7 +46,7 @@ namespace MonoDevelop.Paket.Commands
 		public override void Run ()
 		{
 			var commandLine = PaketCommandLine.CreateCommandLine (GenerateCommandLine ());
-			var message = ProgressMonitorStatusMessageFactory.CreateAddNuGetPackageMessage (GetPackageIdToDisplay ());
+			var message = ProgressMonitorStatusMessageFactory.CreateRemoveNuGetPackageMessage (GetPackageIdToDisplay ());
 			PaketServices.CommandRunner.Run (commandLine, message, OnPaketRunCompleted);
 		}
 
@@ -63,7 +63,7 @@ namespace MonoDevelop.Paket.Commands
 		string GenerateCommandLine ()
 		{
 			return string.Format (
-				"add nuget {0}{1}{2}",
+				"remove nuget {0}{1}{2}",
 				query.PackageId,
 				GetPackageVersionCommandLineArgument (),
 				GetProjectCommandLineArgument ());
@@ -88,7 +88,7 @@ namespace MonoDevelop.Paket.Commands
 		public override string GetMarkup ()
 		{
 			return GettextCatalog.GetString (
-				"paket add nuget <b>{0} {1}</b> {2}",
+				"paket remove nuget <b>{0} {1}</b> {2}",
 				GetPackageIdMarkup (),
 				GetPackageVersionMarkup (),
 				GetProjectNameMarkup ());
@@ -113,7 +113,7 @@ namespace MonoDevelop.Paket.Commands
 		string GetProjectNameMarkup ()
 		{
 			if (Project != null)
-				return string.Format ("(to project {0})", Project.Name);
+				return string.Format ("(from project {0})", Project.Name);
 
 			return string.Empty;
 		}
@@ -121,10 +121,10 @@ namespace MonoDevelop.Paket.Commands
 		public override string GetDescriptionMarkup ()
 		{
 			if (Project != null) {
-				return GettextCatalog.GetString ("Adds a NuGet package to the current project.");
+				return GettextCatalog.GetString ("Removes a NuGet package from the current project.");
 			}
 
-			return GettextCatalog.GetString ("Adds a NuGet package to your paket.dependencies file");
+			return GettextCatalog.GetString ("Removes a NuGet package from your paket.dependencies file");
 		}
 
 		void OnPaketRunCompleted ()

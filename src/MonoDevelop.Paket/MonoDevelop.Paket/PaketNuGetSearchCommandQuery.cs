@@ -1,5 +1,5 @@
 ﻿//
-// PaketAddNuGetSearchCommandQuery.cs
+// PaketNuGetSearchCommandQuery.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,15 +25,13 @@
 // THE SOFTWARE.
 //
 
-using System;
-
 namespace MonoDevelop.Paket
 {
-	public class PaketAddNuGetSearchCommandQuery
+	public class PaketNuGetSearchCommandQuery
 	{
 		readonly PaketSearchCommandQuery query;
 
-		public PaketAddNuGetSearchCommandQuery (string search)
+		public PaketNuGetSearchCommandQuery (string search)
 		{
 			query = new PaketSearchCommandQuery (search);
 		}
