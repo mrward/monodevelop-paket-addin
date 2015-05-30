@@ -31,91 +31,20 @@ using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.Commands
 {
-	public class PaketAddNuGetSearchCommand : PaketSearchCommand
+	public class PaketAddNuGetSearchCommand : PaketNuGetSearchCommand
 	{
-		PaketNuGetSearchCommandQuery query;
-
 		public PaketAddNuGetSearchCommand (string search, Project project = null)
-			: base ("add nuget")
+			: base ("add", search, project)
 		{
-			query = new PaketNuGetSearchCommandQuery (search);
-			query.Parse ();
-			Project = project;
 		}
 
-		public override void Run ()
-		{
-			var commandLine = PaketCommandLine.CreateCommandLine (GenerateCommandLine ());
-			var message = ProgressMonitorStatusMessageFactory.CreateAddNuGetPackageMessage (GetPackageIdToDisplay ());
-			PaketServices.CommandRunner.Run (commandLine, message, OnPaketRunCompleted);
+		protected override string ProjectNameMarkupStart {
+			get { return "to"; }
 		}
 
-		protected Project Project { get; set; }
-
-		string GetPackageIdToDisplay ()
+		protected override ProgressMonitorStatusMessage GetProgressMessage (string packageId)
 		{
-			if (string.IsNullOrEmpty (query.PackageId))
-				return "NuGet package";
-
-			return query.PackageId;
-		}
-
-		string GenerateCommandLine ()
-		{
-			return string.Format (
-				"add nuget {0}{1}{2}",
-				query.PackageId,
-				GetPackageVersionCommandLineArgument (),
-				GetProjectCommandLineArgument ());
-		}
-
-		string GetPackageVersionCommandLineArgument ()
-		{
-			if (query.HasVersion ())
-				return " version " + query.PackageVersion;
-
-			return string.Empty;
-		}
-
-		string GetProjectCommandLineArgument ()
-		{
-			if (Project != null)
-				return string.Format (" project \"{0}\"", Project.FileName);
-
-			return string.Empty;
-		}
-
-		public override string GetMarkup ()
-		{
-			return GettextCatalog.GetString (
-				"paket add nuget <b>{0} {1}</b> {2}",
-				GetPackageIdMarkup (),
-				GetPackageVersionMarkup (),
-				GetProjectNameMarkup ());
-		}
-
-		string GetPackageIdMarkup ()
-		{
-			if (query.HasPackageId ())
-				return query.PackageId;
-
-			return "PackageId";
-		}
-
-		string GetPackageVersionMarkup ()
-		{
-			if (query.HasPackageId ())
-				return query.PackageVersion;
-
-			return "[Version]";
-		}
-
-		string GetProjectNameMarkup ()
-		{
-			if (Project != null)
-				return string.Format ("(to project {0})", Project.Name);
-
-			return string.Empty;
+			return ProgressMonitorStatusMessageFactory.CreateAddNuGetPackageMessage (packageId);
 		}
 
 		public override string GetDescriptionMarkup ()
@@ -125,15 +54,6 @@ namespace MonoDevelop.Paket.Commands
 			}
 
 			return GettextCatalog.GetString ("Adds a NuGet package to your paket.dependencies file");
-		}
-
-		void OnPaketRunCompleted ()
-		{
-			try {
-				FileService.NotifyFileChanged (Project.FileName);
-			} catch (Exception ex) {
-				LoggingService.LogError ("Notify file changed error.", ex);
-			}
 		}
 	}
 }

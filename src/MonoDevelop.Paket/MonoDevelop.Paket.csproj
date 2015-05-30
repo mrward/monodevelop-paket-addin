@@ -88,6 +88,7 @@
     <Compile Include="MonoDevelop.Paket.Commands\PaketRemoveNuGetSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket\PaketNuGetSearchCommandQuery.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketRemoveNuGetFromProjectSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketNuGetSearchCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
