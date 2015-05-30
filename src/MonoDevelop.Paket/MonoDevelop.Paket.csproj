@@ -90,6 +90,7 @@
     <Compile Include="MonoDevelop.Paket.Commands\PaketRemoveNuGetFromProjectSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketNuGetSearchCommand.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\PaketUpdateNuGetSearchCommand.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketFileChangedNotifier.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

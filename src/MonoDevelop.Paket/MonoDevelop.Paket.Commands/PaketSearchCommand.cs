@@ -26,6 +26,8 @@
 //
 
 using System;
+using MonoDevelop.Core;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.Commands
 {
@@ -56,6 +58,22 @@ namespace MonoDevelop.Paket.Commands
 				return true;
 
 			return Name.StartsWith (query.CommandType, StringComparison.OrdinalIgnoreCase);
+		}
+
+		protected void NotifyAllPaketAndProjectFilesChangedInSolution ()
+		{
+			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
+		}
+
+		protected void NotifyPaketFilesChanged (Project project)
+		{
+			FileService.NotifyFileChanged (project.FileName);
+			PaketServices.FileChangedNotifier.NotifyPaketReferencesFileChanged (project);
+		}
+
+		protected void NotifyAllProjectFilesChangedInSolution ()
+		{
+			PaketServices.FileChangedNotifier.NotifyAllProjectFilesChangedInSolution ();
 		}
 	}
 }

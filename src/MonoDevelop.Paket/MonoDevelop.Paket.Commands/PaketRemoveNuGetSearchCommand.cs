@@ -25,7 +25,6 @@
 // THE SOFTWARE.
 //
 
-using System;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 
@@ -55,6 +54,15 @@ namespace MonoDevelop.Paket.Commands
 			}
 
 			return GettextCatalog.GetString ("Removes a NuGet package from your paket.dependencies file");
+		}
+
+		protected override void NotifyPaketFilesChanged ()
+		{
+			if (Project != null) {
+				base.NotifyPaketFilesChanged ();
+			} else {
+				NotifyAllPaketAndProjectFilesChangedInSolution ();
+			}
 		}
 	}
 }

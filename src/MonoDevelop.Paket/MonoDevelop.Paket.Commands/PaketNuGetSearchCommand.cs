@@ -49,7 +49,7 @@ namespace MonoDevelop.Paket.Commands
 		{
 			var commandLine = PaketCommandLine.CreateCommandLine (GenerateCommandLine ());
 			ProgressMonitorStatusMessage message = GetProgressMessage (GetPackageIdToDisplay ());
-			PaketServices.CommandRunner.Run (commandLine, message, OnPaketRunCompleted);
+			PaketServices.CommandRunner.Run (commandLine, message, NotifyPaketFilesChanged);
 		}
 
 		protected abstract ProgressMonitorStatusMessage GetProgressMessage (string packageId);
@@ -146,13 +146,15 @@ namespace MonoDevelop.Paket.Commands
 			return string.Empty;
 		}
 
-		void OnPaketRunCompleted ()
+		protected virtual void NotifyPaketFilesChanged ()
 		{
-			try {
+			if (Project != null) {
+				NotifyPaketFilesChanged (Project);
 				FileService.NotifyFileChanged (Project.FileName);
-			} catch (Exception ex) {
-				LoggingService.LogError ("Notify file changed error.", ex);
 			}
+
+			PaketServices.FileChangedNotifier.NotifyPaketDependenciesFileChanged ();
+			PaketServices.FileChangedNotifier.NotifyPaketLockFileChanged ();
 		}
 	}
 }

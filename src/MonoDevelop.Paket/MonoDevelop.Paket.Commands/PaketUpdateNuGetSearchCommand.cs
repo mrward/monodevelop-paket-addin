@@ -54,6 +54,11 @@ namespace MonoDevelop.Paket.Commands
 
 			return GettextCatalog.GetString ("Updates a NuGet package.");
 		}
+
+		protected override void NotifyPaketFilesChanged ()
+		{
+			NotifyAllPaketAndProjectFilesChangedInSolution ();
+		}
 	}
 }
 

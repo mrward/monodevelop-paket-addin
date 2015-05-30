@@ -32,9 +32,11 @@ namespace MonoDevelop.Paket
 		static PaketServices ()
 		{
 			CommandRunner = new PaketCommandRunner ();
+			FileChangedNotifier = new PaketFileChangedNotifier ();
 		}
 
 		public static PaketCommandRunner CommandRunner { get; private set; }
+		public static PaketFileChangedNotifier FileChangedNotifier { get; private set; }
 	}
 }
 

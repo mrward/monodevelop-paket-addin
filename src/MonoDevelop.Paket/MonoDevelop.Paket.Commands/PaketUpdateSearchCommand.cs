@@ -40,7 +40,7 @@ namespace MonoDevelop.Paket.Commands
 		{
 			var commandLine = PaketCommandLine.CreateCommandLine ("update");
 			var message = ProgressMonitorStatusMessageFactory.CreateUpdateMessage ();
-			PaketServices.CommandRunner.Run (commandLine, message);
+			PaketServices.CommandRunner.Run (commandLine, message, NotifyAllPaketAndProjectFilesChangedInSolution);
 		}
 
 		public override string GetDescriptionMarkup ()

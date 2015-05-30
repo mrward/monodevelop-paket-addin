@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 //
 
+using System;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.Paket.Commands
@@ -40,7 +41,7 @@ namespace MonoDevelop.Paket.Commands
 		{
 			var commandLine = PaketCommandLine.CreateCommandLine ("install");
 			var message = ProgressMonitorStatusMessageFactory.CreateInstallMessage ();
-			PaketServices.CommandRunner.Run (commandLine, message);
+			PaketServices.CommandRunner.Run (commandLine, message, NotifyAllPaketAndProjectFilesChangedInSolution);
 		}
 
 		public override string GetDescriptionMarkup ()

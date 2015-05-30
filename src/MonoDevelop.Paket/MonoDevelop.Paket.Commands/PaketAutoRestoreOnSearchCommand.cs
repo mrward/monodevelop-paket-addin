@@ -40,7 +40,7 @@ namespace MonoDevelop.Paket.Commands
 		{
 			var commandLine = PaketCommandLine.CreateCommandLine ("auto-restore on");
 			var message = ProgressMonitorStatusMessageFactory.CreateAutoRestoreOnMessage ();
-			PaketServices.CommandRunner.Run (commandLine, message);
+			PaketServices.CommandRunner.Run (commandLine, message, NotifyAllProjectFilesChangedInSolution);
 		}
 
 		public override string GetDescriptionMarkup ()
