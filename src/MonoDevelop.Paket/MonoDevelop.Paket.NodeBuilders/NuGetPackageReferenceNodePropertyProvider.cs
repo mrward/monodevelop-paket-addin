@@ -1,10 +1,10 @@
 ﻿//
-// NuGetPackageReferenceNode.cs
+// NuGetPackageReferenceNodePropertyProvider.cs
 //
 // Author:
-//       Matt Ward <matt.ward@xamarin.com>
+//       Matt Ward <ward.matt@gmail.com>
 //
-// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
+// Copyright (c) 2015 Matthew Ward
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +25,20 @@
 // THE SOFTWARE.
 //
 
-using MonoDevelop.Core;
-using MonoDevelop.Ide.Gui;
-using Paket;
+using MonoDevelop.DesignerSupport;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class NuGetPackageReferenceNode
+	public class NuGetPackageReferenceNodePropertyProvider : IPropertyProvider
 	{
-		readonly PackageInstallSettings installSettings;
-
-		public NuGetPackageReferenceNode (PackageInstallSettings installSettings)
+		public bool SupportsObject (object obj)
 		{
-			this.installSettings = installSettings;
+			return obj is NuGetPackageReferenceNode;
 		}
 
-		internal PackageInstallSettings InstallSettings {
-			get { return installSettings; }
-		}
-
-		public string Name {
-			get { return installSettings.Name.ToString (); }
-		}
-
-		public string Id {
-			get { return Name; }
-		}
-
-		public string GetLabel ()
+		public object CreateProvider (object obj)
 		{
-			return Name;
-		}
-
-		public IconId GetIconId ()
-		{
-			return Stock.Reference;
+			return new NuGetPackageReferenceNodeDescriptor ((NuGetPackageReferenceNode)obj);
 		}
 	}
 }

@@ -56,6 +56,10 @@
     <Reference Include="paket">
       <HintPath>..\packages\Paket\tools\paket.exe</HintPath>
     </Reference>
+    <Reference Include="MonoDevelop.DesignerSupport">
+      <HintPath>..\..\lib\MonoDevelop.DesignerSupport.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +110,8 @@
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageReferenceNode.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageDependencyNode.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageDependencyNodeBuilder.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageReferenceNodePropertyProvider.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageReferenceNodeDescriptor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

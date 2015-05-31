@@ -80,4 +80,8 @@
 		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.NuGetPackageDependencyNodeBuilder" />
 		<NodeBuilder class="MonoDevelop.Paket.NodeBuilders.NuGetPackageReferenceNodeBuilder" />
 	</Extension>
+
+	<Extension path="/MonoDevelop/DesignerSupport/PropertyProviders">
+		<Class class="MonoDevelop.Paket.NodeBuilders.NuGetPackageReferenceNodePropertyProvider" />
+	</Extension>
 </ExtensionModel>

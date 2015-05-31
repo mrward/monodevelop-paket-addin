@@ -11,3 +11,4 @@
 [assembly:AddinDependency ("Core", "5.0")]
 [assembly:AddinDependency ("Ide", "5.0")]
 [assembly:AddinDependency ("SourceEditor2", "5.0")]
+[assembly:AddinDependency ("DesignerSupport", "5.0")]
