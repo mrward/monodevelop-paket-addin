@@ -26,13 +26,27 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Projects;
+using MonoDevelop.Core;
+using MonoDevelop.Ide;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
 	public class SolutionPaketDependenciesNodeBuilderExtension : NodeBuilderExtension
 	{
+		public SolutionPaketDependenciesNodeBuilderExtension ()
+		{
+			FileService.FileChanged += FileChanged;
+		}
+
+		public override void Dispose ()
+		{
+			FileService.FileChanged -= FileChanged;
+		}
+
 		public override bool CanBuildNode (Type dataType)
 		{
 			return typeof(Solution).IsAssignableFrom (dataType);
@@ -54,6 +68,31 @@ namespace MonoDevelop.Paket.NodeBuilders
 			var solution = (Solution)dataObject;
 			if (SolutionHasDependencies (solution)) {
 				treeBuilder.AddChild (new SolutionPaketDependenciesFolderNode (solution));
+			}
+		}
+
+		void FileChanged (object sender, FileEventArgs e)
+		{
+			List<FilePath> paketDependencyFiles = GetPaketDependencyFilesChanged (e).ToList ();
+			if (paketDependencyFiles.Any ()) {
+				RefreshAllChildNodes (paketDependencyFiles);
+			}
+		}
+
+		IEnumerable<FilePath> GetPaketDependencyFilesChanged (FileEventArgs fileEventArgs)
+		{
+			return fileEventArgs
+				.Where (file => file.FileName.IsPaketDependenciesFileName ())
+				.Select (file => file.FileName);
+		}
+
+		void RefreshAllChildNodes (ICollection<FilePath> dependencyFiles)
+		{
+			foreach (Solution solution in IdeApp.Workspace.GetAllSolutions ()) {
+				FilePath solutionPaketDependenciesFile = solution.GetPaketDependenciesFile ();
+				if (dependencyFiles.Any (file => file.Equals (solutionPaketDependenciesFile))) {
+					Context.UpdateChildrenFor (solution);
+				}
 			}
 		}
 	}

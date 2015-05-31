@@ -116,6 +116,8 @@
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageDependencyNodeDescriptor.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\SolutionPaketDependenciesFolderNodeCommandHandler.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\ProjectPaketReferencesFolderNodeCommandHandler.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\ITreeBuilderContextExtensions.cs" />
+    <Compile Include="MonoDevelop.Paket\FilePathExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
