@@ -83,5 +83,6 @@
 
 	<Extension path="/MonoDevelop/DesignerSupport/PropertyProviders">
 		<Class class="MonoDevelop.Paket.NodeBuilders.NuGetPackageReferenceNodePropertyProvider" />
+		<Class class="MonoDevelop.Paket.NodeBuilders.NuGetPackageDependencyNodePropertyProvider" />
 	</Extension>
 </ExtensionModel>

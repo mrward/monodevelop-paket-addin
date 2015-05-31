@@ -112,6 +112,8 @@
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageDependencyNodeBuilder.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageReferenceNodePropertyProvider.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageReferenceNodeDescriptor.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageDependencyNodePropertyProvider.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageDependencyNodeDescriptor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

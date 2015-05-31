@@ -1,10 +1,10 @@
 ﻿//
-// NuGetPackageDependencyNode.cs
+// NuGetPackageDependencyNodePropertyProvider.cs
 //
 // Author:
-//       Matt Ward <matt.ward@xamarin.com>
+//       Matt Ward <ward.matt@gmail.com>
 //
-// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
+// Copyright (c) 2015 Matthew Ward
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,41 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-using MonoDevelop.Core;
-using MonoDevelop.Ide.Gui;
-using Paket;
+
+using MonoDevelop.DesignerSupport;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class NuGetPackageDependencyNode
+	public class NuGetPackageDependencyNodePropertyProvider : IPropertyProvider
 	{
-		readonly Requirements.PackageRequirement packageRequirement;
-
-		public NuGetPackageDependencyNode (Requirements.PackageRequirement packageRequirement)
+		public bool SupportsObject (object obj)
 		{
-			this.packageRequirement = packageRequirement;
+			return obj is NuGetPackageDependencyNode;
 		}
 
-		internal Requirements.PackageRequirement PackageRequirement {
-			get { return packageRequirement; }
-		}
-
-		public string Name {
-			get { return packageRequirement.Name.ToString (); }
-		}
-
-		public string Id {
-			get { return Name; }
-		}
-
-		public string GetLabel ()
+		public object CreateProvider (object obj)
 		{
-			return Name;
-		}
-
-		public IconId GetIconId ()
-		{
-			return Stock.Reference;
+			return new NuGetPackageDependencyNodeDescriptor ((NuGetPackageDependencyNode)obj);
 		}
 	}
 }
