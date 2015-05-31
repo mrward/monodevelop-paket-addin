@@ -1,5 +1,5 @@
 ﻿//
-// SolutionPaketDependenciesFolderNode.cs
+// SolutionPaketDependenciesFolderNodeCommandHandler.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,45 +25,16 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
-using MonoDevelop.Core;
-using MonoDevelop.Ide.Gui;
-using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui.Components;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class SolutionPaketDependenciesFolderNode
+	public class SolutionPaketDependenciesFolderNodeCommandHandler : NodeCommandHandler
 	{
-		readonly Solution solution;
-
-		public SolutionPaketDependenciesFolderNode (Solution solution)
+		public override void ActivateItem ()
 		{
-			this.solution = solution;
-		}
-
-		public IconId Icon {
-			get { return Stock.OpenReferenceFolder; }
-		}
-
-		public IconId ClosedIcon {
-			get { return Stock.ClosedReferenceFolder; }
-		}
-
-		public string GetLabel ()
-		{
-			return GettextCatalog.GetString ("Paket Dependencies");
-		}
-
-		public IEnumerable<NuGetPackageDependencyNode> GetPackageDependencies ()
-		{
-			return solution.GetPackageRequirements ()
-				.Select (packageReference => new NuGetPackageDependencyNode (packageReference));
-		}
-
-		public void OpenFile ()
-		{
-			solution.OpenPaketDependenciesFile ();
+			var node = (SolutionPaketDependenciesFolderNode)CurrentNode.DataItem;
+			node.OpenFile ();
 		}
 	}
 }

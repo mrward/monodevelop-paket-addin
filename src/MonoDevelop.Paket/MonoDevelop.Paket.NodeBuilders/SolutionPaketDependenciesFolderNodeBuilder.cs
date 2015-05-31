@@ -41,6 +41,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 			return "PaketDependencies";
 		}
 
+		public override Type CommandHandlerType {
+			get { return typeof(SolutionPaketDependenciesFolderNodeCommandHandler); }
+		}
+
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
 		{
 			var node = (SolutionPaketDependenciesFolderNode)dataObject;

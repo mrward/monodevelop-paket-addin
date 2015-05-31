@@ -32,6 +32,7 @@ using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 using Paket;
+using MonoDevelop.Ide;
 
 namespace MonoDevelop.Paket
 {
@@ -70,6 +71,14 @@ namespace MonoDevelop.Paket
 			}
 
 			return Enumerable.Empty <Requirements.PackageRequirement> ();
+		}
+
+		public static void OpenPaketDependenciesFile (this Solution solution)
+		{
+			var dependenciesFileName = solution.GetPaketDependenciesFile ();
+			if (dependenciesFileName.IsNotNull) {
+				IdeApp.Workbench.OpenDocument (dependenciesFileName, null, true);
+			}
 		}
 	}
 }
