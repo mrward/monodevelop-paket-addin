@@ -1,5 +1,5 @@
 ﻿//
-// SolutionPaketDependenciesFolderNodeCommands.cs
+// PaketCommands.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,7 +27,7 @@
 
 namespace MonoDevelop.Paket.Commands
 {
-	public enum SolutionPaketDependenciesFolderNodeCommands
+	public enum PaketCommands
 	{
 		Restore
 	}

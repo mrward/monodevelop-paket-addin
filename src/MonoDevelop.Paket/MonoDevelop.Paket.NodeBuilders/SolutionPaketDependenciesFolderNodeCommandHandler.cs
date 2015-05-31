@@ -38,7 +38,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 			FolderNode.OpenFile ();
 		}
 
-		[CommandHandler (SolutionPaketDependenciesFolderNodeCommands.Restore)]
+		[CommandHandler (PaketCommands.Restore)]
 		public void Restore ()
 		{
 			var message = ProgressMonitorStatusMessageFactory.CreateRestoreMessage ();

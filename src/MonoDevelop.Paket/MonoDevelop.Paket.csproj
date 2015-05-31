@@ -122,7 +122,7 @@
     <Compile Include="MonoDevelop.Paket\PaketEventMonitor.cs" />
     <Compile Include="MonoDevelop.Paket\PaketAction.cs" />
     <Compile Include="MonoDevelop.Paket\RestorePaketAction.cs" />
-    <Compile Include="MonoDevelop.Paket.Commands\SolutionPaketDependenciesFolderNodeCommands.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\PaketCommands.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
