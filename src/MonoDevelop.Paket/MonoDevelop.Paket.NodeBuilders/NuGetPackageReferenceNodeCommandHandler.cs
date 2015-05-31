@@ -1,5 +1,5 @@
 ﻿//
-// ProjectPaketReferencesFolderNode.cs
+// NuGetPackageReferenceNodeCommandHandler.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,45 +25,49 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
+using System;
+using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
-using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui;
+using MonoDevelop.Ide.Commands;
+using MonoDevelop.Ide.Gui.Components;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class ProjectPaketReferencesFolderNode
+	public class NuGetPackageReferenceNodeCommandHandler : NodeCommandHandler
 	{
-		readonly DotNetProject project;
-
-		public ProjectPaketReferencesFolderNode (DotNetProject project)
+		[CommandUpdateHandler (EditCommands.Delete)]
+		public void UpdateRemoveItem (CommandInfo info)
 		{
-			this.project = project;
+			info.Enabled = CanDeleteMultipleItems ();
+			info.Text = GettextCatalog.GetString ("Remove");
 		}
 
-		public IconId Icon {
-			get { return Stock.OpenReferenceFolder; }
-		}
-
-		public IconId ClosedIcon {
-			get { return Stock.ClosedReferenceFolder; }
-		}
-
-		public string GetLabel ()
+		public override bool CanDeleteMultipleItems ()
 		{
-			return GettextCatalog.GetString ("Paket References");
+			return !MultipleSelectedNodes;
 		}
 
-		public IEnumerable<NuGetPackageReferenceNode> GetPackageReferences ()
+		public override void DeleteItem ()
 		{
-			return project.GetPackageInstallSettings ()
-				.Select (installSettings => new NuGetPackageReferenceNode (project, installSettings));
+			ProgressMonitorStatusMessage progressMessage = ProgressMonitorStatusMessageFactory.CreateRemoveNuGetPackageMessage (ReferenceNode.Id);
+
+			try {
+				RemoveDependency (progressMessage);
+			} catch (Exception ex) {
+				PaketServices.ActionRunner.ShowError (progressMessage, ex);
+			}
 		}
 
-		public void OpenFile ()
+		NuGetPackageReferenceNode ReferenceNode {
+			get { return (NuGetPackageReferenceNode)CurrentNode.DataItem; }
+		}
+
+		void RemoveDependency (ProgressMonitorStatusMessage progressMessage)
 		{
-			project.OpenPaketReferencesFile ();
+			var action = new RemoveNuGetFromProjectPaketAction (
+				ReferenceNode.Id,
+				ReferenceNode.Project);
+			PaketServices.ActionRunner.Run (progressMessage, action);
 		}
 	}
 }

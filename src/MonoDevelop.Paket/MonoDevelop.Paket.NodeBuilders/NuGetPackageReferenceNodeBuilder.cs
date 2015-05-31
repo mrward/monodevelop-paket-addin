@@ -36,6 +36,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 			get { return typeof(NuGetPackageReferenceNode); }
 		}
 
+		public override Type CommandHandlerType {
+			get { return typeof(NuGetPackageReferenceNodeCommandHandler); }
+		}
+
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			var node = (NuGetPackageReferenceNode)dataObject;

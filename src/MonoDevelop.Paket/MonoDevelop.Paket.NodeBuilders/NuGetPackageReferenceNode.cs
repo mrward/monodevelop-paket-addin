@@ -27,6 +27,7 @@
 
 using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui;
+using MonoDevelop.Projects;
 using Paket;
 
 namespace MonoDevelop.Paket.NodeBuilders
@@ -35,8 +36,11 @@ namespace MonoDevelop.Paket.NodeBuilders
 	{
 		readonly PackageInstallSettings installSettings;
 
-		public NuGetPackageReferenceNode (PackageInstallSettings installSettings)
+		public NuGetPackageReferenceNode (
+			DotNetProject project,
+			PackageInstallSettings installSettings)
 		{
+			Project = project;
 			this.installSettings = installSettings;
 		}
 
@@ -61,6 +65,8 @@ namespace MonoDevelop.Paket.NodeBuilders
 		{
 			return Stock.Reference;
 		}
+
+		internal DotNetProject Project { get; private set; }
 	}
 }
 

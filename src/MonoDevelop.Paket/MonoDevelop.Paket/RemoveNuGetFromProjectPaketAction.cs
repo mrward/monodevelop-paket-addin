@@ -1,5 +1,5 @@
 ﻿//
-// ProjectPaketReferencesFolderNode.cs
+// RemoveNuGetFromProjectPaketAction.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,45 +25,37 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui;
+using Paket;
 
-namespace MonoDevelop.Paket.NodeBuilders
+namespace MonoDevelop.Paket
 {
-	public class ProjectPaketReferencesFolderNode
+	public class RemoveNuGetFromProjectPaketAction : PaketAction
 	{
-		readonly DotNetProject project;
+		readonly string packageId;
+		readonly string projectFileName;
+		FilePath dependenciesFileName;
+		FilePath referencesFileName;
 
-		public ProjectPaketReferencesFolderNode (DotNetProject project)
+		public RemoveNuGetFromProjectPaketAction (
+			string packageId,
+			DotNetProject project)
 		{
-			this.project = project;
+			this.packageId = packageId;
+			dependenciesFileName = project.ParentSolution.GetPaketDependenciesFile ();
+			referencesFileName = project.GetPaketReferencesFile ();
+			projectFileName = project.FileName;
 		}
 
-		public IconId Icon {
-			get { return Stock.OpenReferenceFolder; }
-		}
-
-		public IconId ClosedIcon {
-			get { return Stock.ClosedReferenceFolder; }
-		}
-
-		public string GetLabel ()
+		public override void Run ()
 		{
-			return GettextCatalog.GetString ("Paket References");
-		}
+			Dependencies.Locate (dependenciesFileName)
+				.RemoveFromProject (packageId, false, false, referencesFileName, true);
 
-		public IEnumerable<NuGetPackageReferenceNode> GetPackageReferences ()
-		{
-			return project.GetPackageInstallSettings ()
-				.Select (installSettings => new NuGetPackageReferenceNode (project, installSettings));
-		}
-
-		public void OpenFile ()
-		{
-			project.OpenPaketReferencesFile ();
+			FileService.NotifyFileChanged (referencesFileName);
+			FileService.NotifyFileChanged (projectFileName);
+			FileService.NotifyFileChanged (dependenciesFileName);
 		}
 	}
 }

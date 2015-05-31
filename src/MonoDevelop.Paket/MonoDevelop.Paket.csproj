@@ -125,6 +125,8 @@
     <Compile Include="MonoDevelop.Paket.Commands\PaketCommands.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageDependencyNodeCommandHandler.cs" />
     <Compile Include="MonoDevelop.Paket\RemoveNuGetPaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket.NodeBuilders\NuGetPackageReferenceNodeCommandHandler.cs" />
+    <Compile Include="MonoDevelop.Paket\RemoveNuGetFromProjectPaketAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
