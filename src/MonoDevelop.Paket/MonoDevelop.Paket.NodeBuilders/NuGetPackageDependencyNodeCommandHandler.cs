@@ -1,8 +1,8 @@
 ﻿//
-// NuGetPackageDependencyNodeBuilder.cs
+// NuGetPackageDependencyNodeCommandHandler.cs
 //
 // Author:
-//       Matt Ward <ward..matt@gmail.com>
+//       Matt Ward <ward.matt@gmail.com>
 //
 // Copyright (c) 2015 Matthew Ward
 //
@@ -26,31 +26,48 @@
 //
 
 using System;
+using MonoDevelop.Components.Commands;
+using MonoDevelop.Core;
+using MonoDevelop.Ide.Commands;
 using MonoDevelop.Ide.Gui.Components;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class NuGetPackageDependencyNodeBuilder : TypeNodeBuilder
+	public class NuGetPackageDependencyNodeCommandHandler : NodeCommandHandler
 	{
-		public override Type NodeDataType {
-			get { return typeof(NuGetPackageDependencyNode); }
-		}
-
-		public override Type CommandHandlerType {
-			get { return typeof(NuGetPackageDependencyNodeCommandHandler); }
-		}
-
-		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
+		[CommandUpdateHandler (EditCommands.Delete)]
+		public void UpdateRemoveItem (CommandInfo info)
 		{
-			var node = (NuGetPackageDependencyNode)dataObject;
-			return node.Name;
+			info.Enabled = CanDeleteMultipleItems ();
+			info.Text = GettextCatalog.GetString ("Remove");
 		}
 
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
+		public override bool CanDeleteMultipleItems ()
 		{
-			var node = (NuGetPackageDependencyNode)dataObject;
-			nodeInfo.Label = node.GetLabel ();
-			nodeInfo.Icon = Context.GetIcon (node.GetIconId ());
+			return !MultipleSelectedNodes;
+		}
+
+		public override void DeleteItem ()
+		{
+			ProgressMonitorStatusMessage progressMessage = ProgressMonitorStatusMessageFactory.CreateRemoveNuGetPackageMessage (DependencyNode.Id);
+
+			try {
+				RemoveDependency (progressMessage);
+			} catch (Exception ex) {
+				PaketServices.ActionRunner.ShowError (progressMessage, ex);
+			}
+		}
+
+		NuGetPackageDependencyNode DependencyNode {
+			get { return (NuGetPackageDependencyNode)CurrentNode.DataItem; }
+		}
+
+		void RemoveDependency (ProgressMonitorStatusMessage progressMessage)
+		{
+			var action = new RemoveNuGetPaketAction (
+				DependencyNode.Id,
+				DependencyNode.GetPackageDependencyFile ());
+			PaketServices.ActionRunner.Run (progressMessage, action);
 		}
 	}
 }

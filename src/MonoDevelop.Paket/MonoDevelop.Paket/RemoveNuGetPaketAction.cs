@@ -1,10 +1,10 @@
 ﻿//
-// NuGetPackageDependencyNode.cs
+// RemoveNuGetPaketAction.cs
 //
 // Author:
-//       Matt Ward <matt.ward@xamarin.com>
+//       Matt Ward <ward.matt@gmail.com>
 //
-// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
+// Copyright (c) 2015 Matthew Ward
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,51 +24,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
 using MonoDevelop.Core;
-using MonoDevelop.Ide.Gui;
-using MonoDevelop.Projects;
 using Paket;
 
-namespace MonoDevelop.Paket.NodeBuilders
+namespace MonoDevelop.Paket
 {
-	public class NuGetPackageDependencyNode
+	public class RemoveNuGetPaketAction : PaketAction
 	{
-		readonly Solution solution;
-		readonly Requirements.PackageRequirement packageRequirement;
+		string packageId;
+		FilePath dependenciesFileName;
 
-		public NuGetPackageDependencyNode (
-			Solution solution,
-			Requirements.PackageRequirement packageRequirement)
+		public RemoveNuGetPaketAction (
+			string packageId,
+			FilePath dependenciesFileName)
 		{
-			this.solution = solution;
-			this.packageRequirement = packageRequirement;
+			this.packageId = packageId;
+			this.dependenciesFileName = dependenciesFileName;
 		}
 
-		internal Requirements.PackageRequirement PackageRequirement {
-			get { return packageRequirement; }
-		}
-
-		public string Name {
-			get { return packageRequirement.Name.ToString (); }
-		}
-
-		public string Id {
-			get { return Name; }
-		}
-
-		public string GetLabel ()
+		public override void Run ()
 		{
-			return Name;
-		}
-
-		public IconId GetIconId ()
-		{
-			return Stock.Reference;
-		}
-
-		public FilePath GetPackageDependencyFile ()
-		{
-			return solution.GetPaketDependenciesFile ();
+			Dependencies.Locate (dependenciesFileName)
+				.Remove (packageId);
+			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
 		}
 	}
 }

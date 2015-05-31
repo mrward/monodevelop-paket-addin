@@ -58,7 +58,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 		public IEnumerable<NuGetPackageDependencyNode> GetPackageDependencies ()
 		{
 			return solution.GetPackageRequirements ()
-				.Select (packageReference => new NuGetPackageDependencyNode (packageReference));
+				.Select (packageReference => new NuGetPackageDependencyNode (solution, packageReference));
 		}
 
 		public void OpenFile ()

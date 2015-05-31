@@ -96,6 +96,21 @@ namespace MonoDevelop.Paket
 		{
 			DispatchService.GuiDispatch (handler);
 		}
+
+		public void ShowError (ProgressMonitorStatusMessage progressMessage, Exception exception)
+		{
+			LoggingService.LogError (progressMessage.Status, exception);
+			ShowError (progressMessage, exception.Message);
+		}
+
+		public void ShowError (ProgressMonitorStatusMessage progressMessage, string error)
+		{
+			using (IProgressMonitor monitor = CreateProgressMonitor (progressMessage.Status)) {
+				monitor.Log.WriteLine (error);
+				monitor.ReportError (progressMessage.Error, null);
+				PaketConsolePad.Show (monitor);
+			}
+		}
 	}
 }
 
