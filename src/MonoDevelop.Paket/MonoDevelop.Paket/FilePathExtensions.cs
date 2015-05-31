@@ -34,11 +34,21 @@ namespace MonoDevelop.Paket
 	{
 		public static bool IsPaketDependenciesFileName (this FilePath filePath)
 		{
+			return filePath.IsMatch ("paket.dependencies");
+		}
+
+		static bool IsMatch (this FilePath filePath, string fileNameToMatch)
+		{
 			if (filePath == null) {
 				return false;
 			}
 
-			return "paket.dependencies".Equals (filePath.FileName, StringComparison.OrdinalIgnoreCase);
+			return fileNameToMatch.Equals (filePath.FileName, StringComparison.OrdinalIgnoreCase);
+		}
+
+		public static bool IsPaketReferencesFileName (this FilePath filePath)
+		{
+			return filePath.IsMatch ("paket.references");
 		}
 	}
 }

@@ -26,6 +26,10 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using MonoDevelop.Core;
+using MonoDevelop.Ide;
 using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Projects;
 
@@ -33,6 +37,16 @@ namespace MonoDevelop.Paket.NodeBuilders
 {
 	public class ProjectPaketReferencesNodeBuilderExtension : NodeBuilderExtension
 	{
+		public ProjectPaketReferencesNodeBuilderExtension ()
+		{
+			FileService.FileChanged += FileChanged;
+		}
+
+		public override void Dispose ()
+		{
+			FileService.FileChanged -= FileChanged;
+		}
+
 		public override bool CanBuildNode (Type dataType)
 		{
 			return typeof(DotNetProject).IsAssignableFrom (dataType);
@@ -54,6 +68,33 @@ namespace MonoDevelop.Paket.NodeBuilders
 			var project = (DotNetProject)dataObject;
 			if (ProjectHasPaketReferences (project)) {
 				treeBuilder.AddChild (new ProjectPaketReferencesFolderNode (project));
+			}
+		}
+
+		void FileChanged (object sender, FileEventArgs e)
+		{
+			List<FilePath> paketReferenceFiles = GetPaketReferenceFilesChanged (e).ToList ();
+			if (paketReferenceFiles.Any ()) {
+				RefreshAllChildNodes (paketReferenceFiles);
+			}
+		}
+
+		IEnumerable<FilePath> GetPaketReferenceFilesChanged (FileEventArgs fileEventArgs)
+		{
+			return fileEventArgs
+				.Where (file => file.FileName.IsPaketReferencesFileName ())
+				.Select (file => file.FileName);
+		}
+
+		void RefreshAllChildNodes (ICollection<FilePath> referenceFiles)
+		{
+			foreach (Solution solution in IdeApp.Workspace.GetAllSolutions ()) {
+				foreach (DotNetProject project in solution.GetAllProjects ().OfType<DotNetProject> ()) {
+					FilePath referencesFile = project.GetPaketReferencesFile ();
+					if (referenceFiles.Any (file => file.Equals (referencesFile))) {
+						Context.UpdateChildrenFor (project);
+					}
+				}
 			}
 		}
 	}
