@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MonoDevelop.Core;
+using MonoDevelop.Ide;
 
 namespace MonoDevelop.Paket
 {
@@ -45,7 +46,7 @@ namespace MonoDevelop.Paket
 			ProgressMonitorStatusMessage progressMessage,
 			IEnumerable<PaketAction> actions)
 		{
-			RunWithProgressMonitor (progressMessage, actions.ToList ());
+			BackgroundDispatch (() => RunWithProgressMonitor (progressMessage, actions.ToList ()));
 		}
 
 		void RunWithProgressMonitor (
@@ -84,6 +85,16 @@ namespace MonoDevelop.Paket
 		PaketEventsMonitor CreateEventMonitor (IProgressMonitor monitor)
 		{
 			return new PaketEventsMonitor (monitor);
+		}
+
+		protected virtual void BackgroundDispatch (MessageHandler handler)
+		{
+			DispatchService.BackgroundDispatch (handler);
+		}
+
+		protected virtual void GuiDispatch (MessageHandler handler)
+		{
+			DispatchService.GuiDispatch (handler);
 		}
 	}
 }
