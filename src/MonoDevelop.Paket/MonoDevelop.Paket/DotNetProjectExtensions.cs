@@ -32,6 +32,7 @@ using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 using Paket;
+using MonoDevelop.Ide;
 
 namespace MonoDevelop.Paket
 {
@@ -70,6 +71,14 @@ namespace MonoDevelop.Paket
 			}
 
 			return Enumerable.Empty <PackageInstallSettings> ();
+		}
+
+		public static void OpenPaketReferencesFile (this DotNetProject project)
+		{
+			var referencesFileName = project.GetPaketReferencesFile ();
+			if (referencesFileName.IsNotNull) {
+				IdeApp.Workbench.OpenDocument (referencesFileName, null, true);
+			}
 		}
 	}
 }

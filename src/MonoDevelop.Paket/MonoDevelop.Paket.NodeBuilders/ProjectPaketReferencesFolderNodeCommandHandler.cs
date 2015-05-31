@@ -1,5 +1,5 @@
 ﻿//
-// ProjectPaketReferencesFolderNode.cs
+// ProjectPaketReferencesFolderNodeCommandHandler.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,45 +25,16 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
-using MonoDevelop.Core;
-using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui;
+using MonoDevelop.Ide.Gui.Components;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
-	public class ProjectPaketReferencesFolderNode
+	public class ProjectPaketReferencesFolderNodeCommandHandler : NodeCommandHandler
 	{
-		readonly DotNetProject project;
-
-		public ProjectPaketReferencesFolderNode (DotNetProject project)
+		public override void ActivateItem ()
 		{
-			this.project = project;
-		}
-
-		public IconId Icon {
-			get { return Stock.OpenReferenceFolder; }
-		}
-
-		public IconId ClosedIcon {
-			get { return Stock.ClosedReferenceFolder; }
-		}
-
-		public string GetLabel ()
-		{
-			return GettextCatalog.GetString ("Paket References");
-		}
-
-		public IEnumerable<NuGetPackageReferenceNode> GetPackageReferences ()
-		{
-			return project.GetPackageInstallSettings ()
-				.Select (installSettings => new NuGetPackageReferenceNode (installSettings));
-		}
-
-		public void OpenFile ()
-		{
-			project.OpenPaketReferencesFile ();
+			var node = (ProjectPaketReferencesFolderNode)CurrentNode.DataItem;
+			node.OpenFile ();
 		}
 	}
 }
