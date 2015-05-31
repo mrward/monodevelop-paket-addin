@@ -1,5 +1,5 @@
 ﻿//
-// PaketServices.cs
+// RestorePaketAction.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,20 +25,25 @@
 // THE SOFTWARE.
 //
 
+using MonoDevelop.Core;
+using Paket;
+
 namespace MonoDevelop.Paket
 {
-	public static class PaketServices
+	public class RestorePaketAction : PaketAction
 	{
-		static PaketServices ()
+		FilePath dependenciesFileName;
+
+		public RestorePaketAction (FilePath dependenciesFileName)
 		{
-			CommandRunner = new PaketCommandRunner ();
-			FileChangedNotifier = new PaketFileChangedNotifier ();
-			ActionRunner = new PaketActionRunner ();
+			this.dependenciesFileName = dependenciesFileName;
 		}
 
-		public static PaketCommandRunner CommandRunner { get; private set; }
-		public static PaketFileChangedNotifier FileChangedNotifier { get; private set; }
-		public static PaketActionRunner ActionRunner { get; private set; }
+		public override void Run ()
+		{
+			Dependencies.Locate (dependenciesFileName)
+				.Restore ();
+		}
 	}
 }
 

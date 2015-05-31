@@ -1,5 +1,5 @@
 ﻿//
-// PaketServices.cs
+// PaketEventsMonitor.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,20 +25,44 @@
 // THE SOFTWARE.
 //
 
+using System;
+using Paket;
+using MonoDevelop.Core;
+
 namespace MonoDevelop.Paket
 {
-	public static class PaketServices
+	public class PaketEventsMonitor : IDisposable
 	{
-		static PaketServices ()
+		readonly IProgressMonitor monitor;
+
+		public PaketEventsMonitor (IProgressMonitor monitor)
 		{
-			CommandRunner = new PaketCommandRunner ();
-			FileChangedNotifier = new PaketFileChangedNotifier ();
-			ActionRunner = new PaketActionRunner ();
+			this.monitor = monitor;
+			Logging.RegisterTraceFunction (OnTrace);
 		}
 
-		public static PaketCommandRunner CommandRunner { get; private set; }
-		public static PaketFileChangedNotifier FileChangedNotifier { get; private set; }
-		public static PaketActionRunner ActionRunner { get; private set; }
+		public void Dispose ()
+		{
+			Logging.RemoveTraceFunction (OnTrace);
+		}
+
+		void OnTrace (string message)
+		{
+			monitor.Log.WriteLine (message);
+		}
+
+		public void ReportError (ProgressMonitorStatusMessage progressMessage, Exception ex)
+		{
+			LoggingService.LogError ("PaketAction error.", ex);
+			monitor.Log.WriteLine (ex.Message);
+			monitor.ReportError (progressMessage.Error, null);
+			PaketConsolePad.Show (monitor);
+		}
+
+		public void ReportResult (ProgressMonitorStatusMessage progressMessage)
+		{
+			monitor.ReportSuccess (progressMessage.Success);
+		}
 	}
 }
 

@@ -26,6 +26,8 @@
 //
 
 using MonoDevelop.Ide.Gui.Components;
+using MonoDevelop.Components.Commands;
+using MonoDevelop.Paket.Commands;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
@@ -33,8 +35,21 @@ namespace MonoDevelop.Paket.NodeBuilders
 	{
 		public override void ActivateItem ()
 		{
-			var node = (SolutionPaketDependenciesFolderNode)CurrentNode.DataItem;
-			node.OpenFile ();
+			FolderNode.OpenFile ();
+		}
+
+		[CommandHandler (SolutionPaketDependenciesFolderNodeCommands.Restore)]
+		public void Restore ()
+		{
+			var message = ProgressMonitorStatusMessageFactory.CreateRestoreMessage ();
+			var action = new RestorePaketAction (FolderNode.GetPaketDependenciesFile ());
+			PaketServices.ActionRunner.Run (message, action);
+		}
+
+		SolutionPaketDependenciesFolderNode FolderNode {
+			get {
+				return (SolutionPaketDependenciesFolderNode)CurrentNode.DataItem;
+			}
 		}
 	}
 }

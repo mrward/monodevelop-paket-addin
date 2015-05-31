@@ -24,14 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
 using MonoDevelop.Ide;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Core.ProgressMonitoring;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Paket
 {
 	public static class PaketConsolePad
 	{
+		public static void Show (IProgressMonitor monitor)
+		{
+			var aggregatedMonitor = monitor as AggregatedProgressMonitor;
+			if (aggregatedMonitor != null)
+				Show (aggregatedMonitor);
+		}
+
 		public static void Show (AggregatedProgressMonitor monitor)
 		{
 			DispatchService.GuiDispatch (() => {

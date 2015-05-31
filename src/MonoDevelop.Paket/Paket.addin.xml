@@ -85,4 +85,17 @@
 		<Class class="MonoDevelop.Paket.NodeBuilders.NuGetPackageReferenceNodePropertyProvider" />
 		<Class class="MonoDevelop.Paket.NodeBuilders.NuGetPackageDependencyNodePropertyProvider" />
 	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/Commands">
+		<Command
+			id = "MonoDevelop.Paket.Commands.SolutionPaketDependenciesFolderNodeCommands.Restore"
+			_description = "Restore missing dependencies"
+			_label = "_Restore" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/ContextMenu/ProjectPad">
+		<Condition id="ItemType" value="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNode">
+			<CommandItem id="MonoDevelop.Paket.Commands.SolutionPaketDependenciesFolderNodeCommands.Restore" />
+		</Condition>
+	</Extension>
 </ExtensionModel>

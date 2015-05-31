@@ -1,5 +1,5 @@
 ﻿//
-// PaketServices.cs
+// SolutionPaketDependenciesFolderNodeCommands.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,20 +25,11 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket
+namespace MonoDevelop.Paket.Commands
 {
-	public static class PaketServices
+	public enum SolutionPaketDependenciesFolderNodeCommands
 	{
-		static PaketServices ()
-		{
-			CommandRunner = new PaketCommandRunner ();
-			FileChangedNotifier = new PaketFileChangedNotifier ();
-			ActionRunner = new PaketActionRunner ();
-		}
-
-		public static PaketCommandRunner CommandRunner { get; private set; }
-		public static PaketFileChangedNotifier FileChangedNotifier { get; private set; }
-		public static PaketActionRunner ActionRunner { get; private set; }
+		Restore
 	}
 }
 

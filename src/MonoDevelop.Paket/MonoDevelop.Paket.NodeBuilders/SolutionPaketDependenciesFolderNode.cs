@@ -65,6 +65,11 @@ namespace MonoDevelop.Paket.NodeBuilders
 		{
 			solution.OpenPaketDependenciesFile ();
 		}
+
+		public FilePath GetPaketDependenciesFile ()
+		{
+			return solution.GetPaketDependenciesFile ();
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 ﻿//
-// PaketServices.cs
+// PaketAction.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -27,18 +27,9 @@
 
 namespace MonoDevelop.Paket
 {
-	public static class PaketServices
+	public abstract class PaketAction
 	{
-		static PaketServices ()
-		{
-			CommandRunner = new PaketCommandRunner ();
-			FileChangedNotifier = new PaketFileChangedNotifier ();
-			ActionRunner = new PaketActionRunner ();
-		}
-
-		public static PaketCommandRunner CommandRunner { get; private set; }
-		public static PaketFileChangedNotifier FileChangedNotifier { get; private set; }
-		public static PaketActionRunner ActionRunner { get; private set; }
+		public abstract void Run ();
 	}
 }
 

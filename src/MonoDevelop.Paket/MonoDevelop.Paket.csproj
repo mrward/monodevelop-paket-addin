@@ -118,6 +118,11 @@
     <Compile Include="MonoDevelop.Paket.NodeBuilders\ProjectPaketReferencesFolderNodeCommandHandler.cs" />
     <Compile Include="MonoDevelop.Paket.NodeBuilders\ITreeBuilderContextExtensions.cs" />
     <Compile Include="MonoDevelop.Paket\FilePathExtensions.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketActionRunner.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketEventMonitor.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket\RestorePaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\SolutionPaketDependenciesFolderNodeCommands.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
