@@ -118,8 +118,14 @@
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
 		</Condition>
-		<Condition id="ItemType" value="MonoDevelop.Paket.NodeBuilders.NuGetPackageDependencyNode">
-			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.UpdatePackage" />
-		</Condition>
+	</Extension>
+
+	<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageDependency">
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
+	</ExtensionPoint>
+
+	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageDependency">
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.UpdatePackage" />
+		<CommandItem id="MonoDevelop.Ide.Commands.EditCommands.Delete" />
 	</Extension>
 </ExtensionModel>

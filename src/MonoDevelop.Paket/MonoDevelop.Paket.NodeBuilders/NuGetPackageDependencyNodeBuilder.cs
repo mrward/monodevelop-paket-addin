@@ -40,6 +40,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 			get { return typeof(NuGetPackageDependencyNodeCommandHandler); }
 		}
 
+		public override string ContextMenuAddinPath {
+			get { return "/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageDependency"; }
+		}
+
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			var node = (NuGetPackageDependencyNode)dataObject;
