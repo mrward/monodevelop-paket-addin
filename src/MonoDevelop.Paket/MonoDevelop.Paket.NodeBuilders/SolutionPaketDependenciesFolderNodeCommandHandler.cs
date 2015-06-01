@@ -51,6 +51,14 @@ namespace MonoDevelop.Paket.NodeBuilders
 				return (SolutionPaketDependenciesFolderNode)CurrentNode.DataItem;
 			}
 		}
+
+		[CommandHandler (PaketCommands.Install)]
+		public void Install ()
+		{
+			var message = ProgressMonitorStatusMessageFactory.CreateInstallMessage ();
+			var action = new InstallPaketAction (FolderNode.GetPaketDependenciesFile ());
+			PaketServices.ActionRunner.Run (message, action);
+		}
 	}
 }
 

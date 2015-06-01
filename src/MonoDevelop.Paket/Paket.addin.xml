@@ -92,11 +92,16 @@
 				id = "MonoDevelop.Paket.Commands.PaketCommands.Restore"
 				_description = "Restore missing Paket dependencies"
 				_label = "_Restore" />
+			<Command
+				id = "MonoDevelop.Paket.Commands.PaketCommands.Install"
+				_description = "Installs Paket dependencies into packages directory and referenced projects"
+				_label = "_Install" />
 		</Category>
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/ContextMenu/ProjectPad">
 		<Condition id="ItemType" value="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNode">
+			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
 		</Condition>
 	</Extension>
