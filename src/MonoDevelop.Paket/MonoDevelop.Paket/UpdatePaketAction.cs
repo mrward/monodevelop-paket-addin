@@ -1,5 +1,5 @@
 ﻿//
-// PaketCommands.cs
+// UpdatePaketAction.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,14 +25,26 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket.Commands
+using MonoDevelop.Core;
+using Paket;
+
+namespace MonoDevelop.Paket
 {
-	public enum PaketCommands
+	public class UpdatePaketAction : PaketAction
 	{
-		Install,
-		Restore,
-		Simplify,
-		Update
+		FilePath dependenciesFileName;
+
+		public UpdatePaketAction (FilePath dependenciesFileName)
+		{
+			this.dependenciesFileName = dependenciesFileName;
+		}
+
+		public override void Run ()
+		{
+			Dependencies.Locate (dependenciesFileName)
+				.Update (false, false);
+			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
+		}
 	}
 }
 

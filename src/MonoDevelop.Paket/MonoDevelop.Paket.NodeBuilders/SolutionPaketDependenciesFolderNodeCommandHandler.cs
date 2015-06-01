@@ -67,6 +67,14 @@ namespace MonoDevelop.Paket.NodeBuilders
 			var action = new SimplifyPaketAction (FolderNode.GetPaketDependenciesFile ());
 			PaketServices.ActionRunner.Run (message, action);
 		}
+
+		[CommandHandler (PaketCommands.Update)]
+		public void Update ()
+		{
+			var message = ProgressMonitorStatusMessageFactory.CreateUpdateMessage ();
+			var action = new UpdatePaketAction (FolderNode.GetPaketDependenciesFile ());
+			PaketServices.ActionRunner.Run (message, action);
+		}
 	}
 }
 

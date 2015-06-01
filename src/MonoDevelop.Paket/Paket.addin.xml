@@ -100,11 +100,16 @@
 				id = "MonoDevelop.Paket.Commands.PaketCommands.Simplify"
 				_description = "Simplifies Paket dependencies"
 				_label = "_Simplify" />
+			<Command
+				id = "MonoDevelop.Paket.Commands.PaketCommands.Update"
+				_description = "Updates Paket dependencies"
+				_label = "_Update" />
 		</Category>
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/ContextMenu/ProjectPad">
 		<Condition id="ItemType" value="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNode">
+			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Update" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
