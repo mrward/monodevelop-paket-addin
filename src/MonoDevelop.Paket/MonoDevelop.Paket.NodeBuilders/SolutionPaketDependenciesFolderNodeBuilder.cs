@@ -45,6 +45,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 			get { return typeof(SolutionPaketDependenciesFolderNodeCommandHandler); }
 		}
 
+		public override string ContextMenuAddinPath {
+			get { return "/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketDependencies"; }
+		}
+
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
 		{
 			var node = (SolutionPaketDependenciesFolderNode)dataObject;

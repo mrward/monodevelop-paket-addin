@@ -46,6 +46,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 			get { return typeof(ProjectPaketReferencesFolderNodeCommandHandler); }
 		}
 
+		public override string ContextMenuAddinPath {
+			get { return "/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketReferences"; }
+		}
+
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
 		{
 			var node = (ProjectPaketReferencesFolderNode)dataObject;

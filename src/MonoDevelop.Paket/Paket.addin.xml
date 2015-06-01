@@ -111,13 +111,22 @@
 		</Category>
 	</Extension>
 
-	<Extension path="/MonoDevelop/Ide/ContextMenu/ProjectPad">
-		<Condition id="ItemType" value="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNode">
-			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Update" />
-			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
-			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
-			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
-		</Condition>
+	<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketDependencies">
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
+	</ExtensionPoint>
+
+	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketDependencies">
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Update" />
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
+	</Extension>
+
+	<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketReferences">
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
+	</ExtensionPoint>
+
+	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketReferences">
 	</Extension>
 
 	<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageDependency">
@@ -126,6 +135,14 @@
 
 	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageDependency">
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.UpdatePackage" />
+		<CommandItem id="MonoDevelop.Ide.Commands.EditCommands.Delete" />
+	</Extension>
+
+		<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageReference">
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
+	</ExtensionPoint>
+
+	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageReference">
 		<CommandItem id="MonoDevelop.Ide.Commands.EditCommands.Delete" />
 	</Extension>
 </ExtensionModel>
