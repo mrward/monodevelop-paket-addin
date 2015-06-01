@@ -52,7 +52,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 			ProgressMonitorStatusMessage progressMessage = ProgressMonitorStatusMessageFactory.CreateRemoveNuGetPackageMessage (ReferenceNode.Id);
 
 			try {
-				RemoveDependency (progressMessage);
+				RemovePackageReference (progressMessage);
 			} catch (Exception ex) {
 				PaketServices.ActionRunner.ShowError (progressMessage, ex);
 			}
@@ -62,7 +62,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 			get { return (NuGetPackageReferenceNode)CurrentNode.DataItem; }
 		}
 
-		void RemoveDependency (ProgressMonitorStatusMessage progressMessage)
+		void RemovePackageReference (ProgressMonitorStatusMessage progressMessage)
 		{
 			var action = new RemoveNuGetFromProjectPaketAction (
 				ReferenceNode.Id,
