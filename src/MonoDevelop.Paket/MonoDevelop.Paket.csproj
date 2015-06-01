@@ -130,6 +130,7 @@
     <Compile Include="MonoDevelop.Paket\InstallPaketAction.cs" />
     <Compile Include="MonoDevelop.Paket\SimplifyPaketAction.cs" />
     <Compile Include="MonoDevelop.Paket\UpdatePaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket\UpdateNuGetPaketAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

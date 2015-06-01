@@ -30,6 +30,7 @@ using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
 using MonoDevelop.Ide.Commands;
 using MonoDevelop.Ide.Gui.Components;
+using MonoDevelop.Paket.Commands;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
@@ -68,6 +69,16 @@ namespace MonoDevelop.Paket.NodeBuilders
 				DependencyNode.Id,
 				DependencyNode.GetPackageDependencyFile ());
 			PaketServices.ActionRunner.Run (progressMessage, action);
+		}
+
+		[CommandHandler (PaketCommands.UpdatePackage)]
+		public void Update ()
+		{
+			var message = ProgressMonitorStatusMessageFactory.CreateUpdateNuGetPackageMessage (DependencyNode.Id);
+			var action = new UpdateNuGetPaketAction (
+				DependencyNode.Id,
+				DependencyNode.GetPackageDependencyFile ());
+			PaketServices.ActionRunner.Run (message, action);
 		}
 	}
 }

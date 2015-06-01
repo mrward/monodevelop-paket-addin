@@ -104,6 +104,10 @@
 				id = "MonoDevelop.Paket.Commands.PaketCommands.Update"
 				_description = "Updates Paket dependencies"
 				_label = "_Update" />
+			<Command
+				id = "MonoDevelop.Paket.Commands.PaketCommands.UpdatePackage"
+				_description = "Updates a NuGet package"
+				_label = "_Update" />
 		</Category>
 	</Extension>
 
@@ -113,6 +117,9 @@
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
+		</Condition>
+		<Condition id="ItemType" value="MonoDevelop.Paket.NodeBuilders.NuGetPackageDependencyNode">
+			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.UpdatePackage" />
 		</Condition>
 	</Extension>
 </ExtensionModel>
