@@ -50,6 +50,7 @@ namespace MonoDevelop.Paket
 			Dependencies.Locate (dependenciesFileName)
 				.UpdatePackage (packageId, FSharpOption<string>.None, false, false);
 
+			PaketServices.UpdatedPackagesInSolution.Remove (packageId);
 			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
 		}
 	}

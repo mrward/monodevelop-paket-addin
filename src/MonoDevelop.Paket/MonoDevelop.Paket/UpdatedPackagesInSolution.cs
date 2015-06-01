@@ -66,9 +66,9 @@ namespace MonoDevelop.Paket
 			return updates.FirstOrDefault (update => update.IsMatch (id));
 		}
 
-		public void Remove (NuGetPackageUpdate updatedPackage)
+		public void Remove (string packageId)
 		{
-			updates.RemoveAll (update => update.IsMatch (updatedPackage.PackageId));
+			updates.RemoveAll (update => update.IsMatch (packageId));
 		}
 	}
 }

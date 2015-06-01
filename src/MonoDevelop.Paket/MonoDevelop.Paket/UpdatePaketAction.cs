@@ -43,6 +43,8 @@ namespace MonoDevelop.Paket
 		{
 			Dependencies.Locate (dependenciesFileName)
 				.Update (false, false);
+
+			PaketServices.UpdatedPackagesInSolution.Clear ();
 			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
 		}
 	}
