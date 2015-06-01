@@ -96,6 +96,10 @@
 				id = "MonoDevelop.Paket.Commands.PaketCommands.Install"
 				_description = "Installs Paket dependencies into packages directory and referenced projects"
 				_label = "_Install" />
+			<Command
+				id = "MonoDevelop.Paket.Commands.PaketCommands.Simplify"
+				_description = "Simplifies Paket dependencies"
+				_label = "_Simplify" />
 		</Category>
 	</Extension>
 
@@ -103,6 +107,7 @@
 		<Condition id="ItemType" value="MonoDevelop.Paket.NodeBuilders.SolutionPaketDependenciesFolderNode">
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
 			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
+			<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
 		</Condition>
 	</Extension>
 </ExtensionModel>

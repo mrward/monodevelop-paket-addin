@@ -1,5 +1,5 @@
 ﻿//
-// PaketCommands.cs
+// SimplifyPaketAction.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,13 +25,26 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket.Commands
+using MonoDevelop.Core;
+using Paket;
+
+namespace MonoDevelop.Paket
 {
-	public enum PaketCommands
+	public class SimplifyPaketAction : PaketAction
 	{
-		Install,
-		Restore,
-		Simplify
+		FilePath dependenciesFileName;
+
+		public SimplifyPaketAction (FilePath dependenciesFileName)
+		{
+			this.dependenciesFileName = dependenciesFileName;
+		}
+
+		public override void Run ()
+		{
+			Dependencies.Locate (dependenciesFileName)
+				.Simplify (false);
+			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
+		}
 	}
 }
 
