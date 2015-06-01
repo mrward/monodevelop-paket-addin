@@ -1,10 +1,10 @@
 ﻿//
-// PaketCommands.cs
+// UpdatedPackagesProgressMonitorStatusMessage.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+using MonoDevelop.Core;
 
-namespace MonoDevelop.Paket.Commands
+namespace MonoDevelop.Paket
 {
-	public enum PaketCommands
+	public class UpdatedPackagesProgressMonitorStatusMessage : ProgressMonitorStatusMessage
 	{
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		public UpdatedPackagesProgressMonitorStatusMessage (string status, string success, string error, string warning)
+			: base (status, success, error, warning)
+		{
+		}
+
+		public int UpdatedPackagesFound { get; set; }
+
+		protected override string GetSuccessMessage ()
+		{
+			if (UpdatedPackagesFound == 0) {
+				return GettextCatalog.GetString ("Paket dependencies are up to date.");
+			} else if (UpdatedPackagesFound == 1) {
+				return GettextCatalog.GetString ("1 update found.", UpdatedPackagesFound);
+			}
+
+			return GettextCatalog.GetString ("{0} updates found.", UpdatedPackagesFound);
+		}
 	}
 }
 

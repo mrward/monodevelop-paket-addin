@@ -71,6 +71,7 @@ namespace MonoDevelop.Paket
 		void RunActionsWithProgressMonitor (IProgressMonitor monitor, IList<PaketAction> actions)
 		{
 			foreach (PaketAction action in actions) {
+				action.Monitor = monitor;
 				action.Run ();
 				monitor.Step (1);
 			}

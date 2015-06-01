@@ -1,5 +1,5 @@
 ﻿//
-// PaketCommands.cs
+// UpdatedPackagesInSolution.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,16 +25,51 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket.Commands
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using MonoDevelop.Ide;
+using MonoDevelop.Projects;
+
+namespace MonoDevelop.Paket
 {
-	public enum PaketCommands
+	public class UpdatedPackagesInSolution
 	{
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		public UpdatedPackagesInSolution ()
+		{
+			IdeApp.Workspace.SolutionUnloaded += SolutionUnloaded;
+		}
+
+		void SolutionUnloaded (object sender, SolutionEventArgs e)
+		{
+			Clear ();
+		}
+
+		public void Clear ()
+		{
+			updates = new List<NuGetPackageUpdate> ();
+		}
+
+		List<NuGetPackageUpdate> updates = new List<NuGetPackageUpdate> ();
+
+		public void RefreshUpdatedPackages (IEnumerable<NuGetPackageUpdate> updates)
+		{
+			this.updates = updates.ToList ();
+		}
+
+		public int UpdatedPackagesCount {
+			get { return updates.Count; }
+		}
+
+		public NuGetPackageUpdate FindUpdatedPackage (string id)
+		{
+			return updates.FirstOrDefault (update => update.IsMatch (id));
+		}
+
+		public void Remove (NuGetPackageUpdate updatedPackage)
+		{
+			updates.RemoveAll (update => update.IsMatch (updatedPackage.PackageId));
+		}
 	}
 }
 

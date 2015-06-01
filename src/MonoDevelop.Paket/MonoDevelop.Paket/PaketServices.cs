@@ -34,11 +34,13 @@ namespace MonoDevelop.Paket
 			CommandRunner = new PaketCommandRunner ();
 			FileChangedNotifier = new PaketFileChangedNotifier ();
 			ActionRunner = new PaketActionRunner ();
+			UpdatedPackagesInSolution = new UpdatedPackagesInSolution ();
 		}
 
 		public static PaketCommandRunner CommandRunner { get; private set; }
 		public static PaketFileChangedNotifier FileChangedNotifier { get; private set; }
 		public static PaketActionRunner ActionRunner { get; private set; }
+		public static UpdatedPackagesInSolution UpdatedPackagesInSolution { get; private set; }
 	}
 }
 

@@ -101,6 +101,16 @@ namespace MonoDevelop.Paket
 			);
 		}
 
+		public static UpdatedPackagesProgressMonitorStatusMessage CreateUpdatedPackagesMessage ()
+		{
+			return new UpdatedPackagesProgressMonitorStatusMessage (
+				GetString ("Checking for updated paket dependencies..."),
+				GetString ("Updated- paket dependencies checked successfully."),
+				GetString ("Could not check for updated paket dependencies."),
+				GetString ("Updated paket dependencies checked with warnings.")
+			);
+		}
+
 		public static ProgressMonitorStatusMessage CreateRemoveNuGetPackageMessage (string packageId)
 		{
 			return new ProgressMonitorStatusMessage (

@@ -60,6 +60,10 @@
       <HintPath>..\..\lib\MonoDevelop.DesignerSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,6 +135,10 @@
     <Compile Include="MonoDevelop.Paket\SimplifyPaketAction.cs" />
     <Compile Include="MonoDevelop.Paket\UpdatePaketAction.cs" />
     <Compile Include="MonoDevelop.Paket\UpdateNuGetPaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket\CheckForUpdatesPaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket\NuGetPackageUpdate.cs" />
+    <Compile Include="MonoDevelop.Paket\UpdatedPackagesProgressMonitorStatusMessage.cs" />
+    <Compile Include="MonoDevelop.Paket\UpdatedPackagesInSolution.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

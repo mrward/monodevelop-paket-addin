@@ -1,10 +1,10 @@
 ﻿//
-// PaketCommands.cs
+// NuGetPackageUpdate.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,31 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket.Commands
+using System;
+using Paket;
+
+namespace MonoDevelop.Paket
 {
-	public enum PaketCommands
+	public class NuGetPackageUpdate
 	{
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		public NuGetPackageUpdate (string packageId, SemVerInfo version)
+		{
+			PackageId = packageId;
+			Version = version;
+		}
+
+		public string PackageId { get; private set; }
+		public SemVerInfo Version { get; private set; }
+
+		public override string ToString ()
+		{
+			return string.Format ("{0} {1}", PackageId, Version);
+		}
+
+		public bool IsMatch (string packageId)
+		{
+			return string.Equals (PackageId, packageId, StringComparison.OrdinalIgnoreCase);
+		}
 	}
 }
 

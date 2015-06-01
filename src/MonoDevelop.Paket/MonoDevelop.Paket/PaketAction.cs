@@ -25,11 +25,14 @@
 // THE SOFTWARE.
 //
 
+using MonoDevelop.Core;
+
 namespace MonoDevelop.Paket
 {
 	public abstract class PaketAction
 	{
 		public abstract void Run ();
+		public IProgressMonitor Monitor { get; set; }
 	}
 }
 

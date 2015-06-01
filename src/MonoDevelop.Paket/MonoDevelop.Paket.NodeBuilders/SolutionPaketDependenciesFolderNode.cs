@@ -30,16 +30,22 @@ using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Projects;
+using Paket;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
 	public class SolutionPaketDependenciesFolderNode
 	{
 		readonly Solution solution;
+		List<NuGetPackageUpdate> updates = new List<NuGetPackageUpdate> ();
 
 		public SolutionPaketDependenciesFolderNode (Solution solution)
 		{
 			this.solution = solution;
+		}
+
+		internal Solution Solution {
+			get { return solution; }
 		}
 
 		public IconId Icon {
@@ -52,13 +58,43 @@ namespace MonoDevelop.Paket.NodeBuilders
 
 		public string GetLabel ()
 		{
-			return GettextCatalog.GetString ("Paket Dependencies");
+			return GettextCatalog.GetString ("Paket Dependencies") + GetUpdatedCountLabel ();
+		}
+
+		string GetUpdatedCountLabel ()
+		{
+			int count = PaketServices.UpdatedPackagesInSolution.UpdatedPackagesCount;
+			if (count == 0) {
+				return string.Empty;
+			}
+
+			return " <span color='grey'>" + GetUpdatedPackagesCountLabel (count) + "</span>";
+		}
+
+		string GetUpdatedPackagesCountLabel (int count)
+		{
+			return string.Format ("({0} {1})", count, GetUpdateText (count));
+		}
+
+		string GetUpdateText (int count)
+		{
+			if (count > 1) {
+				return GettextCatalog.GetString ("updates");
+			}
+			return GettextCatalog.GetString ("update");
 		}
 
 		public IEnumerable<NuGetPackageDependencyNode> GetPackageDependencies ()
 		{
 			return solution.GetPackageRequirements ()
-				.Select (packageReference => new NuGetPackageDependencyNode (solution, packageReference));
+				.Select (packageReference => CreateDependencyNode (packageReference));
+		}
+
+		NuGetPackageDependencyNode CreateDependencyNode (Requirements.PackageRequirement packageReference)
+		{
+			var node = new NuGetPackageDependencyNode (solution, packageReference);
+			node.UpdatedPackage = PaketServices.UpdatedPackagesInSolution.FindUpdatedPackage (node.Id);
+			return node;
 		}
 
 		public void OpenFile ()

@@ -108,6 +108,10 @@
 				id = "MonoDevelop.Paket.Commands.PaketCommands.UpdatePackage"
 				_description = "Updates a NuGet package"
 				_label = "_Update" />
+			<Command
+				id = "MonoDevelop.Paket.Commands.PaketCommands.CheckForUpdates"
+				_description = "Check for Updates"
+				_label = "_Check for Updates" />
 		</Category>
 	</Extension>
 
@@ -119,6 +123,7 @@
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Update" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.CheckForUpdates" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
 	</Extension>
 

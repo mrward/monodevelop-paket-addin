@@ -25,8 +25,9 @@
 // THE SOFTWARE.
 //
 
-using MonoDevelop.Ide.Gui.Components;
+using System.Collections.Generic;
 using MonoDevelop.Components.Commands;
+using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Paket.Commands;
 
 namespace MonoDevelop.Paket.NodeBuilders
@@ -74,6 +75,22 @@ namespace MonoDevelop.Paket.NodeBuilders
 			var message = ProgressMonitorStatusMessageFactory.CreateUpdateMessage ();
 			var action = new UpdatePaketAction (FolderNode.GetPaketDependenciesFile ());
 			PaketServices.ActionRunner.Run (message, action);
+		}
+
+		[CommandHandler (PaketCommands.CheckForUpdates)]
+		public void CheckForUpdates ()
+		{
+			var message = ProgressMonitorStatusMessageFactory.CreateUpdatedPackagesMessage ();
+			var action = new CheckForUpdatesPaketAction (
+				message,
+				FolderNode.GetPaketDependenciesFile (),
+				OnCheckForUpdatesCompleted);
+			PaketServices.ActionRunner.Run (message, action);
+		}
+
+		void OnCheckForUpdatesCompleted (IEnumerable<NuGetPackageUpdate> updates)
+		{
+			Tree.BuilderContext.UpdateChildrenFor (FolderNode.Solution);
 		}
 	}
 }

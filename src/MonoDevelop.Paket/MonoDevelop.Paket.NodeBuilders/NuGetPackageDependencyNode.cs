@@ -58,7 +58,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 
 		public string GetLabel ()
 		{
-			return Name;
+			return Name + GetUpdatedPackageVersionLabel ();
 		}
 
 		public IconId GetIconId ()
@@ -69,6 +69,18 @@ namespace MonoDevelop.Paket.NodeBuilders
 		public FilePath GetPackageDependencyFile ()
 		{
 			return solution.GetPaketDependenciesFile ();
+		}
+
+		public NuGetPackageUpdate UpdatedPackage { get; set; }
+
+		string GetUpdatedPackageVersionLabel ()
+		{
+			if (UpdatedPackage == null)
+				return string.Empty;
+
+			return string.Format (" <span color='grey'>({0} {1})</span>",
+				UpdatedPackage.Version,
+				GettextCatalog.GetString ("available"));
 		}
 	}
 }
