@@ -125,9 +125,11 @@
 
 	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketDependencies">
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.AddPackage" />
+		<SeparatorItem id="AddPackageSeparator" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Update" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />
+		<SeparatorItem id="RestoreSeparator" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.CheckForUpdates" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Simplify" />
 	</Extension>
