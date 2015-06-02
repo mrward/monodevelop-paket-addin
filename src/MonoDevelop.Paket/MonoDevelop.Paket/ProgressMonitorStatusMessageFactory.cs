@@ -26,6 +26,7 @@
 //
 
 using MonoDevelop.Core;
+using System.Collections.Generic;
 
 namespace MonoDevelop.Paket
 {
@@ -49,6 +50,15 @@ namespace MonoDevelop.Paket
 				GetString ("Could not add packages."),
 				GetString ("{0} packages added with warnings.", count)
 			);
+		}
+
+		public static ProgressMonitorStatusMessage CreateAddNuGetPackagesMessage (IList<NuGetPackageToAdd> packagesToAdd)
+		{
+			if (packagesToAdd.Count == 1) {
+				return CreateAddNuGetPackageMessage (packagesToAdd[0].Id);
+			}
+
+			return CreateAddNuGetPackagesMessage (packagesToAdd.Count);
 		}
 
 		public static ProgressMonitorStatusMessage CreateAutoRestoreOnMessage ()

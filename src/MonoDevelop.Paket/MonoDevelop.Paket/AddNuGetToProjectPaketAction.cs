@@ -1,5 +1,5 @@
 ﻿//
-// ProjectPaketReferencesFolderNodeCommandHandler.cs
+// AddNuGetToProjectPaketAction.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,46 +25,37 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Linq;
 using MonoDevelop.Core;
-using MonoDevelop.Components.Commands;
-using MonoDevelop.Ide.Gui.Components;
-using MonoDevelop.PackageManagement;
-using MonoDevelop.Paket.Commands;
+using MonoDevelop.Projects;
+using Paket;
 
-namespace MonoDevelop.Paket.NodeBuilders
+namespace MonoDevelop.Paket
 {
-	public class ProjectPaketReferencesFolderNodeCommandHandler : NodeCommandHandler
+	public class AddNuGetToProjectPaketAction : PaketAction
 	{
-		public override void ActivateItem ()
+		NuGetPackageToAdd package;
+		readonly string projectFileName;
+		FilePath dependenciesFileName;
+		FilePath referencesFileName;
+
+		public AddNuGetToProjectPaketAction (
+			NuGetPackageToAdd package,
+			DotNetProject project)
 		{
-			FolderNode.OpenFile ();
+			this.package = package;
+			dependenciesFileName = project.ParentSolution.GetPaketDependenciesFile ();
+			referencesFileName = project.GetPaketReferencesFile ();
+			projectFileName = project.FileName;
 		}
 
-		ProjectPaketReferencesFolderNode FolderNode {
-			get { return (ProjectPaketReferencesFolderNode)CurrentNode.DataItem; }
-		}
-
-		[CommandHandler (PaketCommands.AddPackage)]
-		public void AddPackage ()
+		public override void Run ()
 		{
-			var runner = new AddPackagesDialogRunner ();
-			runner.Run ();
-			AddPackages (runner.PackagesToAdd.ToList ());
-		}
+			Dependencies.Locate (dependenciesFileName)
+				.AddToProject (package.Id, package.Version ?? string.Empty, false, false, referencesFileName, true);
 
-		void AddPackages (IList<NuGetPackageToAdd> packagesToAdd)
-		{
-			if (!packagesToAdd.Any ())
-				return;
-
-			var message = ProgressMonitorStatusMessageFactory.CreateAddNuGetPackagesMessage (packagesToAdd);
-
-			List<AddNuGetToProjectPaketAction> actions = packagesToAdd
-				.Select (package => new AddNuGetToProjectPaketAction (package, FolderNode.Project))
-				.ToList ();
-			PaketServices.ActionRunner.Run (message, actions);
+			FileService.NotifyFileChanged (referencesFileName);
+			FileService.NotifyFileChanged (projectFileName);
+			FileService.NotifyFileChanged (dependenciesFileName);
 		}
 	}
 }

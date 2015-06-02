@@ -42,6 +42,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 			this.project = project;
 		}
 
+		internal DotNetProject Project {
+			get { return project; }
+		}
+
 		public IconId Icon {
 			get { return Stock.OpenReferenceFolder; }
 		}

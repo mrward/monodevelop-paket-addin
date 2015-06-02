@@ -3,6 +3,7 @@
 	<Runtime>
 		<Import assembly="MonoDevelop.Paket.dll" />
 		<Import assembly="paket.exe" />
+		<Import assembly="NuGet.exe" />
 	</Runtime>
 
 	<Extension path="/MonoDevelop/Core/MimeTypes">
@@ -114,7 +115,7 @@
 				_label = "_Check for Updates" />
 			<Command
 				id = "MonoDevelop.Paket.Commands.PaketCommands.AddPackage"
-				_description = "Adds NuGet Package"
+				_description = "Adds a NuGet Package"
 				_label = "_Add Packages..." />
 		</Category>
 	</Extension>
@@ -139,6 +140,7 @@
 	</ExtensionPoint>
 
 	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketReferences">
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.AddPackage" />
 	</Extension>
 
 	<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageDependency">
@@ -150,7 +152,7 @@
 		<CommandItem id="MonoDevelop.Ide.Commands.EditCommands.Delete" />
 	</Extension>
 
-		<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageReference">
+	<ExtensionPoint path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageReference">
 		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 

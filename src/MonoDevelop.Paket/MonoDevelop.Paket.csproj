@@ -194,6 +194,7 @@
     <Compile Include="MonoDevelop.PackageManagement\WildcardVersionSpec.cs" />
     <Compile Include="MonoDevelop.Paket\NuGetPackageToAdd.cs" />
     <Compile Include="MonoDevelop.Paket\AddNuGetPaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket\AddNuGetToProjectPaketAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

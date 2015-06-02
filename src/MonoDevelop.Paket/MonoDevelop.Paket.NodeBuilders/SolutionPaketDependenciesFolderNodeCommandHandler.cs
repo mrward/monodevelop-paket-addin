@@ -109,22 +109,13 @@ namespace MonoDevelop.Paket.NodeBuilders
 			if (!packagesToAdd.Any ())
 				return;
 
-			ProgressMonitorStatusMessage message = CreateProgressMessage (packagesToAdd);
+			var message = ProgressMonitorStatusMessageFactory.CreateAddNuGetPackagesMessage (packagesToAdd);
 
 			FilePath dependenciesFile = FolderNode.GetPaketDependenciesFile ();
 			List<AddNuGetPaketAction> actions = packagesToAdd
 				.Select (package => new AddNuGetPaketAction (dependenciesFile, package))
 				.ToList ();
 			PaketServices.ActionRunner.Run (message, actions);
-		}
-
-		ProgressMonitorStatusMessage CreateProgressMessage (IList<NuGetPackageToAdd> packagesToAdd)
-		{
-			if (packagesToAdd.Count == 1) {
-				return ProgressMonitorStatusMessageFactory.CreateAddNuGetPackageMessage (packagesToAdd[0].Id);
-			}
-
-			return ProgressMonitorStatusMessageFactory.CreateAddNuGetPackagesMessage (packagesToAdd.Count);
 		}
 	}
 }
