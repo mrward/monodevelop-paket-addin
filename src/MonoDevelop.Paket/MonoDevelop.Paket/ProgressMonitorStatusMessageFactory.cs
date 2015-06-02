@@ -41,6 +41,16 @@ namespace MonoDevelop.Paket
 			);
 		}
 
+		public static ProgressMonitorStatusMessage CreateAddNuGetPackagesMessage (int count)
+		{
+			return new ProgressMonitorStatusMessage (
+				GetString ("Adding {0} packages ...", count),
+				GetString ("{0} packages added successfully.", count),
+				GetString ("Could not add packages."),
+				GetString ("{0} packages added with warnings.", count)
+			);
+		}
+
 		public static ProgressMonitorStatusMessage CreateAutoRestoreOnMessage ()
 		{
 			return new ProgressMonitorStatusMessage (

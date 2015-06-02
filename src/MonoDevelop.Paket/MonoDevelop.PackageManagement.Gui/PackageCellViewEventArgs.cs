@@ -1,10 +1,10 @@
 ﻿//
-// PaketCommands.cs
+// PackageCellViewEventArgs.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2014 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,20 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-//
 
-namespace MonoDevelop.Paket.Commands
+using System;
+using ICSharpCode.PackageManagement;
+
+namespace MonoDevelop.PackageManagement
 {
-	public enum PaketCommands
+	public class PackageCellViewEventArgs : EventArgs
 	{
-		AddPackage,
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		public PackageCellViewEventArgs (PackageViewModel packageViewModel)
+		{
+			PackageViewModel = packageViewModel;
+		}
+
+		public PackageViewModel PackageViewModel { get; private set; }
 	}
 }
 

@@ -1,5 +1,5 @@
 ﻿//
-// PaketCommands.cs
+// NuGetPackageToAdd.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,17 +25,19 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket.Commands
+using ICSharpCode.PackageManagement;
+
+namespace MonoDevelop.Paket
 {
-	public enum PaketCommands
+	public class NuGetPackageToAdd
 	{
-		AddPackage,
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		public NuGetPackageToAdd (PackageViewModel viewModel)
+		{
+			Id = viewModel.GetPackage ().Id;
+		}
+
+		public string Id { get; private set; }
+		public string Version { get; private set; }
 	}
 }
 

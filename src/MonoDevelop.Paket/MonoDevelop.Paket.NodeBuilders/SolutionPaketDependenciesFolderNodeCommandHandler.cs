@@ -26,9 +26,12 @@
 //
 
 using System.Collections.Generic;
+using System.Linq;
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Paket.Commands;
+using MonoDevelop.PackageManagement;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
@@ -91,6 +94,37 @@ namespace MonoDevelop.Paket.NodeBuilders
 		void OnCheckForUpdatesCompleted (IEnumerable<NuGetPackageUpdate> updates)
 		{
 			Tree.BuilderContext.UpdateChildrenFor (FolderNode.Solution);
+		}
+
+		[CommandHandler (PaketCommands.AddPackage)]
+		public void AddPackage ()
+		{
+			var runner = new AddPackagesDialogRunner ();
+			runner.Run ();
+			AddPackages (runner.PackagesToAdd.ToList ());
+		}
+
+		void AddPackages (IList<NuGetPackageToAdd> packagesToAdd)
+		{
+			if (!packagesToAdd.Any ())
+				return;
+
+			ProgressMonitorStatusMessage message = CreateProgressMessage (packagesToAdd);
+
+			FilePath dependenciesFile = FolderNode.GetPaketDependenciesFile ();
+			List<AddNuGetPaketAction> actions = packagesToAdd
+				.Select (package => new AddNuGetPaketAction (dependenciesFile, package))
+				.ToList ();
+			PaketServices.ActionRunner.Run (message, actions);
+		}
+
+		ProgressMonitorStatusMessage CreateProgressMessage (IList<NuGetPackageToAdd> packagesToAdd)
+		{
+			if (packagesToAdd.Count == 1) {
+				return ProgressMonitorStatusMessageFactory.CreateAddNuGetPackageMessage (packagesToAdd[0].Id);
+			}
+
+			return ProgressMonitorStatusMessageFactory.CreateAddNuGetPackagesMessage (packagesToAdd.Count);
 		}
 	}
 }

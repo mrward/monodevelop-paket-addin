@@ -1,3 +1,4 @@
 source https://nuget.org/api/v2
 
 nuget paket 1.5.3
+nuget mono.nuget 2.8.5-beta-1

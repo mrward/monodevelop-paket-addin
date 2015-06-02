@@ -1,10 +1,10 @@
 ﻿//
-// PaketCommands.cs
+// AddNuGetPaketAction.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,30 @@
 // THE SOFTWARE.
 //
 
-namespace MonoDevelop.Paket.Commands
+using MonoDevelop.Core;
+using Paket;
+
+namespace MonoDevelop.Paket
 {
-	public enum PaketCommands
+	public class AddNuGetPaketAction : PaketAction
 	{
-		AddPackage,
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		FilePath dependenciesFileName;
+		NuGetPackageToAdd package;
+
+		public AddNuGetPaketAction (
+			FilePath dependenciesFileName,
+			NuGetPackageToAdd package)
+		{
+			this.dependenciesFileName = dependenciesFileName;
+			this.package = package;
+		}
+
+		public override void Run ()
+		{
+			Dependencies.Locate (dependenciesFileName)
+				.Add (package.Id, package.Version ?? string.Empty, false, false, false, true);
+			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
+		}
 	}
 }
 

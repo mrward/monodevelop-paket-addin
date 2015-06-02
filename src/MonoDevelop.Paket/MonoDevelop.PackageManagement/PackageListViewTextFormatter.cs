@@ -1,10 +1,10 @@
 ﻿//
-// PaketCommands.cs
+// PackageListViewTextFormatter.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2014 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,33 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-//
 
-namespace MonoDevelop.Paket.Commands
+using System;
+using System.Text;
+
+namespace MonoDevelop.PackageManagement
 {
-	public enum PaketCommands
+	public static class PackageListViewTextFormatter
 	{
-		AddPackage,
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		public static string Format (string text)
+		{
+			if (text == null) {
+				return String.Empty;
+			}
+
+			string[] lines = text.Split (new [] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			if (lines.Length == 1) {
+				return text;
+			}
+
+			var updatedText = new StringBuilder ();
+			foreach (string line in lines) {
+				updatedText.Append (line.Trim ());
+				updatedText.Append (' ');
+			}
+
+			return updatedText.ToString ().TrimEnd ();
+		}
 	}
 }
 

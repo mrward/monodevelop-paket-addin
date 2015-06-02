@@ -112,6 +112,10 @@
 				id = "MonoDevelop.Paket.Commands.PaketCommands.CheckForUpdates"
 				_description = "Check for Updates"
 				_label = "_Check for Updates" />
+			<Command
+				id = "MonoDevelop.Paket.Commands.PaketCommands.AddPackage"
+				_description = "Adds NuGet Package"
+				_label = "_Add Packages..." />
 		</Category>
 	</Extension>
 
@@ -120,6 +124,7 @@
 	</ExtensionPoint>
 
 	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/PaketDependencies">
+		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.AddPackage" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Update" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Install" />
 		<CommandItem id="MonoDevelop.Paket.Commands.PaketCommands.Restore" />

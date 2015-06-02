@@ -1,10 +1,10 @@
 ﻿//
-// PaketCommands.cs
+// ImageLoadedEventArgs.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2014 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,43 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-//
 
-namespace MonoDevelop.Paket.Commands
+using System;
+using Xwt.Drawing;
+
+namespace MonoDevelop.PackageManagement
 {
-	public enum PaketCommands
+	public class ImageLoadedEventArgs : EventArgs
 	{
-		AddPackage,
-		CheckForUpdates,
-		Install,
-		Restore,
-		Simplify,
-		Update,
-		UpdatePackage
+		public ImageLoadedEventArgs (Image image, Uri uri, object state)
+		{
+			Uri = uri;
+			Image = image;
+			State = state;
+		}
+
+		public ImageLoadedEventArgs (Exception ex, Uri uri, object state)
+		{
+			Uri = uri;
+			Exception = ex;
+			State = state;
+		}
+
+		public Image Image { get; private set; }
+		public Uri Uri { get; private set; }
+		public Exception Exception { get; private set; }
+		public object State { get; private set; }
+
+		public bool HasError {
+			get { return Exception != null; }
+		}
+
+		public ImageLoadedEventArgs WithState (object state)
+		{
+			var eventArgs = (ImageLoadedEventArgs)MemberwiseClone ();
+			eventArgs.State = state;
+			return eventArgs;
+		}
 	}
 }
 
