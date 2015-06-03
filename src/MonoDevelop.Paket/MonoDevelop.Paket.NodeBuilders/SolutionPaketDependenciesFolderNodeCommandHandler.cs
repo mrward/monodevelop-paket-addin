@@ -100,7 +100,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 		public void AddPackage ()
 		{
 			var runner = new AddPackagesDialogRunner ();
-			runner.Run ();
+			runner.RunToAddPackageDependencies ();
 			AddPackages (runner.PackagesToAdd.ToList ());
 		}
 

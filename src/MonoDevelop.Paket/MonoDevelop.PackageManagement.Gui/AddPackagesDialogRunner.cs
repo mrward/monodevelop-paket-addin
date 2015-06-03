@@ -38,13 +38,23 @@ namespace MonoDevelop.PackageManagement
 	{
 		List<NuGetPackageToAdd> packagesToAdd;
 
-		public void Run (string initialSearch = null)
+		public void RunToAddPackageDependencies ()
+		{
+			Run (AddPackagesDialog.AddPackageDependenciesTitle);
+		}
+
+		public void RunToAddPackageReferences ()
+		{
+			Run (AddPackagesDialog.AddPackageReferencesTitle);
+		}
+
+		public void Run (string title, string initialSearch = null)
 		{
 			try {
 
 				bool configurePackageSources = false;
 //				do {
-					using (AddPackagesDialog dialog = CreateDialog (initialSearch)) {
+					using (AddPackagesDialog dialog = CreateDialog (title, initialSearch)) {
 						dialog.ShowWithParent ();
 						configurePackageSources = dialog.ShowPreferencesForPackageSources;
 						initialSearch = dialog.SearchText;
@@ -65,10 +75,11 @@ namespace MonoDevelop.PackageManagement
 			get { return packagesToAdd; }
 		}
 
-		AddPackagesDialog CreateDialog (string initialSearch)
+		AddPackagesDialog CreateDialog (string title, string initialSearch)
 		{
 			return new AddPackagesDialog (
 				new AvailablePackagesViewModel (),
+				title,
 				initialSearch);
 		}
 

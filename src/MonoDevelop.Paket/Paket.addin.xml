@@ -116,7 +116,7 @@
 			<Command
 				id = "MonoDevelop.Paket.Commands.PaketCommands.AddPackage"
 				_description = "Adds a NuGet Package"
-				_label = "_Add Packages..." />
+				_label = "_Add NuGet Packages..." />
 		</Category>
 	</Extension>
 

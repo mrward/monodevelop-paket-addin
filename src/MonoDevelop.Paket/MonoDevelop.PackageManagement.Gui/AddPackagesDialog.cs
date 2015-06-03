@@ -41,6 +41,12 @@ namespace MonoDevelop.PackageManagement
 {
 	public partial class AddPackagesDialog
 	{
+		public static readonly string AddPackageDependenciesTitle = 
+			GettextCatalog.GetString ("Add NuGet Package Dependencies");
+
+		public static readonly string AddPackageReferencesTitle = 
+			GettextCatalog.GetString ("Add NuGet Package References");
+
 		PackagesViewModel viewModel;
 		List<PackageSource> packageSources;
 		DataField<bool> packageHasBackgroundColorField = new DataField<bool> ();
@@ -58,11 +64,15 @@ namespace MonoDevelop.PackageManagement
 		bool loadingMessageVisible;
 		List<NuGetPackageToAdd> packagesToAdd = new List<NuGetPackageToAdd> ();
 
-		public AddPackagesDialog (AvailablePackagesViewModel viewModel, string initialSearch = null)
+		public AddPackagesDialog (
+			AvailablePackagesViewModel viewModel,
+			string title,
+			string initialSearch = null)
 		{
 			this.viewModel = viewModel;
 
 			Build ();
+			Title = title;
 
 			UpdatePackageSearchEntryWithInitialText (initialSearch);
 
