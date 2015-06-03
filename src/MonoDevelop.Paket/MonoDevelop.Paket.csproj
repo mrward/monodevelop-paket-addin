@@ -195,6 +195,8 @@
     <Compile Include="MonoDevelop.Paket\NuGetPackageToAdd.cs" />
     <Compile Include="MonoDevelop.Paket\AddNuGetPaketAction.cs" />
     <Compile Include="MonoDevelop.Paket\AddNuGetToProjectPaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket.Commands\AddNuGetPackagesToSelectedProjectHandler.cs" />
+    <Compile Include="MonoDevelop.Paket\CreatePaketDependenciesFileIfNotExistPaketAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

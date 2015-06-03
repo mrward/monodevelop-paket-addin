@@ -117,6 +117,11 @@
 				id = "MonoDevelop.Paket.Commands.PaketCommands.AddPackage"
 				_description = "Adds a NuGet Package"
 				_label = "_Add NuGet Packages..." />
+			<Command
+				id = "MonoDevelop.Paket.Commands.AddNuGetPackagesToSelectedProject"
+				_description = "Add NuGet packages to the project"
+				_label = "Add NuGet Packages using Pa_ket..."
+				defaultHandler = "MonoDevelop.Paket.Commands.AddNuGetPackagesToSelectedProjectHandler" />
 		</Category>
 	</Extension>
 
@@ -158,5 +163,19 @@
 
 	<Extension path="/MonoDevelop/Paket/ContextMenu/ProjectPad/NuGetPackageReference">
 		<CommandItem id="MonoDevelop.Ide.Commands.EditCommands.Delete" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/ContextMenu/ProjectPad/Add">
+		<Condition id="ItemType" value="DotNetProject">
+			<CommandItem
+				id="MonoDevelop.Paket.Commands.AddNuGetPackagesToSelectedProject"
+				insertafter="MonoDevelop.PackageManagement.Commands.AddNuGetPackages" />
+		</Condition>
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/MainMenu/Project">
+		<SeparatorItem insertafter="MonoDevelop.PackageManagement.Commands.RestorePackages" />
+		<CommandItem id="MonoDevelop.Paket.Commands.AddNuGetPackagesToSelectedProject" />
+		<SeparatorItem />
 	</Extension>
 </ExtensionModel>

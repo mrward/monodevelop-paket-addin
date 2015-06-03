@@ -40,14 +40,14 @@ namespace MonoDevelop.Paket
 	{
 		public static FilePath GetPaketReferencesFile (this DotNetProject project)
 		{
-			FilePath path = BuildPaketReferencesFileName (project);
+			FilePath path = project.BuildPaketReferencesFileName ();
 			if (File.Exists (path))
 				return path;
 
 			return FilePath.Null;
 		}
 
-		static FilePath BuildPaketReferencesFileName (DotNetProject project)
+		public static FilePath BuildPaketReferencesFileName (this DotNetProject project)
 		{
 			return Path.Combine (project.BaseDirectory, "paket.references");
 		}

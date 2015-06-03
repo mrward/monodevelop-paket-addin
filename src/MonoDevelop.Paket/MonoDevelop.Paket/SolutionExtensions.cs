@@ -40,14 +40,14 @@ namespace MonoDevelop.Paket
 	{
 		public static FilePath GetPaketDependenciesFile (this Solution solution)
 		{
-			FilePath path = BuildPaketDependenciesFileName (solution);
+			FilePath path = solution.BuildPaketDependenciesFileName ();
 			if (File.Exists (path))
 				return path;
 
 			return FilePath.Null;
 		}
 
-		static FilePath BuildPaketDependenciesFileName (Solution solution)
+		public static FilePath BuildPaketDependenciesFileName (this Solution solution)
 		{
 			return Path.Combine (solution.BaseDirectory, "paket.dependencies");
 		}

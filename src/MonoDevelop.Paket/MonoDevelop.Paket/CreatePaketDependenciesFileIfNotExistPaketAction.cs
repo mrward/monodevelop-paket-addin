@@ -1,10 +1,10 @@
 ﻿//
-// AddNuGetToProjectPaketAction.cs
+// CreatePaketDependenciesFileIfNotExistPaketAction.cs
 //
 // Author:
-//       Matt Ward <ward.matt@gmail.com>
+//       Matt Ward <matt.ward@xamarin.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2015 Xamarin Inc. (http://xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,35 +27,26 @@
 
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
+using System.IO;
 using Paket;
 
 namespace MonoDevelop.Paket
 {
-	public class AddNuGetToProjectPaketAction : PaketAction
+	public class CreatePaketDependenciesFileIfNotExistPaketAction : PaketAction
 	{
-		NuGetPackageToAdd package;
-		readonly string projectFileName;
 		FilePath dependenciesFileName;
-		FilePath referencesFileName;
 
-		public AddNuGetToProjectPaketAction (
-			NuGetPackageToAdd package,
-			DotNetProject project)
+		public CreatePaketDependenciesFileIfNotExistPaketAction (DotNetProject project)
 		{
-			this.package = package;
 			dependenciesFileName = project.ParentSolution.BuildPaketDependenciesFileName ();
-			referencesFileName = project.BuildPaketReferencesFileName ();
-			projectFileName = project.FileName;
 		}
 
 		public override void Run ()
 		{
-			Dependencies.Locate (dependenciesFileName)
-				.AddToProject (package.Id, package.Version ?? string.Empty, false, false, referencesFileName, true);
-
-			FileService.NotifyFileChanged (referencesFileName);
-			FileService.NotifyFileChanged (projectFileName);
-			FileService.NotifyFileChanged (dependenciesFileName);
+			if (!File.Exists (dependenciesFileName)) {
+				string directory = Path.GetDirectoryName (dependenciesFileName);
+				Dependencies.Init (directory);
+			}
 		}
 	}
 }
