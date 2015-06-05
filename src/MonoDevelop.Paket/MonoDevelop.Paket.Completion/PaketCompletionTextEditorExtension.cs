@@ -28,6 +28,8 @@
 using Mono.TextEditor;
 using MonoDevelop.Ide.CodeCompletion;
 using MonoDevelop.Ide.Gui.Content;
+using System.Text;
+using System;
 
 namespace MonoDevelop.Paket.Completion
 {
@@ -38,23 +40,38 @@ namespace MonoDevelop.Paket.Completion
 			PaketCompletionContext context = GetCompletionContext (completionContext, completionChar);
 			if (context.CompletionType == PaketCompletionType.Keyword) {
 				triggerWordLength = context.TriggerWordLength;
-				var provider = new PaketKeywordCompletionItemProvider();
+				var provider = new PaketKeywordCompletionItemProvider ();
 				return provider.GenerateCompletionItems ();
+			} else if (context.CompletionType == PaketCompletionType.NuGetPackageSource) {
+				triggerWordLength = context.TriggerWordLength;
+				var provider = new NuGetPackageSourceCompletionItemProvider ();
+				return provider.GenerateCompletionItems (Editor.FileName);
 			}
 			return null;
 		}
 
 		PaketCompletionContext GetCompletionContext (CodeCompletionContext completionContext, char completionChar)
 		{
-			if (completionChar == ' ')
-				return PaketCompletionContext.None;
-			
 			DocumentLine line = Editor.GetLineByOffset (completionContext.TriggerOffset);
 			if (line == null)
 				return PaketCompletionContext.None;
 
-			if (!IsFirstWordOnLine (line, completionContext.TriggerOffset))
+			int triggerOffset = completionContext.TriggerOffset;
+			if (completionChar == ' ')
+				triggerOffset--;
+			
+			if (!IsFirstWordOnLine (line, triggerOffset))
 				return PaketCompletionContext.None;
+
+			if (completionChar == ' ') {
+				if (FirstWordIsSourceKeyword (line, triggerOffset)) {
+					return new PaketCompletionContext {
+						CompletionType = PaketCompletionType.NuGetPackageSource
+					};
+				} else {
+					return PaketCompletionContext.None;
+				}
+			}
 
 			int previousWordOffset = Editor.FindPrevWordOffset (completionContext.TriggerOffset);
 			return new PaketCompletionContext {
@@ -83,6 +100,34 @@ namespace MonoDevelop.Paket.Completion
 			}
 
 			return true;
+		}
+
+		bool FirstWordIsSourceKeyword (DocumentLine line, int triggerOffset)
+		{
+			string firstWord = GetFirstWord (line, triggerOffset);
+			return string.Equals ("source", firstWord, StringComparison.OrdinalIgnoreCase);
+		}
+
+		string GetFirstWord (DocumentLine line, int triggerOffset)
+		{
+			var currentWord = new StringBuilder ();
+			int currentOffset = line.Offset;
+
+			while (currentOffset < triggerOffset) {
+				char currentChar = Editor.GetCharAt (currentOffset);
+				if (currentChar == ' ') {
+					if (currentWord.Length > 0) {
+						return currentWord.ToString ().TrimEnd ();
+					}
+				} else if (char.IsLetter (currentChar)) {
+					currentWord.Append (currentChar);
+				} else {
+					return string.Empty;
+				}
+				currentOffset++;
+			}
+
+			return currentWord.ToString ().TrimEnd ();
 		}
 
 		public override ICompletionDataList CodeCompletionCommand (CodeCompletionContext completionContext)

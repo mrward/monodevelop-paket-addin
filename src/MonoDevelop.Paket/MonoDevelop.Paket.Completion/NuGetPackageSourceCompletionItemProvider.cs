@@ -1,5 +1,5 @@
 ﻿//
-// PaketCompletionType.cs
+// NuGetPackageSourceCompletionItemProvider.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,14 +25,38 @@
 // THE SOFTWARE.
 //
 
+using System;
+using System.Linq;
+using Microsoft.FSharp.Collections;
+using MonoDevelop.Core;
+using MonoDevelop.Ide;
+using MonoDevelop.Ide.CodeCompletion;
+using MonoDevelop.Projects;
+using Paket;
 
 namespace MonoDevelop.Paket.Completion
 {
-	public enum PaketCompletionType
+	public class NuGetPackageSourceCompletionItemProvider
 	{
-		None,
-		Keyword,
-		NuGetPackageSource
+		public ICompletionDataList GenerateCompletionItems (FilePath paketDependenciesFileName)
+		{
+			try {
+				Solution solution = IdeApp.ProjectOperations.CurrentSelectedSolution;
+				if (solution == null)
+					return null;
+
+				FSharpList<string> feeds = Dependencies.Locate (paketDependenciesFileName.ParentDirectory)
+					.GetDefinedNuGetFeeds ();
+
+				var completionData = new CompletionDataList ();
+				completionData.AddRange (feeds);
+				return completionData;
+			} catch (Exception ex) {
+				LoggingService.LogError ("Unable to provide NuGet package source completion items.", ex);
+			}
+
+			return null;
+		}
 	}
 }
 

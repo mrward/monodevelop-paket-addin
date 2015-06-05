@@ -197,6 +197,11 @@
     <Compile Include="MonoDevelop.Paket\AddNuGetToProjectPaketAction.cs" />
     <Compile Include="MonoDevelop.Paket.Commands\AddNuGetPackagesToSelectedProjectHandler.cs" />
     <Compile Include="MonoDevelop.Paket\CreatePaketDependenciesFileIfNotExistPaketAction.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketCompletionTextEditorExtension.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketKeywordCompletionItemProvider.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketCompletionType.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketCompletionContext.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\NuGetPackageSourceCompletionItemProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -208,6 +213,7 @@
     <Folder Include="MonoDevelop.Paket.NodeBuilders\" />
     <Folder Include="MonoDevelop.PackageManagement.Gui\" />
     <Folder Include="MonoDevelop.PackageManagement\" />
+    <Folder Include="MonoDevelop.Paket.Completion\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Paket.addin.xml" />
