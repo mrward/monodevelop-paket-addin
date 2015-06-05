@@ -31,23 +31,46 @@ namespace MonoDevelop.Paket.Completion
 {
 	public class PaketKeywordCompletionItemProvider
 	{
+		CompletionDataList completionData;
+
 		public ICompletionDataList GenerateCompletionItems ()
 		{
-			var completionData = new CompletionDataList ();
-			completionData.AddRange (new [] {
-				"content",
-				"copy_local",
-				"gist",
-				"github",
-				"http",
-				"import_targets",
-				"nuget",
-				"source",
-				"redirects",
-				"references"
-			});
+			completionData = new CompletionDataList ();
+			AddSettings ("content");
+			AddSettings ("copy_local");
+			AddSettings ("framework");
+			Add ("gist");
+			Add ("github");
+			Add ("http");
+			AddSettings ("import_targets");
+			Add ("nuget");
+			Add ("source");
+			AddSettings ("redirects");
+			AddSettings ("references");
 			completionData.IsSorted = true;
 			return completionData;
+		}
+
+		void AddSettings (string name)
+		{
+			Add (name, isSettings: true);
+		}
+
+		void Add (string name, bool isSettings = false)
+		{
+			Add (name, GetCompletionText (name, isSettings));
+		}
+
+		string GetCompletionText (string name, bool isSettings)
+		{
+			if (isSettings)
+				return name + ":";
+			return name;
+		}
+
+		void Add (string name, string completionText)
+		{
+			completionData.Add (new CompletionData (name, null, null, completionText));
 		}
 	}
 }
