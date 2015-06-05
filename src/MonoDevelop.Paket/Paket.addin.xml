@@ -178,4 +178,10 @@
 		<CommandItem id="MonoDevelop.Paket.Commands.AddNuGetPackagesToSelectedProject" />
 		<SeparatorItem />
 	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/TextEditorExtensions">
+		<Class
+			mimeTypes="application/paket-dependencies"
+			class="MonoDevelop.Paket.Completion.PaketCompletionTextEditorExtension" />
+	</Extension>
 </ExtensionModel>
