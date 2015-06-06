@@ -85,6 +85,11 @@ namespace MonoDevelop.Paket.Completion
 			return string.Equals (RuleName, "source", StringComparison.OrdinalIgnoreCase);
 		}
 
+		public bool IsNuGetRule ()
+		{
+			return string.Equals (RuleName, "nuget", StringComparison.OrdinalIgnoreCase);
+		}
+
 		public bool IsCurrentItemFirstKeywordValue { get; private set; }
 	}
 }

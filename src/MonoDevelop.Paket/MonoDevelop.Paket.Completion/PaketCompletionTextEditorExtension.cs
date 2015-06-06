@@ -42,14 +42,17 @@ namespace MonoDevelop.Paket.Completion
 			PaketCompletionContext context = GetCompletionContext (completionContext);
 			triggerWordLength = context.TriggerWordLength;
 			if (context.CompletionType == PaketCompletionType.Keyword) {
-				var provider = new PaketKeywordCompletionItemProvider ();
+				var provider = new PaketKeywordCompletionItemProvider();
 				return provider.GenerateCompletionItems ();
 			} else if (context.CompletionType == PaketCompletionType.NuGetPackageSource) {
-				var provider = new NuGetPackageSourceCompletionItemProvider ();
+				var provider = new NuGetPackageSourceCompletionItemProvider();
 				return provider.GenerateCompletionItems (Editor.FileName);
 			} else if (context.CompletionType == PaketCompletionType.KeywordValue) {
-				var provider = new PaketKeywordValueCompletionItemProvider ();
+				var provider = new PaketKeywordValueCompletionItemProvider();
 				return provider.GenerateCompletionItems (context.Keyword);
+			} else if (context.CompletionType == PaketCompletionType.NuGetPackage) {
+				var provider = new LocalNuGetPackageCacheCompletionItemProvider ();
+				return provider.GenerateCompletionItems ();
 			}
 			return null;
 		}
@@ -67,6 +70,10 @@ namespace MonoDevelop.Paket.Completion
 				if (result.IsSourceRule ()) {
 					return new PaketCompletionContext {
 						CompletionType = PaketCompletionType.NuGetPackageSource
+					};
+				} else if (result.IsNuGetRule ()) {
+					return new PaketCompletionContext {
+						CompletionType = PaketCompletionType.NuGetPackage
 					};
 				} else {
 					var paketContext = CreatePaketCompletionContext (completionContext, result, PaketCompletionType.KeywordValue);

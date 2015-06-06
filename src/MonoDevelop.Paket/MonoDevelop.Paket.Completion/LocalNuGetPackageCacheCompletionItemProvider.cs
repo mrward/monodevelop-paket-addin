@@ -1,5 +1,5 @@
 ﻿//
-// PaketCompletionType.cs
+// LocalNuGetPackageCacheCompletionItemProvider.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,15 +25,32 @@
 // THE SOFTWARE.
 //
 
+using System;
+using System.Linq;
+using ICSharpCode.PackageManagement;
+using MonoDevelop.Core;
+using MonoDevelop.Ide.CodeCompletion;
+using NuGet;
+
 namespace MonoDevelop.Paket.Completion
 {
-	public enum PaketCompletionType
+	public class LocalNuGetPackageCacheCompletionItemProvider
 	{
-		None,
-		Keyword,
-		KeywordValue,
-		NuGetPackage,
-		NuGetPackageSource
+		public ICompletionDataList GenerateCompletionItems ()
+		{
+			try {
+				var completionData = new CompletionDataList ();
+				completionData.AddRange (MachineCache.Default
+					.GetPackages ()
+					.DistinctLast<IPackage> (PackageEqualityComparer.Id)
+					.Select (package => package.Id));
+				return completionData;
+			} catch (Exception ex) {
+				LoggingService.LogError ("Unable to provide NuGet package completion items.", ex);
+			}
+
+			return null;
+		}
 	}
 }
 
