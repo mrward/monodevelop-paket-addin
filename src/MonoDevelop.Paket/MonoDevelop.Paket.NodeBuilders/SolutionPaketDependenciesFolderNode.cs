@@ -37,7 +37,6 @@ namespace MonoDevelop.Paket.NodeBuilders
 	public class SolutionPaketDependenciesFolderNode
 	{
 		readonly Solution solution;
-		List<NuGetPackageUpdate> updates = new List<NuGetPackageUpdate> ();
 
 		public SolutionPaketDependenciesFolderNode (Solution solution)
 		{

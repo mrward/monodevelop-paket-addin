@@ -39,7 +39,6 @@ namespace ICSharpCode.PackageManagement
 	public class PackageViewModel : ViewModelBase<PackageViewModel>
 	{
 		IPackageFromRepository package;
-		IEnumerable<PackageOperation> packageOperations = new PackageOperation[0];
 		IPackageViewModelParent parent;
 		string summary;
 		List<PackageDependency> dependencies;

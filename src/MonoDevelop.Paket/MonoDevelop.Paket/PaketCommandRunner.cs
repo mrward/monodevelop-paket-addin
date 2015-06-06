@@ -88,7 +88,7 @@ namespace MonoDevelop.Paket
 			Action afterRun)
 		{
 			progressMonitor.Log.WriteLine (commandLine);
-			IProcessAsyncOperation operation = Runtime.ProcessService.StartConsoleProcess (
+			Runtime.ProcessService.StartConsoleProcess (
 				commandLine.Command,
 				commandLine.Arguments,
 				commandLine.WorkingDirectory,
