@@ -61,7 +61,7 @@ namespace MonoDevelop.Paket.Completion
 			if (result.IsComment || (result.TotalItems > 1))
 				return PaketCompletionContext.None;
 
-			if (completionChar == ' ') {
+			if (result.CurrentItem == 2) {
 				if (result.IsSourceRule ()) {
 					return new PaketCompletionContext {
 						CompletionType = PaketCompletionType.NuGetPackageSource
@@ -91,13 +91,8 @@ namespace MonoDevelop.Paket.Completion
 
 		public override ICompletionDataList CodeCompletionCommand (CodeCompletionContext completionContext)
 		{
-			PaketCompletionContext context = GetCompletionContext (completionContext, '\n');
-
-			if (context.CompletionType == PaketCompletionType.Keyword) {
-				var provider = new PaketKeywordCompletionItemProvider ();
-				return provider.GenerateCompletionItems ();
-			}
-			return null;
+			int triggerWordLength = 0;
+			return HandleCodeCompletion (completionContext, '\n', ref triggerWordLength);
 		}
 	}
 }
