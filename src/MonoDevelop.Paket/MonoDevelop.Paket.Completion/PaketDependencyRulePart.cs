@@ -1,5 +1,5 @@
 ﻿//
-// PaketCompletionType.cs
+// PaketDependencyRulePart.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,13 +25,22 @@
 // THE SOFTWARE.
 //
 
+using ICSharpCode.NRefactory.Editor;
+
 namespace MonoDevelop.Paket.Completion
 {
-	public enum PaketCompletionType
+	public class PaketDependencyRulePart
 	{
-		None,
-		Keyword,
-		NuGetPackageSource
+		public PaketDependencyRulePart (IDocument document, int start, int end)
+		{
+			Text = document.GetText (start, end - start);
+			Offset = start;
+			EndOffset = end;
+		}
+
+		public string Text { get; private set; }
+		public int Offset { get; private set; }
+		public int EndOffset { get; private set; }
 	}
 }
 

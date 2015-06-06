@@ -35,6 +35,8 @@ namespace MonoDevelop.Paket.Completion
 {
 	public class PaketCompletionTextEditorExtension : CompletionTextEditorExtension
 	{
+		PaketDependencyFileLineParser parser = new PaketDependencyFileLineParser ();
+
 		public override ICompletionDataList HandleCodeCompletion (CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
 		{
 			PaketCompletionContext context = GetCompletionContext (completionContext, completionChar);
@@ -52,25 +54,23 @@ namespace MonoDevelop.Paket.Completion
 
 		PaketCompletionContext GetCompletionContext (CodeCompletionContext completionContext, char completionChar)
 		{
-			DocumentLine line = Editor.GetLineByOffset (completionContext.TriggerOffset);
-			if (line == null)
+			PaketDependencyFileLineParseResult result = ParseLine (completionContext);
+			if (result == null)
 				return PaketCompletionContext.None;
 
-			int triggerOffset = completionContext.TriggerOffset;
-			if (completionChar == ' ')
-				triggerOffset--;
-			
-			if (!IsFirstWordOnLine (line, triggerOffset))
+			if (result.IsComment || (result.TotalItems > 1))
 				return PaketCompletionContext.None;
 
 			if (completionChar == ' ') {
-				if (FirstWordIsSourceKeyword (line, triggerOffset)) {
+				if (result.IsSourceRule ()) {
 					return new PaketCompletionContext {
 						CompletionType = PaketCompletionType.NuGetPackageSource
 					};
 				} else {
 					return PaketCompletionContext.None;
 				}
+			} else if (result.CurrentItem > 1) {
+				return PaketCompletionContext.None;
 			}
 
 			int previousWordOffset = Editor.FindPrevWordOffset (completionContext.TriggerOffset);
@@ -80,61 +80,21 @@ namespace MonoDevelop.Paket.Completion
 			};
 		}
 
-		bool IsFirstWordOnLine (DocumentLine line, int triggerOffset)
+		PaketDependencyFileLineParseResult ParseLine (CodeCompletionContext completionContext)
 		{
-			int currentWordLength = 0;
-			int currentOffset = line.Offset;
+			DocumentLine line = Editor.GetLineByOffset (completionContext.TriggerOffset);
+			if (line == null)
+				return null;
 
-			while (currentOffset < triggerOffset) {
-				char currentChar = Editor.GetCharAt (currentOffset);
-				if (currentChar == ' ') {
-					if (currentWordLength > 0) {
-						return false;
-					}
-				} else if (char.IsLetter (currentChar) || currentChar == '_') {
-					currentWordLength++;
-				} else {
-					return false;
-				}
-				currentOffset++;
-			}
-
-			return true;
-		}
-
-		bool FirstWordIsSourceKeyword (DocumentLine line, int triggerOffset)
-		{
-			string firstWord = GetFirstWord (line, triggerOffset);
-			return string.Equals ("source", firstWord, StringComparison.OrdinalIgnoreCase);
-		}
-
-		string GetFirstWord (DocumentLine line, int triggerOffset)
-		{
-			var currentWord = new StringBuilder ();
-			int currentOffset = line.Offset;
-
-			while (currentOffset < triggerOffset) {
-				char currentChar = Editor.GetCharAt (currentOffset);
-				if (currentChar == ' ') {
-					if (currentWord.Length > 0) {
-						return currentWord.ToString ().TrimEnd ();
-					}
-				} else if (char.IsLetter (currentChar)) {
-					currentWord.Append (currentChar);
-				} else {
-					return string.Empty;
-				}
-				currentOffset++;
-			}
-
-			return currentWord.ToString ().TrimEnd ();
+			return parser.Parse (Editor.Document, line.Offset, completionContext.TriggerOffset);
 		}
 
 		public override ICompletionDataList CodeCompletionCommand (CodeCompletionContext completionContext)
 		{
 			PaketCompletionContext context = GetCompletionContext (completionContext, '\n');
+
 			if (context.CompletionType == PaketCompletionType.Keyword) {
-				var provider = new PaketKeywordCompletionItemProvider();
+				var provider = new PaketKeywordCompletionItemProvider ();
 				return provider.GenerateCompletionItems ();
 			}
 			return null;

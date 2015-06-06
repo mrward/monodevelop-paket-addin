@@ -202,6 +202,9 @@
     <Compile Include="MonoDevelop.Paket.Completion\PaketCompletionType.cs" />
     <Compile Include="MonoDevelop.Paket.Completion\PaketCompletionContext.cs" />
     <Compile Include="MonoDevelop.Paket.Completion\NuGetPackageSourceCompletionItemProvider.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketDependencyFileLineParser.cs.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketDependencyFileLineParseResult.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketDependencyRulePart.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

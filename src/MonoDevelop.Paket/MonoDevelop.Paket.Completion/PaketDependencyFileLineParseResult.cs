@@ -1,5 +1,5 @@
 ﻿//
-// PaketCompletionType.cs
+// PaketDependencyFileLineParseResult.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,13 +25,57 @@
 // THE SOFTWARE.
 //
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace MonoDevelop.Paket.Completion
 {
-	public enum PaketCompletionType
+	public class PaketDependencyFileLineParseResult
 	{
-		None,
-		Keyword,
-		NuGetPackageSource
+		readonly List<PaketDependencyRulePart> parts;
+
+		public PaketDependencyFileLineParseResult (IEnumerable<PaketDependencyRulePart> parts, int triggerOffset)
+		{
+			this.parts = parts.ToList ();
+			CurrentItem = this.parts.Count;
+
+			PaketDependencyRulePart lastPart = parts.LastOrDefault ();
+			if (lastPart != null) {
+				if (triggerOffset > lastPart.EndOffset) {
+					CurrentItem++;
+				}
+			}
+		}
+
+		public static readonly PaketDependencyFileLineParseResult CommentLine = new PaketDependencyFileLineParseResult {
+			IsComment = true
+		};
+
+		PaketDependencyFileLineParseResult ()
+		{
+		}
+
+		public bool IsComment { get; private set; }
+
+		public int TotalItems {
+			get { return parts.Count; }
+		}
+
+		public int CurrentItem { get; private set; }
+
+		public string RuleName {
+			get {
+				if (parts.Count > 0)
+					return parts[0].Text;
+				return string.Empty;
+			}
+		}
+
+		public bool IsSourceRule ()
+		{
+			return string.Equals (RuleName, "source", StringComparison.OrdinalIgnoreCase);
+		}
 	}
 }
 
