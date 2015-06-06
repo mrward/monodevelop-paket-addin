@@ -1,2 +1,4 @@
-paket
+ilrepack
 mono.nuget
+paket
+paket.core

@@ -1,4 +1,6 @@
 source https://nuget.org/api/v2
 
 nuget paket 1.10.0
+nuget paket.core 1.10.0
+nuget ilrepack 1.26.0
 nuget mono.nuget 2.8.5-beta-1
