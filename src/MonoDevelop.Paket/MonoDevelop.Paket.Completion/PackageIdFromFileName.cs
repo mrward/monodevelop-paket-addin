@@ -1,5 +1,5 @@
 ﻿//
-// LocalNuGetPackageCacheCompletionItemProvider.cs
+// PackageIdFromFileName.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -26,44 +26,42 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Text.RegularExpressions;
 using MonoDevelop.Core;
-using MonoDevelop.Ide.CodeCompletion;
 
 namespace MonoDevelop.Paket.Completion
 {
-	public class LocalNuGetPackageCacheCompletionItemProvider
+	public class PackageIdFromFileName
 	{
-		static readonly string cachePath;
-
-		static LocalNuGetPackageCacheCompletionItemProvider ()
+		public PackageIdFromFileName (FilePath fileName)
 		{
-			string appDataDirectory = Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
-			cachePath = Path.Combine (appDataDirectory, "NuGet", "Cache");
-		}
+			string fileNameWithoutExtension = fileName.FileNameWithoutExtension;
+			Match versionMatch = Regex.Match (fileNameWithoutExtension, @"\.\d");
 
-		public ICompletionDataList GenerateCompletionItems ()
-		{
-			try {
-				var completionData = new CompletionDataList ();
-				completionData.AddRange (GetPackageIds ());
-				return completionData;
-			} catch (Exception ex) {
-				LoggingService.LogError ("Unable to provide NuGet package completion items.", ex);
+			if (versionMatch.Success && versionMatch.Index > 0) {
+				Id = fileNameWithoutExtension.Substring (0, versionMatch.Index).Trim ();
+				IsValid = true;
 			}
-
-			return null;
 		}
 
-		IEnumerable<string> GetPackageIds ()
+		public bool IsValid { get; private set; }
+		public string Id { get; private set; }
+
+		public override string ToString ()
 		{
-			return Directory.GetFiles (cachePath, "*.nupkg")
-				.Select (fileName => new PackageIdFromFileName (fileName))
-				.Where (packageIdFromFileName => packageIdFromFileName.IsValid)
-				.Select (packageIdFromFileName => packageIdFromFileName.Id)
-				.Distinct ();
+			return Id;
+		}
+
+		public override bool Equals (object obj)
+		{
+			var other = obj as PackageIdFromFileName;
+			return (other != null) && 
+				string.Equals (other.Id, Id, StringComparison.OrdinalIgnoreCase);
+		}
+
+		public override int GetHashCode ()
+		{
+			return Id.GetHashCode ();
 		}
 	}
 }

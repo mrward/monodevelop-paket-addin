@@ -207,6 +207,7 @@
     <Compile Include="MonoDevelop.Paket.Completion\PaketDependencyRulePart.cs" />
     <Compile Include="MonoDevelop.Paket.Completion\PaketKeywordValueCompletionItemProvider.cs" />
     <Compile Include="MonoDevelop.Paket.Completion\LocalNuGetPackageCacheCompletionItemProvider.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PackageIdFromFileName.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
