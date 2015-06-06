@@ -37,12 +37,10 @@ namespace MonoDevelop.Paket
 {
 	public class PaketSearchDataSource : ISearchDataSource
 	{
-		SearchPopupSearchPattern searchPattern;
 		List<PaketSearchCommand> commands;
 
 		public PaketSearchDataSource (SearchPopupSearchPattern searchPattern)
 		{
-			this.searchPattern = searchPattern;
 			commands = PaketSearchCommands.FilterCommands (searchPattern.Pattern).ToList ();
 		}
 
