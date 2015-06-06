@@ -31,6 +31,7 @@ namespace MonoDevelop.Paket.Completion
 	{
 		None,
 		Keyword,
+		KeywordValue,
 		NuGetPackageSource
 	}
 }

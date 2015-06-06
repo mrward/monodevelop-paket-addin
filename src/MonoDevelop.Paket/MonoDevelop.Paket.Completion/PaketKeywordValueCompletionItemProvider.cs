@@ -1,5 +1,5 @@
 ﻿//
-// PaketDependencyRulePart.cs
+// PaketKeywordValueCompletionItemProvider.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
@@ -25,41 +25,34 @@
 // THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using ICSharpCode.NRefactory.Editor;
+using MonoDevelop.Ide.CodeCompletion;
 
 namespace MonoDevelop.Paket.Completion
 {
-	public class PaketDependencyRulePart
+	public class PaketKeywordValueCompletionItemProvider
 	{
-		public PaketDependencyRulePart (IDocument document, int start, int end)
+		public ICompletionDataList GenerateCompletionItems (string keyword)
 		{
-			Text = document.GetText (start, end - start);
-			Offset = start;
-			EndOffset = end;
+			switch (keyword) {
+				case "content":
+					return GenerateCompletionDataList ("none");
+				case "copy_local":
+				case "import_targets":
+					return GenerateCompletionDataList ("false", "true");
+				case "redirects":
+					return GenerateCompletionDataList ("on");
+				case "references":
+					return GenerateCompletionDataList ("strict");
+			}
+			return null;
 		}
 
-		public PaketDependencyRulePart (string text, int start, int end)
+		ICompletionDataList GenerateCompletionDataList (params string[] names)
 		{
-			Text = text;
-			Offset = start;
-			EndOffset = end;
-		}
-
-		public string Text { get; private set; }
-		public int Offset { get; private set; }
-		public int EndOffset { get; private set; }
-
-		public IEnumerable<PaketDependencyRulePart> SplitByDelimiter (int delimiter)
-		{
-			string firstPart = Text.Substring (0, delimiter);
-			string delimiterPart = Text.Substring (delimiter, 1);
-			string lastPart = Text.Substring (delimiter + 1);
-
-			yield return new PaketDependencyRulePart (firstPart, Offset, Offset + delimiter - 1);
-			yield return new PaketDependencyRulePart (delimiterPart, Offset + delimiter, Offset + delimiter + 1);
-			if (!string.IsNullOrEmpty (lastPart))
-				yield return new PaketDependencyRulePart (lastPart, Offset + delimiter + 1, EndOffset);
+			var items = new CompletionDataList ();
+			items.AddRange (names);
+			items.IsSorted = true;
+			return items;
 		}
 	}
 }

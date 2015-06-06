@@ -36,6 +36,7 @@ namespace MonoDevelop.Paket.Completion
 
 		public PaketCompletionType CompletionType { get; set; }
 		public int TriggerWordLength { get; set; }
+		public string Keyword { get; set; }
 	}
 }
 

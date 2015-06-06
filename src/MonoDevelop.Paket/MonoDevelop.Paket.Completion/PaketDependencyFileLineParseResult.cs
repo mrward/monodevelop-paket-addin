@@ -46,6 +46,14 @@ namespace MonoDevelop.Paket.Completion
 					CurrentItem++;
 				}
 			}
+
+			IsCurrentItemFirstKeywordValue = CheckCurrentItemIsFirstKeywordValue ();
+		}
+
+		bool CheckCurrentItemIsFirstKeywordValue ()
+		{
+			return (CurrentItem == 2) ||
+				((CurrentItem == 3) && (parts[1].Text == ":"));
 		}
 
 		public static readonly PaketDependencyFileLineParseResult CommentLine = new PaketDependencyFileLineParseResult {
@@ -76,6 +84,8 @@ namespace MonoDevelop.Paket.Completion
 		{
 			return string.Equals (RuleName, "source", StringComparison.OrdinalIgnoreCase);
 		}
+
+		public bool IsCurrentItemFirstKeywordValue { get; private set; }
 	}
 }
 

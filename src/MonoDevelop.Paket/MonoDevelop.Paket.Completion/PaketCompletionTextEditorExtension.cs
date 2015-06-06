@@ -39,43 +39,58 @@ namespace MonoDevelop.Paket.Completion
 
 		public override ICompletionDataList HandleCodeCompletion (CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
 		{
-			PaketCompletionContext context = GetCompletionContext (completionContext, completionChar);
+			PaketCompletionContext context = GetCompletionContext (completionContext);
+			triggerWordLength = context.TriggerWordLength;
 			if (context.CompletionType == PaketCompletionType.Keyword) {
-				triggerWordLength = context.TriggerWordLength;
 				var provider = new PaketKeywordCompletionItemProvider ();
 				return provider.GenerateCompletionItems ();
 			} else if (context.CompletionType == PaketCompletionType.NuGetPackageSource) {
-				triggerWordLength = context.TriggerWordLength;
 				var provider = new NuGetPackageSourceCompletionItemProvider ();
 				return provider.GenerateCompletionItems (Editor.FileName);
+			} else if (context.CompletionType == PaketCompletionType.KeywordValue) {
+				var provider = new PaketKeywordValueCompletionItemProvider ();
+				return provider.GenerateCompletionItems (context.Keyword);
 			}
 			return null;
 		}
 
-		PaketCompletionContext GetCompletionContext (CodeCompletionContext completionContext, char completionChar)
+		PaketCompletionContext GetCompletionContext (CodeCompletionContext completionContext)
 		{
 			PaketDependencyFileLineParseResult result = ParseLine (completionContext);
 			if (result == null)
 				return PaketCompletionContext.None;
 
-			if (result.IsComment || (result.TotalItems > 1))
+			if (result.IsComment)
 				return PaketCompletionContext.None;
 
-			if (result.CurrentItem == 2) {
+			if (result.IsCurrentItemFirstKeywordValue) {
 				if (result.IsSourceRule ()) {
 					return new PaketCompletionContext {
 						CompletionType = PaketCompletionType.NuGetPackageSource
 					};
 				} else {
-					return PaketCompletionContext.None;
+					var paketContext = CreatePaketCompletionContext (completionContext, result, PaketCompletionType.KeywordValue);
+					if (result.TotalItems < result.CurrentItem) {
+						paketContext.TriggerWordLength = 0;
+					}
+					return paketContext;
 				}
 			} else if (result.CurrentItem > 1) {
 				return PaketCompletionContext.None;
 			}
 
+			return CreatePaketCompletionContext (completionContext, result, PaketCompletionType.Keyword);
+		}
+
+		PaketCompletionContext CreatePaketCompletionContext (
+			CodeCompletionContext completionContext,
+			PaketDependencyFileLineParseResult result,
+			PaketCompletionType completionType)
+		{
 			int previousWordOffset = Editor.FindPrevWordOffset (completionContext.TriggerOffset);
 			return new PaketCompletionContext {
-				CompletionType = PaketCompletionType.Keyword,
+				CompletionType = completionType,
+				Keyword = result.RuleName,
 				TriggerWordLength = completionContext.TriggerOffset - previousWordOffset
 			};
 		}

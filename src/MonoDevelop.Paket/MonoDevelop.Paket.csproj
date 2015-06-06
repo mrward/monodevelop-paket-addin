@@ -205,6 +205,7 @@
     <Compile Include="MonoDevelop.Paket.Completion\PaketDependencyFileLineParser.cs.cs" />
     <Compile Include="MonoDevelop.Paket.Completion\PaketDependencyFileLineParseResult.cs" />
     <Compile Include="MonoDevelop.Paket.Completion\PaketDependencyRulePart.cs" />
+    <Compile Include="MonoDevelop.Paket.Completion\PaketKeywordValueCompletionItemProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

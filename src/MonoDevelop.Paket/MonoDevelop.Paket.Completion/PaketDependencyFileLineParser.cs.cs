@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 //
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ICSharpCode.NRefactory.Editor;
@@ -71,16 +72,31 @@ namespace MonoDevelop.Paket.Completion
 			int index = document.IndexOf (delimiter, currentOffset + 1, lastOffset - currentOffset - 1);
 			if (index >= 0) {
 				parts.Add (new PaketDependencyRulePart (document, currentOffset, index));
+				EnsurePartAddedForSettingsDelimiter ();
 				return index + 1;
 			}
 
 			parts.Add (new PaketDependencyRulePart (document, currentOffset, lastOffset));
+			EnsurePartAddedForSettingsDelimiter ();
 			return lastOffset;
 		}
 
 		int ParseString (IDocument document, int currentOffset, int lastOffset)
 		{
 			return ParsePart (document, currentOffset, lastOffset, '"');
+		}
+
+		void EnsurePartAddedForSettingsDelimiter ()
+		{
+			if (parts.Count != 1)
+				return;
+
+			PaketDependencyRulePart keywordPart = parts[0];
+			int delimiter = keywordPart.Text.IndexOf (':');
+			if (delimiter > 0) {
+				parts.Clear ();
+				parts.AddRange (keywordPart.SplitByDelimiter (delimiter));
+			}
 		}
 	}
 }
