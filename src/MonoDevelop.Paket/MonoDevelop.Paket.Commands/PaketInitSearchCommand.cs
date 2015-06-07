@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 //
 using MonoDevelop.Core;
+using MonoDevelop.Ide;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket.Commands
 {
@@ -37,14 +39,20 @@ namespace MonoDevelop.Paket.Commands
 
 		public override void Run ()
 		{
+			Solution solution = IdeApp.ProjectOperations.CurrentSelectedSolution;
 			var commandLine = PaketCommandLine.CreateCommandLine ("init");
 			var message = ProgressMonitorStatusMessageFactory.CreateInitMessage ();
-			PaketServices.CommandRunner.Run (commandLine, message);
+			PaketServices.CommandRunner.Run (commandLine, message, () => NotifyPaketDependencyFileChanged (solution));
 		}
 
 		public override string GetDescriptionMarkup ()
 		{
 			return GettextCatalog.GetString ("Creates an empty paket.dependencies file in the solution directory.");
+		}
+
+		void NotifyPaketDependencyFileChanged (Solution solution)
+		{
+			PaketServices.FileChangedNotifier.NotifyPaketDependenciesFileChanged (solution);
 		}
 	}
 }
