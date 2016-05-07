@@ -1,4 +1,4 @@
-<AddinProject appVersion="5.0">
+<AddinProject appVersion="6.0">
   <Project platforms="Linux Mac Win32">
     <AddinFile>bin/MonoDevelop.Paket.dll</AddinFile>
     <BuildFile>src/MonoDevelop.Paket.sln</BuildFile>

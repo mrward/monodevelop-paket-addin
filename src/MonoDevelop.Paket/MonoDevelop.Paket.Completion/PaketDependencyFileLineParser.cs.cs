@@ -28,7 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICSharpCode.NRefactory.Editor;
+using MonoDevelop.Ide.Editor;
 
 namespace MonoDevelop.Paket.Completion
 {
@@ -36,7 +36,7 @@ namespace MonoDevelop.Paket.Completion
 	{
 		List<PaketDependencyRulePart> parts;
 
-		public PaketDependencyFileLineParseResult Parse (IDocument document, int offset, int lastOffset)
+		public PaketDependencyFileLineParseResult Parse (IReadonlyTextDocument document, int offset, int lastOffset)
 		{
 			parts = new List<PaketDependencyRulePart> ();
 
@@ -62,14 +62,14 @@ namespace MonoDevelop.Paket.Completion
 			return (currentChar == '#') || (currentChar == '/');
 		}
 
-		int ParsePart (IDocument document, int currentOffset, int lastOffset)
+		int ParsePart (IReadonlyTextDocument document, int currentOffset, int lastOffset)
 		{
 			return ParsePart (document, currentOffset, lastOffset, ' ');
 		}
 
-		int ParsePart (IDocument document, int currentOffset, int lastOffset, char delimiter)
+		int ParsePart (IReadonlyTextDocument document, int currentOffset, int lastOffset, char delimiter)
 		{
-			int index = document.IndexOf (delimiter, currentOffset + 1, lastOffset - currentOffset - 1);
+			int index = document.Text.IndexOf (delimiter, currentOffset + 1, lastOffset - currentOffset - 1);
 			if (index >= 0) {
 				parts.Add (new PaketDependencyRulePart (document, currentOffset, index));
 				EnsurePartAddedForSettingsDelimiter ();
@@ -81,7 +81,7 @@ namespace MonoDevelop.Paket.Completion
 			return lastOffset;
 		}
 
-		int ParseString (IDocument document, int currentOffset, int lastOffset)
+		int ParseString (IReadonlyTextDocument document, int currentOffset, int lastOffset)
 		{
 			return ParsePart (document, currentOffset, lastOffset, '"');
 		}

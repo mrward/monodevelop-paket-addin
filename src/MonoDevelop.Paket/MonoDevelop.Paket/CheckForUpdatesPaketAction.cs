@@ -60,7 +60,7 @@ namespace MonoDevelop.Paket
 			progressMessage.UpdatedPackagesFound = updates.Count;
 			ReportUpdates (updates);
 
-			DispatchService.GuiDispatch (() => {
+			Runtime.RunInMainThread (() => {
 				PaketServices.UpdatedPackagesInSolution.RefreshUpdatedPackages (updates);
 				onCompleted (updates);
 			});

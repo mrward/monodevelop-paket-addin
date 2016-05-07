@@ -27,9 +27,10 @@
 
 using Mono.TextEditor;
 using MonoDevelop.Ide.CodeCompletion;
-using MonoDevelop.Ide.Gui.Content;
-using System.Text;
-using System;
+using MonoDevelop.Ide.Editor;
+using MonoDevelop.Ide.Editor.Extension;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonoDevelop.Paket.Completion
 {
@@ -37,13 +38,22 @@ namespace MonoDevelop.Paket.Completion
 	{
 		PaketDependencyFileLineParser parser = new PaketDependencyFileLineParser ();
 
-		public override ICompletionDataList HandleCodeCompletion (CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
+		public override Task<ICompletionDataList> HandleCodeCompletionAsync (CodeCompletionContext completionContext, char completionChar, CancellationToken token)
+		{
+			return HandleCodeCompletionAsync (completionContext, 1);
+		}
+
+		Task<ICompletionDataList> HandleCodeCompletionAsync (CodeCompletionContext completionContext, int triggerWordLength)
+		{
+			return Task.FromResult (GetCompletionItems (completionContext, triggerWordLength));
+		}
+
+		ICompletionDataList GetCompletionItems (CodeCompletionContext completionContext, int triggerWordLength)
 		{
 			PaketCompletionContext context = GetCompletionContext (completionContext);
-			triggerWordLength = context.TriggerWordLength;
 			if (context.CompletionType == PaketCompletionType.Keyword) {
 				var provider = new PaketKeywordCompletionItemProvider();
-				return provider.GenerateCompletionItems ();
+				return provider.GenerateCompletionItems (triggerWordLength);
 			} else if (context.CompletionType == PaketCompletionType.NuGetPackageSource) {
 				var provider = new NuGetPackageSourceCompletionItemProvider();
 				return provider.GenerateCompletionItems (Editor.FileName);
@@ -94,27 +104,24 @@ namespace MonoDevelop.Paket.Completion
 			PaketDependencyFileLineParseResult result,
 			PaketCompletionType completionType)
 		{
-			int previousWordOffset = Editor.FindPrevWordOffset (completionContext.TriggerOffset);
 			return new PaketCompletionContext {
 				CompletionType = completionType,
-				Keyword = result.RuleName,
-				TriggerWordLength = completionContext.TriggerOffset - previousWordOffset
+				Keyword = result.RuleName
 			};
 		}
 
 		PaketDependencyFileLineParseResult ParseLine (CodeCompletionContext completionContext)
 		{
-			DocumentLine line = Editor.GetLineByOffset (completionContext.TriggerOffset);
+			IDocumentLine line = Editor.GetLineByOffset (completionContext.TriggerOffset);
 			if (line == null)
 				return null;
 
-			return parser.Parse (Editor.Document, line.Offset, completionContext.TriggerOffset);
+			return parser.Parse (Editor.CreateDocumentSnapshot (), line.Offset, completionContext.TriggerOffset);
 		}
 
-		public override ICompletionDataList CodeCompletionCommand (CodeCompletionContext completionContext)
+		public override Task<ICompletionDataList> CodeCompletionCommand (CodeCompletionContext completionContext)
 		{
-			int triggerWordLength = 0;
-			return HandleCodeCompletion (completionContext, '\n', ref triggerWordLength);
+			return HandleCodeCompletionAsync (completionContext, 0);
 		}
 	}
 }

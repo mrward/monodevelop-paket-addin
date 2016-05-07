@@ -35,21 +35,26 @@ namespace MonoDevelop.Paket
 {
 	public class PaketSearchCategory : SearchCategory
 	{
+		string[] tags = new string[0];
+
 		public PaketSearchCategory ()
 			: base ("Paket")
 		{
 		}
 
-		public override Task<ISearchDataSource> GetResults (
-			SearchPopupSearchPattern searchPattern,
-			int resultsCount,
+		public override Task GetResults (
+			ISearchResultCallback searchResultCallback,
+			SearchPopupSearchPattern pattern,
 			CancellationToken token)
 		{
-			if (!CanSearch (searchPattern.Tag))
-				return Task.FromResult<ISearchDataSource> (null);
+			if (!CanSearch (pattern.Tag))
+				return Task.FromResult (0);
 
-			return Task.Factory.StartNew<ISearchDataSource> (() => {
-				return new PaketSearchDataSource (searchPattern);
+			return Task.Factory.StartNew (() => {
+				var dataSource = new PaketSearchDataSource (pattern);
+				foreach (PaketSearchResult result in dataSource.GetResults ()) {
+					searchResultCallback.ReportResult (result);
+				}
 			});
 		}
 
@@ -66,6 +71,10 @@ namespace MonoDevelop.Paket
 		public override bool IsValidTag (string tag)
 		{
 			return tag == null;
+		}
+
+		public override string[] Tags {
+			get { return tags; }
 		}
 	}
 }

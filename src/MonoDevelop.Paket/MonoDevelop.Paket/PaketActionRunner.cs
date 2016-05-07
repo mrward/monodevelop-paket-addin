@@ -53,7 +53,7 @@ namespace MonoDevelop.Paket
 			ProgressMonitorStatusMessage progressMessage,
 			IList<PaketAction> actions)
 		{
-			using (IProgressMonitor monitor = CreateProgressMonitor (progressMessage.Status)) {
+			using (ProgressMonitor monitor = CreateProgressMonitor (progressMessage.Status)) {
 				using (PaketEventsMonitor eventMonitor = CreateEventMonitor (monitor)) {
 					try {
 						monitor.BeginTask (null, actions.Count);
@@ -68,7 +68,7 @@ namespace MonoDevelop.Paket
 			}
 		}
 
-		void RunActionsWithProgressMonitor (IProgressMonitor monitor, IList<PaketAction> actions)
+		void RunActionsWithProgressMonitor (ProgressMonitor monitor, IList<PaketAction> actions)
 		{
 			foreach (PaketAction action in actions) {
 				action.Monitor = monitor;
@@ -77,25 +77,25 @@ namespace MonoDevelop.Paket
 			}
 		}
 
-		IProgressMonitor CreateProgressMonitor (string status)
+		ProgressMonitor CreateProgressMonitor (string status)
 		{
 			var factory = new ProgressMonitorFactory ();
 			return factory.CreateProgressMonitor (status);
 		}
 
-		PaketEventsMonitor CreateEventMonitor (IProgressMonitor monitor)
+		PaketEventsMonitor CreateEventMonitor (ProgressMonitor monitor)
 		{
 			return new PaketEventsMonitor (monitor);
 		}
 
-		protected virtual void BackgroundDispatch (MessageHandler handler)
+		protected virtual void BackgroundDispatch (Action handler)
 		{
-			DispatchService.BackgroundDispatch (handler);
+			PaketBackgroundDispatcher.Dispatch (handler);
 		}
 
-		protected virtual void GuiDispatch (MessageHandler handler)
+		protected virtual void GuiDispatch (Action handler)
 		{
-			DispatchService.GuiDispatch (handler);
+			Runtime.RunInMainThread (handler);
 		}
 
 		public void ShowError (ProgressMonitorStatusMessage progressMessage, Exception exception)
@@ -106,7 +106,7 @@ namespace MonoDevelop.Paket
 
 		public void ShowError (ProgressMonitorStatusMessage progressMessage, string error)
 		{
-			using (IProgressMonitor monitor = CreateProgressMonitor (progressMessage.Status)) {
+			using (ProgressMonitor monitor = CreateProgressMonitor (progressMessage.Status)) {
 				monitor.Log.WriteLine (error);
 				monitor.ReportError (progressMessage.Error, null);
 				PaketConsolePad.Show (monitor);

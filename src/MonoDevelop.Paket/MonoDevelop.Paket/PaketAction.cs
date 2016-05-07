@@ -32,7 +32,7 @@ namespace MonoDevelop.Paket
 	public abstract class PaketAction
 	{
 		public abstract void Run ();
-		public IProgressMonitor Monitor { get; set; }
+		public ProgressMonitor Monitor { get; set; }
 	}
 }
 

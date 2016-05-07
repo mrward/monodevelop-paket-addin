@@ -33,7 +33,7 @@ namespace MonoDevelop.Paket.Completion
 	{
 		CompletionDataList completionData;
 
-		public ICompletionDataList GenerateCompletionItems ()
+		public ICompletionDataList GenerateCompletionItems (int triggerWordLength)
 		{
 			completionData = new CompletionDataList ();
 			AddSettings ("content");
@@ -48,6 +48,7 @@ namespace MonoDevelop.Paket.Completion
 			AddSettings ("redirects");
 			AddSettings ("references");
 			completionData.IsSorted = true;
+			completionData.TriggerWordLength = triggerWordLength;
 			return completionData;
 		}
 

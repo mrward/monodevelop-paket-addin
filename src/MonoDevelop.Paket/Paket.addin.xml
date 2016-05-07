@@ -53,7 +53,15 @@
 		<StockIcon stockid="md-paket" resource="paket-16.png" size="Menu" />
 	</Extension>
 
-	<Extension path="/MonoDevelop/SourceEditor2/CustomModes">
+	<Extension path="/MonoDevelop/Ide/StartupHandlers">
+		<Class class="MonoDevelop.Paket.PaketStartupHandler" />
+	</Extension>
+
+	<ExtensionPoint path="/MonoDevelop/Paket/CustomSyntaxModes" name="Text editor custom syntax modes">
+		<ExtensionNode name="SyntaxMode" type="MonoDevelop.Paket.SyntaxModeCodon"/>
+	</ExtensionPoint>
+
+	<Extension path="/MonoDevelop/Paket/CustomSyntaxModes">
 		<SyntaxMode
 			mimeTypes="application/paket-dependencies"
 			class="MonoDevelop.Paket.PaketDependenciesSyntaxMode" />

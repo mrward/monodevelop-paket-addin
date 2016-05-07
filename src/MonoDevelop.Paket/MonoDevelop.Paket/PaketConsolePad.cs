@@ -34,7 +34,7 @@ namespace MonoDevelop.Paket
 {
 	public static class PaketConsolePad
 	{
-		public static void Show (IProgressMonitor monitor)
+		public static void Show (ProgressMonitor monitor)
 		{
 			var aggregatedMonitor = monitor as AggregatedProgressMonitor;
 			if (aggregatedMonitor != null)
@@ -43,8 +43,8 @@ namespace MonoDevelop.Paket
 
 		public static void Show (AggregatedProgressMonitor monitor)
 		{
-			DispatchService.GuiDispatch (() => {
-				Pad pad = IdeApp.Workbench.ProgressMonitors.GetPadForMonitor (monitor.MasterMonitor);
+			Runtime.RunInMainThread (() => {
+				Pad pad = IdeApp.Workbench.ProgressMonitors.GetPadForMonitor (monitor.LeaderMonitor);
 				if (pad != null) {
 					pad.BringToFront ();
 				}

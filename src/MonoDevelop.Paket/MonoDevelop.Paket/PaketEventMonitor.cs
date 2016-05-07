@@ -33,9 +33,9 @@ namespace MonoDevelop.Paket
 {
 	public class PaketEventsMonitor : IDisposable
 	{
-		readonly IProgressMonitor monitor;
+		readonly ProgressMonitor monitor;
 
-		public PaketEventsMonitor (IProgressMonitor monitor)
+		public PaketEventsMonitor (ProgressMonitor monitor)
 		{
 			this.monitor = monitor;
 			Logging.RegisterTraceFunction (OnTrace);

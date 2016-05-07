@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 //
 using MonoDevelop.Core;
+using MonoDevelop.Core.Execution;
 using MonoDevelop.Ide;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Core.ProgressMonitoring;
@@ -33,13 +34,13 @@ namespace MonoDevelop.Paket
 {
 	public class ProgressMonitorFactory
 	{
-		public IProgressMonitor CreateProgressMonitor (string title)
+		public ProgressMonitor CreateProgressMonitor (string title)
 		{
-			IProgressMonitor consoleMonitor = CreatePaketConsoleOutputMonitor ();
+			OutputProgressMonitor consoleMonitor = CreatePaketConsoleOutputMonitor ();
 
 			Pad pad = IdeApp.Workbench.ProgressMonitors.GetPadForMonitor (consoleMonitor);
 
-			IProgressMonitor statusMonitor = IdeApp.Workbench.ProgressMonitors.GetStatusProgressMonitor (
+			ProgressMonitor statusMonitor = IdeApp.Workbench.ProgressMonitors.GetStatusProgressMonitor (
 				title,
 				Stock.StatusSolutionOperation,
 				false,
@@ -50,7 +51,7 @@ namespace MonoDevelop.Paket
 			return new AggregatedProgressMonitor (consoleMonitor, statusMonitor);
 		}
 
-		IProgressMonitor CreatePaketConsoleOutputMonitor ()
+		OutputProgressMonitor CreatePaketConsoleOutputMonitor ()
 		{
 			return IdeApp.Workbench.ProgressMonitors.GetOutputProgressMonitor (
 				"PaketConsole",

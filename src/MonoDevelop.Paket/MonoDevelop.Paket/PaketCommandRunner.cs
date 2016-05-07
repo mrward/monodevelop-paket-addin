@@ -88,14 +88,16 @@ namespace MonoDevelop.Paket
 			Action afterRun)
 		{
 			progressMonitor.Log.WriteLine (commandLine);
+			var outputProgressMonitor = progressMonitor.LeaderMonitor as OutputProgressMonitor;
 			Runtime.ProcessService.StartConsoleProcess (
 				commandLine.Command,
 				commandLine.Arguments,
 				commandLine.WorkingDirectory,
-				progressMonitor.MasterMonitor as IConsole,
+				outputProgressMonitor.Console,
+				null,
 				(sender, e) => {
 					using (progressMonitor) {
-						OnCommandCompleted ((IAsyncOperation)sender, progressMonitor, progressMessage);
+						OnCommandCompleted ((ProcessAsyncOperation)sender, progressMonitor, progressMessage);
 						afterRun ();
 					}
 				}
@@ -103,7 +105,7 @@ namespace MonoDevelop.Paket
 		}
 
 		void OnCommandCompleted (
-			IAsyncOperation operation,
+			ProcessAsyncOperation operation,
 			AggregatedProgressMonitor progressMonitor,
 			ProgressMonitorStatusMessage progressMessage)
 		{
@@ -111,11 +113,11 @@ namespace MonoDevelop.Paket
 		}
 
 		void ReportOutcome (
-			IAsyncOperation operation,
+			ProcessAsyncOperation operation,
 			AggregatedProgressMonitor progressMonitor,
 			ProgressMonitorStatusMessage progressMessage)
 		{
-			if (operation.Success) {
+			if (!operation.Task.IsFaulted && operation.ExitCode == 0) {
 				progressMonitor.ReportSuccess (progressMessage.Success);
 			} else {
 				progressMonitor.ReportError (progressMessage.Error, null);

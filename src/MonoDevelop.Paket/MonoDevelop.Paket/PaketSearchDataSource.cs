@@ -27,67 +27,26 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using ICSharpCode.NRefactory.TypeSystem;
 using MonoDevelop.Components.MainToolbar;
-using MonoDevelop.Ide.CodeCompletion;
 using MonoDevelop.Paket.Commands;
-using Xwt.Drawing;
 
 namespace MonoDevelop.Paket
 {
-	public class PaketSearchDataSource : ISearchDataSource
+	public class PaketSearchDataSource
 	{
-		List<PaketSearchCommand> commands;
+		List<PaketSearchResult> searchResults;
 
 		public PaketSearchDataSource (SearchPopupSearchPattern searchPattern)
 		{
-			commands = PaketSearchCommands.FilterCommands (searchPattern.Pattern).ToList ();
+			searchResults = PaketSearchCommands
+				.FilterCommands (searchPattern.Pattern)
+				.Select (command => new PaketSearchResult (command))
+				.ToList ();
 		}
 
-		public Image GetIcon (int item)
+		public IEnumerable<PaketSearchResult> GetResults ()
 		{
-			return null;
-		}
-
-		public string GetMarkup (int item, bool isSelected)
-		{
-			return commands [item].GetMarkup ();
-		}
-
-		public string GetDescriptionMarkup (int item, bool isSelected)
-		{
-			return commands [item].GetDescriptionMarkup ();
-		}
-
-		public TooltipInformation GetTooltip (int item)
-		{
-			return null;
-		}
-
-		public double GetWeight (int item)
-		{
-			return 0;
-		}
-
-		public DomRegion GetRegion (int item)
-		{
-			return DomRegion.Empty;
-		}
-
-		public bool CanActivate (int item)
-		{
-			return true;
-		}
-
-		public void Activate (int item)
-		{
-			commands [item].Run ();
-		}
-
-		public int ItemCount {
-			get {
-				return commands.Count;
-			}
+			return searchResults;
 		}
 	}
 }

@@ -26,15 +26,15 @@
 //
 
 using System.Collections.Generic;
-using ICSharpCode.NRefactory.Editor;
+using MonoDevelop.Ide.Editor;
 
 namespace MonoDevelop.Paket.Completion
 {
 	public class PaketDependencyRulePart
 	{
-		public PaketDependencyRulePart (IDocument document, int start, int end)
+		public PaketDependencyRulePart (IReadonlyTextDocument document, int start, int end)
 		{
-			Text = document.GetText (start, end - start);
+			Text = document.GetTextAt (start, end - start);
 			Offset = start;
 			EndOffset = end;
 		}

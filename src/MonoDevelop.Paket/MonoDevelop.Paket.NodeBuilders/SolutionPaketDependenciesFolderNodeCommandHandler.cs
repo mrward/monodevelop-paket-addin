@@ -93,7 +93,10 @@ namespace MonoDevelop.Paket.NodeBuilders
 
 		void OnCheckForUpdatesCompleted (IEnumerable<NuGetPackageUpdate> updates)
 		{
-			Tree.BuilderContext.UpdateChildrenFor (FolderNode.Solution);
+			var node = Tree.GetNodeAtObject (FolderNode.Solution);
+			if (node != null) {
+				Tree.RefreshNode (node);
+			}
 		}
 
 		[CommandHandler (PaketCommands.AddPackage)]
