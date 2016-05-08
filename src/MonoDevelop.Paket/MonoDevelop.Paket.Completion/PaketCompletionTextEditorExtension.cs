@@ -50,7 +50,7 @@ namespace MonoDevelop.Paket.Completion
 
 		ICompletionDataList GetCompletionItems (CodeCompletionContext completionContext, int triggerWordLength)
 		{
-			PaketCompletionContext context = GetCompletionContext (completionContext);
+			PaketCompletionContext context = GetCompletionContext (completionContext, triggerWordLength);
 			if (context.CompletionType == PaketCompletionType.Keyword) {
 				var provider = new PaketKeywordCompletionItemProvider();
 				return provider.GenerateCompletionItems (triggerWordLength);
@@ -59,7 +59,7 @@ namespace MonoDevelop.Paket.Completion
 				return provider.GenerateCompletionItems (Editor.FileName);
 			} else if (context.CompletionType == PaketCompletionType.KeywordValue) {
 				var provider = new PaketKeywordValueCompletionItemProvider();
-				return provider.GenerateCompletionItems (context.Keyword);
+				return provider.GenerateCompletionItems (context.Keyword, context.TriggerWordLength);
 			} else if (context.CompletionType == PaketCompletionType.NuGetPackage) {
 				var provider = new LocalNuGetPackageCacheCompletionItemProvider ();
 				return provider.GenerateCompletionItems ();
@@ -67,7 +67,7 @@ namespace MonoDevelop.Paket.Completion
 			return null;
 		}
 
-		PaketCompletionContext GetCompletionContext (CodeCompletionContext completionContext)
+		PaketCompletionContext GetCompletionContext (CodeCompletionContext completionContext, int triggerWordLength)
 		{
 			PaketDependencyFileLineParseResult result = ParseLine (completionContext);
 			if (result == null)
@@ -89,6 +89,8 @@ namespace MonoDevelop.Paket.Completion
 					var paketContext = CreatePaketCompletionContext (completionContext, result, PaketCompletionType.KeywordValue);
 					if (result.TotalItems < result.CurrentItem) {
 						paketContext.TriggerWordLength = 0;
+					} else {
+						paketContext.TriggerWordLength = triggerWordLength;
 					}
 					return paketContext;
 				}

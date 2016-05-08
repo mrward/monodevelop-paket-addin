@@ -31,8 +31,12 @@ namespace MonoDevelop.Paket.Completion
 {
 	public class PaketKeywordValueCompletionItemProvider
 	{
-		public ICompletionDataList GenerateCompletionItems (string keyword)
+		int triggerWordLength;
+
+		public ICompletionDataList GenerateCompletionItems (string keyword, int triggerWordLength)
 		{
+			this.triggerWordLength = triggerWordLength;
+
 			switch (keyword) {
 				case "content":
 					return GenerateCompletionDataList ("none");
@@ -52,6 +56,7 @@ namespace MonoDevelop.Paket.Completion
 			var items = new CompletionDataList ();
 			items.AddRange (names);
 			items.IsSorted = true;
+			items.TriggerWordLength = triggerWordLength;
 			return items;
 		}
 	}
