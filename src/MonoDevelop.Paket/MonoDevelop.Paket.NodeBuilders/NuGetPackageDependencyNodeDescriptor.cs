@@ -36,7 +36,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 	{
 		readonly NuGetPackageDependencyNode packageDependencyNode;
 		readonly Requirements.PackageRequirement packageRequirement;
-		string frameworkRestrictions;
+//		string frameworkRestrictions;
 
 		public NuGetPackageDependencyNodeDescriptor (NuGetPackageDependencyNode packageDependencyNode)
 		{
@@ -95,26 +95,26 @@ namespace MonoDevelop.Paket.NodeBuilders
 			}
 		}
 
-		[LocalizedCategory ("Package")]
-		[LocalizedDisplayName ("Frameworks")]
-		[LocalizedDescription ("Framework restrictions.")]
-		public string Frameworks {
-			get {
-				if (frameworkRestrictions == null) {
-					frameworkRestrictions = GetFrameworkRestrictions ();
-				}
-				return frameworkRestrictions;
-			}
-		}
-
-		string GetFrameworkRestrictions ()
-		{
-			if (!packageRequirement.Settings.FrameworkRestrictions.Any ()) {
-				return string.Empty;
-			}
-
-			return string.Join (", ", packageRequirement.Settings.FrameworkRestrictions);
-		}
+//		[LocalizedCategory ("Package")]
+//		[LocalizedDisplayName ("Frameworks")]
+//		[LocalizedDescription ("Framework restrictions.")]
+//		public string Frameworks {
+//			get {
+//				if (frameworkRestrictions == null) {
+//					frameworkRestrictions = GetFrameworkRestrictions ();
+//				}
+//				return frameworkRestrictions;
+//			}
+//		}
+//
+//		string GetFrameworkRestrictions ()
+//		{
+//			if (!packageRequirement.Settings.FrameworkRestrictions.Any ()) {
+//				return string.Empty;
+//			}
+//
+//			return string.Join (", ", packageRequirement.Settings.FrameworkRestrictions);
+//		}
 	}
 }
 

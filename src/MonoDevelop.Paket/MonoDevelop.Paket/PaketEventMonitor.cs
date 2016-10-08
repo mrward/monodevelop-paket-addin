@@ -38,17 +38,17 @@ namespace MonoDevelop.Paket
 		public PaketEventsMonitor (ProgressMonitor monitor)
 		{
 			this.monitor = monitor;
-			Logging.RegisterTraceFunction (OnTrace);
+			Logging.@event.Publish.AddHandler (OnTrace);
 		}
 
 		public void Dispose ()
 		{
-			Logging.RemoveTraceFunction (OnTrace);
+			Logging.@event.Publish.RemoveHandler (OnTrace);
 		}
 
-		void OnTrace (string message)
+		void OnTrace (object sender, Logging.Trace trace)
 		{
-			monitor.Log.WriteLine (message);
+			monitor.Log.WriteLine (trace.Text);
 		}
 
 		public void ReportError (ProgressMonitorStatusMessage progressMessage, Exception ex)

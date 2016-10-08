@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 //
 
+using Microsoft.FSharp.Core;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 using Paket;
@@ -51,7 +52,7 @@ namespace MonoDevelop.Paket
 		public override void Run ()
 		{
 			Dependencies.Locate (dependenciesFileName)
-				.RemoveFromProject (packageId, false, false, referencesFileName, true);
+				.RemoveFromProject (FSharpOption<string>.None, packageId, false, referencesFileName, true);
 
 			FileService.NotifyFileChanged (referencesFileName);
 			FileService.NotifyFileChanged (projectFileName);

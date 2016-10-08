@@ -25,7 +25,6 @@
 // THE SOFTWARE.
 //
 
-using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.DesignerSupport;
 using Paket;
@@ -36,7 +35,6 @@ namespace MonoDevelop.Paket.NodeBuilders
 	{
 		readonly NuGetPackageReferenceNode packageReferenceNode;
 		readonly Requirements.InstallSettings installSettings;
-		string frameworkRestrictions;
 
 		public NuGetPackageReferenceNodeDescriptor (NuGetPackageReferenceNode packageReferenceNode)
 		{
@@ -82,27 +80,6 @@ namespace MonoDevelop.Paket.NodeBuilders
 					return installSettings.OmitContent.Value.ToString ();
 				return string.Empty;
 			}
-		}
-
-		[LocalizedCategory ("Package")]
-		[LocalizedDisplayName ("Frameworks")]
-		[LocalizedDescription ("Framework restrictions.")]
-		public string Frameworks {
-			get {
-				if (frameworkRestrictions == null) {
-					frameworkRestrictions = GetFrameworkRestrictions ();
-				}
-				return frameworkRestrictions;
-			}
-		}
-
-		string GetFrameworkRestrictions ()
-		{
-			if (!installSettings.FrameworkRestrictions.Any ()) {
-				return string.Empty;
-			}
-
-			return string.Join (", ", installSettings.FrameworkRestrictions);
 		}
 	}
 }

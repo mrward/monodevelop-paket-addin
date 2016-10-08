@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 //
 
+using Microsoft.FSharp.Core;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 using Paket;
@@ -51,7 +52,18 @@ namespace MonoDevelop.Paket
 		public override void Run ()
 		{
 			Dependencies.Locate (dependenciesFileName)
-				.AddToProject (package.Id, package.Version ?? string.Empty, false, false, referencesFileName, true);
+				.AddToProject (
+					FSharpOption<string>.None,
+					package.Id,
+					package.Version ?? string.Empty,
+					false,
+					false,
+					false,
+					false,
+					referencesFileName,
+					true,
+					SemVerUpdateMode.NoRestriction,
+					false);
 
 			FileService.NotifyFileChanged (referencesFileName);
 			FileService.NotifyFileChanged (projectFileName);

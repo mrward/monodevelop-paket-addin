@@ -64,6 +64,9 @@ namespace MonoDevelop.Paket
 				if (dependenciesFileName.IsNotNull) {
 					return DependenciesFile
 						.ReadFromFile (dependenciesFileName)
+						.Groups
+						.FirstOrDefault ()
+						.Value
 						.Packages;
 				}
 			} catch (Exception ex) {

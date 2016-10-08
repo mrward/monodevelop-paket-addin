@@ -64,6 +64,9 @@ namespace MonoDevelop.Paket
 				if (referencesFileName.IsNotNull) {
 					return ReferencesFile
 						.FromFile (referencesFileName)
+						.Groups
+						.FirstOrDefault ()
+						.Value
 						.NugetPackages;
 				}
 			} catch (Exception ex) {

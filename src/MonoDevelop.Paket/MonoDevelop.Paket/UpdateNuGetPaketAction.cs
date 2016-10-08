@@ -48,7 +48,13 @@ namespace MonoDevelop.Paket
 		public override void Run ()
 		{
 			Dependencies.Locate (dependenciesFileName)
-				.UpdatePackage (packageId, FSharpOption<string>.None, false, false);
+				.UpdatePackage (
+					FSharpOption<string>.None,
+					packageId,
+					FSharpOption<string>.None,
+					false,
+					SemVerUpdateMode.NoRestriction,
+					false);
 
 			PaketServices.UpdatedPackagesInSolution.Remove (packageId);
 			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();

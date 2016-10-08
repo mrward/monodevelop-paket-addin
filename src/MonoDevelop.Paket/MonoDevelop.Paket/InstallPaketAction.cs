@@ -42,7 +42,7 @@ namespace MonoDevelop.Paket
 		public override void Run ()
 		{
 			Dependencies.Locate (dependenciesFileName)
-				.Install (false, false);
+				.Install (false);
 			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
 		}
 	}

@@ -54,7 +54,7 @@ namespace MonoDevelop.Paket
 		{
 			List<NuGetPackageUpdate> updates = Dependencies.Locate (dependenciesFileName)
 				.FindOutdated (false, false)
-				.Select (update => new NuGetPackageUpdate (update.Item1, update.Item2))
+				.Select (update => new NuGetPackageUpdate (update.Item2, update.Item3))
 				.ToList ();
 
 			progressMessage.UpdatedPackagesFound = updates.Count;
