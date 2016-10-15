@@ -45,9 +45,12 @@ namespace MonoDevelop.Paket
 
 		public override void Run ()
 		{
-			Dependencies.Locate (dependenciesFileName)
-				.Remove (packageId);
-			PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
+			try {
+				Dependencies.Locate (dependenciesFileName)
+					.Remove (packageId);
+			} finally {
+				PaketServices.FileChangedNotifier.NotifyAllPaketAndProjectFilesChangedInSolution ();
+			}
 		}
 	}
 }

@@ -51,12 +51,14 @@ namespace MonoDevelop.Paket
 
 		public override void Run ()
 		{
-			Dependencies.Locate (dependenciesFileName)
-				.RemoveFromProject (FSharpOption<string>.None, packageId, false, referencesFileName, true);
-
-			FileService.NotifyFileChanged (referencesFileName);
-			FileService.NotifyFileChanged (projectFileName);
-			FileService.NotifyFileChanged (dependenciesFileName);
+			try {
+				Dependencies.Locate (dependenciesFileName)
+					.RemoveFromProject (FSharpOption<string>.None, packageId, false, referencesFileName, true);
+			} finally {
+				FileService.NotifyFileChanged (referencesFileName);
+				FileService.NotifyFileChanged (projectFileName);
+				FileService.NotifyFileChanged (dependenciesFileName);
+			}
 		}
 	}
 }
