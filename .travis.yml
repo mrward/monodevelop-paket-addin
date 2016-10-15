@@ -1,0 +1,17 @@
+language: csharp
+
+sudo: false  # use the new container-based Travis infrastructure
+
+before_install:
+  - cd src
+
+install:
+  - mono .paket/paket.bootstrapper.exe
+  - mono .paket/paket.exe restore
+
+cache:
+  - src/.paket
+  - src/packages
+
+script:
+  - xbuild MonoDevelop.Paket.sln
