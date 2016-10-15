@@ -1,4 +1,7 @@
 NUGET
   remote: https://www.nuget.org/api/v2
+    ICSharpCode.NRefactory (5.5.1)
+      Mono.Cecil (>= 0.9.5.4)
+    Mono.Cecil (0.9.6.4)
     Mono.NuGet (2.8.5-beta-1)
     Paket (3.23.2)
