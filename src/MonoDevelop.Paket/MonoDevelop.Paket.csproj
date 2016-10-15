@@ -64,6 +64,10 @@
       <HintPath>..\packages\Mono.NuGet\tools\NuGet.exe</HintPath>
     </Reference>
     <Reference Include="Mono.Cairo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\lib\ICSharpCode.NRefactory.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
