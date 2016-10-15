@@ -4,6 +4,12 @@ Provides [Paket](http://fsprojects.github.io/Paket/) support for MonoDevelop and
 
 For more details see the [Paket Support in Xamarin Studio blog post](http://lastexitcode.com/blog/2015/06/09/PaketSupportInXamarinStudio/)
 
+## Build Status
+
+Mono | .NET
+---- | ----
+[![Mono CI Build Status](https://img.shields.io/travis/mrward/monodevelop-paket-addin/master.svg)](https://travis-ci.org/mrward/monodevelop-paket-addin) | [![.NET CI Build Status](https://img.shields.io/appveyor/ci/mrward/monodevelop-paket-addin/master.svg)](https://ci.appveyor.com/project/mrward/monodevelop-paket-addin)
+
 # Features Overview
 
  * View dependencies and referenced NuGet packages in the Solution window.

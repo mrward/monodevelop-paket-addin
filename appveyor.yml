@@ -1,0 +1,19 @@
+init:
+  - git config --global core.autocrlf input
+install:
+  - if not exist gtk-sharp-2.12.38.msi appveyor DownloadFile http://download.xamarin.com/GTKforWindows/Windows/gtk-sharp-2.12.38.msi
+  - msiexec /i gtk-sharp-2.12.38.msi /qn /norestart
+  - cmd: cd src
+  - cmd: .paket\paket.bootstrapper.exe
+  - cmd: .paket\paket.exe restore
+cache:
+  - gtk-sharp-2.12.38.msi
+  - src\.paket
+  - src\packages
+build_script:
+  - cmd: msbuild MonoDevelop.Paket.sln
+test: off
+version: 0.0.1.{build}
+artifacts:
+  - path: bin
+    name: MonoDevelop.Paket
