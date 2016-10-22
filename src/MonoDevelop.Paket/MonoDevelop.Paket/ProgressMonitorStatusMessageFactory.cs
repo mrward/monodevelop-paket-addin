@@ -30,7 +30,7 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Paket
 {
-	public static class ProgressMonitorStatusMessageFactory
+	static class ProgressMonitorStatusMessageFactory
 	{
 		public static ProgressMonitorStatusMessage CreateAddNuGetPackageMessage (string packageId)
 		{

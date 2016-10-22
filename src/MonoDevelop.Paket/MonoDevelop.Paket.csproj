@@ -61,7 +61,7 @@
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="NuGet">
-      <HintPath>..\packages\Mono.NuGet\tools\NuGet.exe</HintPath>
+      <HintPath>..\packages\NuGet.CommandLine\tools\NuGet.exe</HintPath>
     </Reference>
     <Reference Include="Mono.Cairo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <Reference Include="ICSharpCode.NRefactory">
@@ -148,49 +148,20 @@
     </Compile>
     <Compile Include="MonoDevelop.PackageManagement.Gui\AddPackagesDialogRunner.cs" />
     <Compile Include="MonoDevelop.PackageManagement.Gui\DialogExtensions.cs" />
-    <Compile Include="MonoDevelop.PackageManagement.Gui\PackageCellView.cs" />
+    <Compile Include="MonoDevelop.PackageManagement.Gui\PackageCellView.cs">
+      <LogicalName>package-48.png</LogicalName>
+    </Compile>
     <Compile Include="MonoDevelop.PackageManagement.Gui\PackageCellViewCheckBox.cs" />
     <Compile Include="MonoDevelop.PackageManagement.Gui\PackageCellViewEventArgs.cs" />
     <Compile Include="MonoDevelop.PackageManagement\ImageCache.cs" />
     <Compile Include="MonoDevelop.PackageManagement\ImageLoadedEventArgs.cs" />
     <Compile Include="MonoDevelop.PackageManagement\ImageLoader.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageManagementTask.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageManagementTaskFactory.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\ITask.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\ITaskFactory.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\AvailablePackagesViewModel.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackagesViewModel.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageViewModel.cs" />
     <Compile Include="MonoDevelop.PackageManagement\ViewModelBase.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\IPackageFromRepository.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageFromRepository.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\IPackageExtensions.cs" />
     <Compile Include="MonoDevelop.PackageManagement\PackageListViewTextFormatter.cs" />
     <Compile Include="MonoDevelop.PackageManagement\MarkupString.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageSourceExtensions.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageSearchCriteria.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageManagementEnumerableExtensions.cs" />
     <Compile Include="MonoDevelop.PackageManagement\AggregateExceptionErrorMessage.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\MonoDevelopAggregateRepository.cs" />
     <Compile Include="MonoDevelop.PackageManagement\DelegateCommand.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\Page.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\Pages.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackagesForSelectedPageQuery.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackagesForSelectedPageResult.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageViewModelFactory.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\IPackageViewModelFactory.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\IRegisteredPackageRepositories.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\RegisteredPackageRepositories.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\IPackageRepositoryCache.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\PackageRepositoryCache.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\RegisteredPackageSources.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\FallbackRepository.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\FailingPackageRepository.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\ISharpDevelopPackageRepositoryFactory.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\SharpDevelopPackageRepositoryFactory.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\IPackageViewModelParent.cs" />
     <Compile Include="MonoDevelop.PackageManagement\ICommand.cs" />
-    <Compile Include="MonoDevelop.PackageManagement\WildcardVersionSpec.cs" />
     <Compile Include="MonoDevelop.Paket\NuGetPackageToAdd.cs" />
     <Compile Include="MonoDevelop.Paket\AddNuGetPaketAction.cs" />
     <Compile Include="MonoDevelop.Paket\AddNuGetToProjectPaketAction.cs" />
@@ -213,6 +184,64 @@
     <Compile Include="MonoDevelop.Paket\PaketSyntaxModes.cs" />
     <Compile Include="MonoDevelop.Paket\SyntaxModeCodon.cs" />
     <Compile Include="MonoDevelop.Paket\PaketStartupHandler.cs" />
+    <Compile Include="MonoDevelop.PackageManagement.Gui\Styles.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\PackageSourceViewModel.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\PackageSourceViewModelChangedEventArgs.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\PackageSourceViewModelCheckedEventArgs.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\PackageSearchResultViewModel.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\PackageSearchResultViewModelComparer.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\AllPackagesViewModel.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\SourceRepositoryViewModel.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\DetailControlModel.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\DetailedPackageMetadata.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\DisplayVersion.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\FeedSearchContinuationToken.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\IItemLoader.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\INuGetUILogger.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\IPackageFeed.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\IPackageMetadataProvider.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\LoadingStatus.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\MultiSourcePackageFeed.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\MultiSourcePackageMetadataProvider.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\PackageDependencyMetadata.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\PackageDependentSetMetadata.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\PackageDetailControlModel.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\PackageItemListViewModel.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\PackageItemLoader.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\PackageLoadContext.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\PackageStatus.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\SearchResult.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\SourceRepositoryExtensions.cs" />
+    <Compile Include="NuGet.PackageManagement.UI\TaskCombinators.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\BackgroundDispatcher.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\AggregatePackageSourceErrorMessage.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\RecentNuGetPackagesRepository.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\DeleteOnRestartManager.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\DotNetProjectProxy.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\IDotNetProject.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\IMonoDevelopSolutionManager.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\MonoDevelopSolutionManager.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\IProject.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\ProjectModifiedEventArgs.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\ProjectProxy.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\ISolution.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\DotNetProjectEventArgs.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\SolutionProxy.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\MonoDevelopNuGetProjectFactory.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\SolutionExtensions.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\SourceRepositoryProvider.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\MonoDevelopPackageSourceProvider.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\SettingsLoader.cs" />
+    <Compile Include="NuGet.Protocol.VisualStudio\PackageMetadataResourceLocalProvider.cs" />
+    <Compile Include="NuGet.Protocol.VisualStudio\PackageMetadataResourceLocal.cs" />
+    <Compile Include="NuGet.Protocol.VisualStudio\PackageSearchResourceLocalProvider.cs" />
+    <Compile Include="NuGet.Protocol.VisualStudio\PackageSearchResourceLocal.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\DotNetProjectExtensions.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\MonoDevelopMSBuildNuGetProjectSystem.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\BuildIntegrationProjectSystem.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\IBuildIntegratedNuGetProject.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\ProjectTargetFramework.cs" />
+    <Compile Include="MonoDevelop.PackageManagement\NuGetProjectExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -225,6 +254,8 @@
     <Folder Include="MonoDevelop.PackageManagement.Gui\" />
     <Folder Include="MonoDevelop.PackageManagement\" />
     <Folder Include="MonoDevelop.Paket.Completion\" />
+    <Folder Include="NuGet.PackageManagement.UI\" />
+    <Folder Include="NuGet.Protocol.VisualStudio\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Paket.addin.xml" />
@@ -252,11 +283,29 @@
     <EmbeddedResource Include="Templates\PaketTemplate.xft.xml">
       <LogicalName>PaketTemplate.xft.xml</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Icons\reference-48.png">
-      <LogicalName>reference-48.png</LogicalName>
+    <EmbeddedResource Include="Icons\package-48.png">
+      <LogicalName>package-48.png</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Icons\reference-48%402x.png">
-      <LogicalName>reference-48@2x.png</LogicalName>
+    <EmbeddedResource Include="Icons\package-48%402x.png">
+      <LogicalName>package-48@2x.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\package-48~dark.png">
+      <LogicalName>package-48~dark.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\package-48~dark%402x.png">
+      <LogicalName>package-48~dark@2x.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\package-48~dark~sel.png">
+      <LogicalName>package-48~dark~sel.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\package-48~dark~sel%402x.png">
+      <LogicalName>package-48~dark~sel@2x.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\package-48~sel.png">
+      <LogicalName>package-48~sel.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\package-48~sel%402x.png">
+      <LogicalName>package-48~sel@2x.png</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\.paket\paket.targets" />

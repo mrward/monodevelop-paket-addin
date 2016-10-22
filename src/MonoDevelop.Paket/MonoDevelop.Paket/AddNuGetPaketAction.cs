@@ -31,7 +31,7 @@ using Paket;
 
 namespace MonoDevelop.Paket
 {
-	public class AddNuGetPaketAction : PaketAction
+	class AddNuGetPaketAction : PaketAction
 	{
 		FilePath dependenciesFileName;
 		NuGetPackageToAdd package;

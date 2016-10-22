@@ -27,15 +27,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICSharpCode.PackageManagement;
 using MonoDevelop.Ide;
 using MonoDevelop.Core;
 using MonoDevelop.Paket;
 
 namespace MonoDevelop.PackageManagement
 {
-	public class AddPackagesDialogRunner
+	internal class AddPackagesDialogRunner
 	{
+		static RecentNuGetPackagesRepository recentPackagesRepository = new RecentNuGetPackagesRepository ();
+
 		List<NuGetPackageToAdd> packagesToAdd;
 
 		public void RunToAddPackageDependencies ()
@@ -51,23 +52,24 @@ namespace MonoDevelop.PackageManagement
 		public void Run (string title, string initialSearch = null)
 		{
 			try {
-
 				bool configurePackageSources = false;
-//				do {
+				do {
 					using (AddPackagesDialog dialog = CreateDialog (title, initialSearch)) {
 						dialog.ShowWithParent ();
 						configurePackageSources = dialog.ShowPreferencesForPackageSources;
 						initialSearch = dialog.SearchText;
-						packagesToAdd = dialog.PackagesToAdd.ToList ();
+						if (!configurePackageSources)
+							packagesToAdd = dialog.PackagesToAdd.ToList ();
 					}
-//					if (configurePackageSources) {
-//						ShowPreferencesForPackageSources ();
-//					}
-//				} while (configurePackageSources);
+					if (configurePackageSources) {
+						ShowPreferencesForPackageSources ();
+					}
+				} while (configurePackageSources);
 
 			} catch (Exception ex) {
 				LoggingService.LogError ("Failed to show Add Packages dialog", ex);
 				packagesToAdd = new List<NuGetPackageToAdd> ();
+				
 			}
 		}
 
@@ -77,8 +79,9 @@ namespace MonoDevelop.PackageManagement
 
 		AddPackagesDialog CreateDialog (string title, string initialSearch)
 		{
+			var viewModel = AllPackagesViewModel.Create (recentPackagesRepository);
 			return new AddPackagesDialog (
-				new AvailablePackagesViewModel (),
+				viewModel,
 				title,
 				initialSearch);
 		}

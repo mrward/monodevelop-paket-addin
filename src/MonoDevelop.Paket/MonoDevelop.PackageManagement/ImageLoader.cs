@@ -28,19 +28,19 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using MonoDevelop.Ide;
+using MonoDevelop.Core;
 using NuGet;
-using ICSharpCode.PackageManagement;
+using MonoDevelop.PackageManagement;
 using Xwt.Drawing;
 using System.Collections.Generic;
 
 namespace MonoDevelop.PackageManagement
 {
-	public class ImageLoader
+	internal class ImageLoader
 	{
 		public event EventHandler<ImageLoadedEventArgs> Loaded;
 
-		PackageManagementTaskFactory taskFactory = new PackageManagementTaskFactory ();
+		BackgroundDispatcher dispatcher;
 		Dictionary<Uri, List<object>> callersWaitingForImageLoad = new Dictionary<Uri, List<object>> ();
 		static readonly ImageCache imageCache = new ImageCache ();
 
@@ -60,11 +60,18 @@ namespace MonoDevelop.PackageManagement
 			if (AddToCallersWaitingForImageLoad (uri, state))
 				return;
 
-			ITask<ImageLoadedEventArgs> loadTask = taskFactory.CreateTask (
-				() => LoadImage (uri, state),
-				(task) => OnLoaded (task, uri, state));
+			if (dispatcher == null) {
+				dispatcher = new BackgroundDispatcher ();
+				dispatcher.Start ("Paket image loader");
+			}
 
-			loadTask.Start ();
+			dispatcher.Dispatch (() => {
+				ImageLoadedEventArgs eventArgs = LoadImage (uri, state);
+				Runtime.RunInMainThread (() => {
+					OnLoaded (eventArgs);
+					eventArgs = null;
+				});
+			});
 		}
 
 		bool AddToCallersWaitingForImageLoad (Uri uri, object state)
@@ -91,25 +98,29 @@ namespace MonoDevelop.PackageManagement
 		ImageLoadedEventArgs LoadImage (Uri uri, object state)
 		{
 			try {
-				var httpClient = new HttpClient (uri);
-				Stream stream = httpClient.GetResponse ().GetResponseStream ();
-				Image image = Image.FromStream (stream);
-
-				return new ImageLoadedEventArgs (image, uri, state);
+				Stream stream = GetResponseStream (uri);
+				var loader = Runtime.RunInMainThread (() => Image.FromStream (stream));
+				return new ImageLoadedEventArgs (loader.Result, uri, state);
 			} catch (Exception ex) {
 				return new ImageLoadedEventArgs (ex, uri, state);
 			}
 		}
 
-		void OnLoaded (ITask<ImageLoadedEventArgs> task, Uri uri, object state)
+		static Stream GetResponseStream (Uri uri)
 		{
-			if (task.IsFaulted) {
-				OnError (task.Exception, uri, state);
-			} else if (task.IsCancelled) {
-				// Do nothing.
+			WebResponse response = null;
+			if (uri.IsFile) {
+				var request = WebRequest.Create (uri);
+				response = request.GetResponse ();
 			} else {
-				OnLoaded (task.Result);
+				var httpClient = new HttpClient (uri);
+				response = httpClient.GetResponse ();
 			}
+
+			var stream = new MemoryStream ();
+			response.GetResponseStream ().CopyTo (stream); // force the download to complete
+			stream.Position = 0;
+			return stream;
 		}
 
 		void OnLoaded (ImageLoadedEventArgs eventArgs)
@@ -125,11 +136,6 @@ namespace MonoDevelop.PackageManagement
 				OnLoaded (callers, eventArgs);
 				callersWaitingForImageLoad.Remove (eventArgs.Uri);
 			}
-		}
-
-		void OnError (Exception ex, Uri uri, object state)
-		{
-			OnLoaded (new ImageLoadedEventArgs (ex, uri, state));
 		}
 
 		void OnLoaded (object sender, ImageLoadedEventArgs eventArgs)
@@ -153,6 +159,7 @@ namespace MonoDevelop.PackageManagement
 
 		public void Dispose ()
 		{
+			dispatcher?.Stop ();
 			ShrinkImageCache ();
 		}
 	}

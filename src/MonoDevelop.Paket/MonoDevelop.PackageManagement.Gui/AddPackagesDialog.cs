@@ -26,20 +26,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using ICSharpCode.PackageManagement;
 using MonoDevelop.Core;
+using MonoDevelop.Ide;
 using MonoDevelop.Paket;
-using NuGet;
+using MonoDevelop.Projects;
+using NuGet.Versioning;
 using Xwt;
 using Xwt.Drawing;
 using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 
 namespace MonoDevelop.PackageManagement
 {
-	public partial class AddPackagesDialog
+	internal partial class AddPackagesDialog
 	{
 		public static readonly string AddPackageDependenciesTitle = 
 			GettextCatalog.GetString ("Add NuGet Package Dependencies");
@@ -47,10 +47,10 @@ namespace MonoDevelop.PackageManagement
 		public static readonly string AddPackageReferencesTitle = 
 			GettextCatalog.GetString ("Add NuGet Package References");
 
-		PackagesViewModel viewModel;
-		List<PackageSource> packageSources;
+		AllPackagesViewModel viewModel;
+		List<SourceRepositoryViewModel> packageSources;
 		DataField<bool> packageHasBackgroundColorField = new DataField<bool> ();
-		DataField<PackageViewModel> packageViewModelField = new DataField<PackageViewModel> ();
+		DataField<PackageSearchResultViewModel> packageViewModelField = new DataField<PackageSearchResultViewModel> ();
 		DataField<Image> packageImageField = new DataField<Image> ();
 		DataField<double> packageCheckBoxAlphaField = new DataField<double> ();
 		const double packageCheckBoxSemiTransarentAlpha = 0.6;
@@ -58,16 +58,22 @@ namespace MonoDevelop.PackageManagement
 		PackageCellView packageCellView;
 		TimeSpan searchDelayTimeSpan = TimeSpan.FromMilliseconds (500);
 		IDisposable searchTimer;
-		PackageSource dummyPackageSourceRepresentingConfigureSettingsItem =
-			new PackageSource ("", GettextCatalog.GetString ("Configure Sources..."));
+		SourceRepositoryViewModel dummyPackageSourceRepresentingConfigureSettingsItem =
+			new SourceRepositoryViewModel (GettextCatalog.GetString ("Configure Sources..."));
 		ImageLoader imageLoader = new ImageLoader ();
 		bool loadingMessageVisible;
+		bool ignorePackageVersionChanges;
+		const string IncludePrereleaseUserPreferenceName = "NuGet.AddPackagesDialog.IncludePrerelease";
+		TimeSpan populatePackageVersionsDelayTimeSpan = TimeSpan.FromMilliseconds (500);
+		int packageVersionsAddedCount;
+		IDisposable populatePackageVersionsTimer;
+		const int MaxVersionsToPopulate = 100;
 		List<NuGetPackageToAdd> packagesToAdd = new List<NuGetPackageToAdd> ();
 
 		public AddPackagesDialog (
-			AvailablePackagesViewModel viewModel,
+			AllPackagesViewModel viewModel,
 			string title,
-			string initialSearch = null)
+			string initialSearch)
 		{
 			this.viewModel = viewModel;
 
@@ -86,6 +92,7 @@ namespace MonoDevelop.PackageManagement
 			this.addPackagesButton.Clicked += AddPackagesButtonClicked;
 			this.packageSearchEntry.Changed += PackageSearchEntryChanged;
 			this.packageSearchEntry.Activated += PackageSearchEntryActivated;
+			this.packageVersionComboBox.SelectionChanged += PackageVersionChanged;
 			imageLoader.Loaded += ImageLoaded;
 		}
 
@@ -100,18 +107,22 @@ namespace MonoDevelop.PackageManagement
 			imageLoader.Loaded -= ImageLoaded;
 			imageLoader.Dispose ();
 
+			RemoveSelectedPackagePropertyChangedEventHandler ();
 			viewModel.PropertyChanged -= ViewModelPropertyChanged;
 			viewModel.Dispose ();
 			DisposeExistingTimer ();
+			DisposePopulatePackageVersionsTimer ();
+			packageStore.Clear ();
+			viewModel = null;
 			base.Dispose (disposing);
 		}
 
 		void UpdatePackageSearchEntryWithInitialText (string initialSearch)
 		{
-//			packageSearchEntry.Text = initialSearch;
-//			if (!String.IsNullOrEmpty (initialSearch)) {
-//				packageSearchEntry.CursorPosition = initialSearch.Length;
-//			}
+			packageSearchEntry.Text = initialSearch;
+			if (!String.IsNullOrEmpty (initialSearch)) {
+				packageSearchEntry.CursorPosition = initialSearch.Length;
+			}
 		}
 
 		public string SearchText {
@@ -182,12 +193,39 @@ namespace MonoDevelop.PackageManagement
 		void ShowPrereleaseCheckBoxClicked (object sender, EventArgs e)
 		{
 			viewModel.IncludePrerelease = !viewModel.IncludePrerelease;
+
+			SaveIncludePrereleaseUserPreference ();
+		}
+
+		void SaveIncludePrereleaseUserPreference ()
+		{
+			Solution solution = IdeApp.ProjectOperations.CurrentSelectedSolution;
+			if (solution != null) {
+				if (viewModel.IncludePrerelease) {
+					solution.UserProperties.SetValue (IncludePrereleaseUserPreferenceName, viewModel.IncludePrerelease);
+				} else {
+					solution.UserProperties.RemoveValue (IncludePrereleaseUserPreferenceName);
+				}
+				solution.SaveUserProperties ();
+			}
+		}
+
+		bool GetIncludePrereleaseUserPreference ()
+		{
+			Solution solution = IdeApp.ProjectOperations.CurrentSelectedSolution;
+			if (solution != null) {
+				return solution.UserProperties.GetValue (IncludePrereleaseUserPreferenceName, false);
+			}
+
+			return false;
 		}
 
 		void LoadViewModel (string initialSearch)
 		{
-			viewModel.ClearPackagesOnPaging = false;
 			viewModel.SearchTerms = initialSearch;
+
+			viewModel.IncludePrerelease = GetIncludePrereleaseUserPreference ();
+			showPrereleaseCheckBox.Active = viewModel.IncludePrerelease;
 
 			ClearSelectedPackageInformation ();
 			PopulatePackageSources ();
@@ -203,9 +241,18 @@ namespace MonoDevelop.PackageManagement
 		void ClearSelectedPackageInformation ()
 		{
 			this.packageInfoVBox.Visible = false;
+			this.packageVersionsHBox.Visible = false;
 		}
 
-		List<PackageSource> PackageSources {
+		void RemoveSelectedPackagePropertyChangedEventHandler ()
+		{
+			if (viewModel.SelectedPackage != null) {
+				viewModel.SelectedPackage.PropertyChanged -= SelectedPackageViewModelChanged;
+				viewModel.SelectedPackage = null;
+			}
+		}
+
+		List<SourceRepositoryViewModel> PackageSources {
 			get {
 				if (packageSources == null) {
 					packageSources = viewModel.PackageSources.ToList ();
@@ -216,31 +263,23 @@ namespace MonoDevelop.PackageManagement
 
 		void PopulatePackageSources ()
 		{
-			foreach (PackageSource packageSource in PackageSources) {
+			foreach (SourceRepositoryViewModel packageSource in PackageSources) {
 				AddPackageSourceToComboBox (packageSource);
 			}
 
-			//AddPackageSourceToComboBox (dummyPackageSourceRepresentingConfigureSettingsItem);
+			AddPackageSourceToComboBox (dummyPackageSourceRepresentingConfigureSettingsItem);
 
 			packageSourceComboBox.SelectedItem = viewModel.SelectedPackageSource;
 		}
 
-		void AddPackageSourceToComboBox (PackageSource packageSource)
+		void AddPackageSourceToComboBox (SourceRepositoryViewModel packageSource)
 		{
-			packageSourceComboBox.Items.Add (packageSource, GetPackageSourceName (packageSource));
-		}
-
-		string GetPackageSourceName (PackageSource packageSource)
-		{
-			if (packageSource.IsAggregate ()) {
-				return GettextCatalog.GetString ("All Sources");
-			}
-			return packageSource.Name;
+			packageSourceComboBox.Items.Add (packageSource, packageSource.Name);
 		}
 
 		void PackageSourceChanged (object sender, EventArgs e)
 		{
-			var selectedPackageSource = (PackageSource)packageSourceComboBox.SelectedItem;
+			var selectedPackageSource = (SourceRepositoryViewModel)packageSourceComboBox.SelectedItem;
 			if (selectedPackageSource == dummyPackageSourceRepresentingConfigureSettingsItem) {
 				ShowPreferencesForPackageSources = true;
 				Close ();
@@ -261,16 +300,19 @@ namespace MonoDevelop.PackageManagement
 
 		void ShowSelectedPackage ()
 		{
-			PackageViewModel packageViewModel = GetSelectedPackageViewModel ();
+			RemoveSelectedPackagePropertyChangedEventHandler ();
+
+			PackageSearchResultViewModel packageViewModel = GetSelectedPackageViewModel ();
 			if (packageViewModel != null) {
 				ShowPackageInformation (packageViewModel);
 			} else {
 				ClearSelectedPackageInformation ();
 			}
+			viewModel.SelectedPackage = packageViewModel;
 			UpdateAddPackagesButton ();
 		}
 
-		PackageViewModel GetSelectedPackageViewModel ()
+		PackageSearchResultViewModel GetSelectedPackageViewModel ()
 		{
 			if (packagesListView.SelectedRow != -1) {
 				return packageStore.GetValue (packagesListView.SelectedRow, packageViewModelField);
@@ -278,11 +320,10 @@ namespace MonoDevelop.PackageManagement
 			return null;
 		}
 
-		void ShowPackageInformation (PackageViewModel packageViewModel)
+		void ShowPackageInformation (PackageSearchResultViewModel packageViewModel)
 		{
 			this.packageNameLabel.Markup = packageViewModel.GetNameMarkup ();
-			this.packageVersionLabel.Text = packageViewModel.Version.ToString ();
-			this.packageAuthor.Text = packageViewModel.GetAuthors ();
+			this.packageAuthor.Text = packageViewModel.Author;
 			this.packagePublishedDate.Text = packageViewModel.GetLastPublishedDisplayText ();
 			this.packageDownloads.Text = packageViewModel.GetDownloadCountDisplayText ();
 			this.packageDescription.Text = packageViewModel.Description;
@@ -291,11 +332,16 @@ namespace MonoDevelop.PackageManagement
 			ShowUri (this.packageIdLink, packageViewModel.GalleryUrl, packageViewModel.Id);
 			ShowUri (this.packageProjectPageLink, packageViewModel.ProjectUrl);
 			ShowUri (this.packageLicenseLink, packageViewModel.LicenseUrl);
-			this.packageDependenciesListHBox.Visible = packageViewModel.HasDependencies;
-			this.packageDependenciesNoneLabel.Visible = !packageViewModel.HasDependencies;
-			this.packageDependenciesList.Text = packageViewModel.GetPackageDependenciesDisplayText ();
+
+			PopulatePackageDependencies (packageViewModel);
+
+			PopulatePackageVersions (packageViewModel);
 
 			this.packageInfoVBox.Visible = true;
+			this.packageVersionsHBox.Visible = true;
+
+			packageViewModel.PropertyChanged += SelectedPackageViewModelChanged;
+			viewModel.LoadPackageMetadata (packageViewModel);
 		}
 
 		void ShowUri (LinkLabel linkLabel, Uri uri, string label)
@@ -354,6 +400,7 @@ namespace MonoDevelop.PackageManagement
 			UpdatePackageListViewSelectionColor ();
 			ShowLoadingMessage ();
 			ShrinkImageCache ();
+			DisposePopulatePackageVersionsTimer ();
 		}
 
 		void ResetPackagesListViewScroll ()
@@ -383,7 +430,7 @@ namespace MonoDevelop.PackageManagement
 			bool packagesListViewWasEmpty = (packageStore.RowCount == 0);
 
 			for (int row = packageStore.RowCount; row < viewModel.PackageViewModels.Count; ++row) {
-				PackageViewModel packageViewModel = viewModel.PackageViewModels [row];
+				PackageSearchResultViewModel packageViewModel = viewModel.PackageViewModels [row];
 				AppendPackageToListView (packageViewModel);
 				LoadPackageImage (row, packageViewModel);
 			}
@@ -397,7 +444,7 @@ namespace MonoDevelop.PackageManagement
 			}
 		}
 
-		void AppendPackageToListView (PackageViewModel packageViewModel)
+		void AppendPackageToListView (PackageSearchResultViewModel packageViewModel)
 		{
 			int row = packageStore.AddRow ();
 			packageStore.SetValue (row, packageHasBackgroundColorField, IsOddRow (row));
@@ -405,21 +452,11 @@ namespace MonoDevelop.PackageManagement
 			packageStore.SetValue (row, packageViewModelField, packageViewModel);
 		}
 
-		void LoadPackageImage (int row, PackageViewModel packageViewModel)
+		void LoadPackageImage (int row, PackageSearchResultViewModel packageViewModel)
 		{
 			if (packageViewModel.HasIconUrl) {
-				// Workaround: Image loading is incorrectly being done on GUI thread
-				// since the wrong synchronization context seems to be used. So
-				// here we switch to a background thread and then back to the GUI thread.
-				Task.Run (() => LoadImage (packageViewModel.IconUrl, row));
+				imageLoader.LoadFrom (packageViewModel.IconUrl, row);
 			}
-		}
-
-		void LoadImage (Uri iconUrl, int row)
-		{
-			// Put it back on the GUI thread so the correct synchronization context
-			// is used. The image loading will be done on a background thread.
-			Runtime.RunInMainThread (() => imageLoader.LoadFrom (iconUrl, row));
 		}
 
 		bool IsOddRow (int row)
@@ -448,7 +485,7 @@ namespace MonoDevelop.PackageManagement
 		bool IsValidRowAndUrl (int row, Uri uri)
 		{
 			if (row < packageStore.RowCount) {
-				PackageViewModel packageViewModel = packageStore.GetValue (row, packageViewModelField);
+				PackageSearchResultViewModel packageViewModel = packageStore.GetValue (row, packageViewModelField);
 				if (packageViewModel != null) {
 					return uri == packageViewModel.IconUrl;
 				}
@@ -469,28 +506,28 @@ namespace MonoDevelop.PackageManagement
 
 		List<NuGetPackageToAdd> GetPackagesToAdd ()
 		{
-			List<PackageViewModel> packageViewModels = GetSelectedPackageViewModels ();
+			List<PackageSearchResultViewModel> packageViewModels = GetSelectedPackageViewModels ();
 			if (packageViewModels.Count > 0) {
 				return GetPackagesToAdd (packageViewModels);
 			}
 			return new List<NuGetPackageToAdd> ();
 		}
 
-		List<PackageViewModel> GetSelectedPackageViewModels ()
+		List<PackageSearchResultViewModel> GetSelectedPackageViewModels ()
 		{
-			List<PackageViewModel> packageViewModels = viewModel.CheckedPackageViewModels.ToList ();
+			List<PackageSearchResultViewModel> packageViewModels = viewModel.CheckedPackageViewModels.ToList ();
 			if (packageViewModels.Count > 0) {
 				return packageViewModels;
 			}
 
-			PackageViewModel selectedPackageViewModel = GetSelectedPackageViewModel ();
+			PackageSearchResultViewModel selectedPackageViewModel = GetSelectedPackageViewModel ();
 			if (selectedPackageViewModel != null) {
 				packageViewModels.Add (selectedPackageViewModel);
 			}
 			return packageViewModels;
 		}
 
-		List<NuGetPackageToAdd> GetPackagesToAdd (IEnumerable<PackageViewModel> packageViewModels)
+		List<NuGetPackageToAdd> GetPackagesToAdd (IEnumerable<PackageSearchResultViewModel> packageViewModels)
 		{
 			return packageViewModels.Select (viewModel => new NuGetPackageToAdd (viewModel))
 				.ToList ();
@@ -520,7 +557,7 @@ namespace MonoDevelop.PackageManagement
 		bool Search ()
 		{
 			viewModel.SearchTerms = this.packageSearchEntry.Text;
-			viewModel.SearchCommand.Execute (null);
+			viewModel.Search ();
 
 			return false;
 		}
@@ -530,7 +567,7 @@ namespace MonoDevelop.PackageManagement
 			if (PackagesCheckedCount > 0) {
 				AddPackagesButtonClicked (sender, e);
 			} else {
-				PackageViewModel packageViewModel = packageStore.GetValue (e.RowIndex, packageViewModelField);
+				PackageSearchResultViewModel packageViewModel = packageStore.GetValue (e.RowIndex, packageViewModelField);
 				packagesToAdd = GetPackagesToAdd (new [] { packageViewModel });
 				Close ();
 			}
@@ -544,7 +581,7 @@ namespace MonoDevelop.PackageManagement
 			if (PackagesCheckedCount > 0) {
 				AddPackagesButtonClicked (sender, e);
 			} else {
-				PackageViewModel selectedPackageViewModel = GetSelectedPackageViewModel ();
+				PackageSearchResultViewModel selectedPackageViewModel = GetSelectedPackageViewModel ();
 				packagesToAdd = GetPackagesToAdd (new [] { selectedPackageViewModel });
 				Close ();
 			}
@@ -581,16 +618,20 @@ namespace MonoDevelop.PackageManagement
 
 		void UpdateAddPackagesButton ()
 		{
-			if (PackagesCheckedCount > 1) {
-				addPackagesButton.Label = GettextCatalog.GetString ("Add Packages");
-			} else {
-				if (OlderPackageInstalledThanPackageSelected ()) {
-					addPackagesButton.Label = GettextCatalog.GetString ("Update Package");
-				} else {
-					addPackagesButton.Label = GettextCatalog.GetString ("Add Package");
-				}
+			string label = GettextCatalog.GetPluralString ("Add Package", "Add Packages", GetPackagesCountForAddPackagesButtonLabel ());
+			if (PackagesCheckedCount <= 1 && OlderPackageInstalledThanPackageSelected ()) {
+				label = GettextCatalog.GetString ("Update Package");
 			}
+			addPackagesButton.Label = label;
 			addPackagesButton.Sensitive = IsAddPackagesButtonEnabled ();
+		}
+
+		int GetPackagesCountForAddPackagesButtonLabel ()
+		{
+			if (PackagesCheckedCount > 1)
+				return PackagesCheckedCount;
+
+			return 1;
 		}
 
 		void UpdatePackageListViewSelectionColor ()
@@ -615,10 +656,10 @@ namespace MonoDevelop.PackageManagement
 				return false;
 			}
 
-//			PackageViewModel selectedPackageViewModel = GetSelectedPackageViewModel ();
-//			if (selectedPackageViewModel != null) {
-//				return selectedPackageViewModel.IsOlderPackageInstalled ();
-//			}
+			PackageSearchResultViewModel selectedPackageViewModel = GetSelectedPackageViewModel ();
+			if (selectedPackageViewModel != null) {
+				return selectedPackageViewModel.IsOlderPackageInstalled ();
+			}
 			return false;
 		}
 
@@ -634,6 +675,114 @@ namespace MonoDevelop.PackageManagement
 
 		int PackagesCheckedCount {
 			get { return viewModel.CheckedPackageViewModels.Count; }
+		}
+
+		void SelectedPackageViewModelChanged (object sender, PropertyChangedEventArgs e)
+		{
+			try {
+				if (e.PropertyName == "Versions") {
+					PopulatePackageVersions (viewModel.SelectedPackage);
+				} else {
+					packagePublishedDate.Text = viewModel.SelectedPackage.GetLastPublishedDisplayText ();
+					PopulatePackageDependencies (viewModel.SelectedPackage);
+				}
+			} catch (Exception ex) {
+				LoggingService.LogError ("Error loading package versions.", ex);
+			}
+		}
+
+		void PopulatePackageVersions (PackageSearchResultViewModel packageViewModel)
+		{
+			DisposePopulatePackageVersionsTimer ();
+
+			ignorePackageVersionChanges = true;
+			try {
+				packageVersionComboBox.Items.Clear ();
+				if (packageViewModel.Versions.Any ()) {
+					int count = 0;
+					foreach (NuGetVersion version in packageViewModel.Versions) {
+						count++;
+						if (count > MaxVersionsToPopulate) {
+							packageVersionsAddedCount = count - 1;
+							if (version >= packageViewModel.SelectedVersion) {
+								AddPackageVersionToComboBox (packageViewModel.SelectedVersion);
+							}
+							PopulatePackageVersionsAfterDelay ();
+							break;
+						}
+						AddPackageVersionToComboBox (version);
+					}
+				} else {
+					AddPackageVersionToComboBox (packageViewModel.Version);
+				}
+				packageVersionComboBox.SelectedItem = packageViewModel.SelectedVersion;
+			} finally {
+				ignorePackageVersionChanges = false;
+			}
+		}
+
+		void AddPackageVersionToComboBox (NuGetVersion version)
+		{
+			packageVersionComboBox.Items.Add (version, version.ToString ());
+		}
+
+		void PackageVersionChanged (object sender, EventArgs e)
+		{
+			if (ignorePackageVersionChanges || viewModel.SelectedPackage == null)
+				return;
+
+			viewModel.SelectedPackage.SelectedVersion = (NuGetVersion)packageVersionComboBox.SelectedItem;
+			UpdateAddPackagesButton ();
+		}
+
+		void PopulatePackageDependencies (PackageSearchResultViewModel packageViewModel)
+		{
+			if (packageViewModel.IsDependencyInformationAvailable) {
+				this.packageDependenciesHBox.Visible = true;
+				this.packageDependenciesListHBox.Visible = packageViewModel.HasDependencies;
+				this.packageDependenciesNoneLabel.Visible = !packageViewModel.HasDependencies;
+				this.packageDependenciesList.Text = packageViewModel.GetPackageDependenciesDisplayText ();
+			} else {
+				this.packageDependenciesHBox.Visible = false;
+				this.packageDependenciesListHBox.Visible = false;
+				this.packageDependenciesNoneLabel.Visible = false;
+				this.packageDependenciesList.Text = String.Empty;
+			}
+		}
+
+		void PopulatePackageVersionsAfterDelay ()
+		{
+			populatePackageVersionsTimer = Application.TimeoutInvoke (populatePackageVersionsDelayTimeSpan, PopulateMorePackageVersions);
+		}
+
+		void DisposePopulatePackageVersionsTimer ()
+		{
+			if (populatePackageVersionsTimer != null) {
+				populatePackageVersionsTimer.Dispose ();
+				populatePackageVersionsTimer = null;
+			}
+		}
+
+		bool PopulateMorePackageVersions ()
+		{
+			PackageSearchResultViewModel packageViewModel = viewModel?.SelectedPackage;
+			if (populatePackageVersionsTimer == null || packageViewModel == null) {
+				return false;
+			}
+
+			int count = 0;
+			foreach (NuGetVersion version in packageViewModel.Versions.Skip (packageVersionsAddedCount)) {
+				count++;
+
+				if (count > MaxVersionsToPopulate) {
+					packageVersionsAddedCount += count - 1;
+					return true;
+				}
+
+				AddPackageVersionToComboBox (version);
+			}
+
+			return false;
 		}
 	}
 }

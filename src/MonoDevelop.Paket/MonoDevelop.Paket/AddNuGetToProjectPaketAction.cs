@@ -32,7 +32,7 @@ using Paket;
 
 namespace MonoDevelop.Paket
 {
-	public class AddNuGetToProjectPaketAction : PaketAction
+	class AddNuGetToProjectPaketAction : PaketAction
 	{
 		NuGetPackageToAdd package;
 		readonly string projectFileName;

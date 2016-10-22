@@ -25,15 +25,15 @@
 // THE SOFTWARE.
 //
 
-using ICSharpCode.PackageManagement;
+using MonoDevelop.PackageManagement;
 
 namespace MonoDevelop.Paket
 {
-	public class NuGetPackageToAdd
+	class NuGetPackageToAdd
 	{
-		public NuGetPackageToAdd (PackageViewModel viewModel)
+		public NuGetPackageToAdd (PackageSearchResultViewModel viewModel)
 		{
-			Id = viewModel.GetPackage ().Id;
+			Id = viewModel.Id;
 		}
 
 		public string Id { get; private set; }
