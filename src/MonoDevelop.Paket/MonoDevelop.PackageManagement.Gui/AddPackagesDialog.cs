@@ -27,7 +27,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
 using MonoDevelop.Paket;
@@ -698,6 +697,9 @@ namespace MonoDevelop.PackageManagement
 			ignorePackageVersionChanges = true;
 			try {
 				packageVersionComboBox.Items.Clear ();
+
+				AddLatestPackageVersionToComboBox ();
+
 				if (packageViewModel.Versions.Any ()) {
 					int count = 0;
 					foreach (NuGetVersion version in packageViewModel.Versions) {
@@ -715,7 +717,12 @@ namespace MonoDevelop.PackageManagement
 				} else {
 					AddPackageVersionToComboBox (packageViewModel.Version);
 				}
-				packageVersionComboBox.SelectedItem = packageViewModel.SelectedVersion;
+
+				if (packageViewModel.IsLatestVersionSelected) {
+					SelectLatestPackageVersion ();
+				} else {
+					packageVersionComboBox.SelectedItem = packageViewModel.SelectedVersion;
+				}
 			} finally {
 				ignorePackageVersionChanges = false;
 			}
@@ -724,6 +731,17 @@ namespace MonoDevelop.PackageManagement
 		void AddPackageVersionToComboBox (NuGetVersion version)
 		{
 			packageVersionComboBox.Items.Add (version, version.ToString ());
+		}
+
+		void AddLatestPackageVersionToComboBox ()
+		{
+			var latestVersion = new LatestNuGetVersion ();
+			packageVersionComboBox.Items.Add (latestVersion, GettextCatalog.GetString ("Latest"));
+		}
+
+		void SelectLatestPackageVersion ()
+		{
+			packageVersionComboBox.SelectedItem = new LatestNuGetVersion ();
 		}
 
 		void PackageVersionChanged (object sender, EventArgs e)

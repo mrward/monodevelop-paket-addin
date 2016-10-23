@@ -32,6 +32,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MonoDevelop.Core;
+using MonoDevelop.Paket;
 using NuGet.Common;
 using NuGet.PackageManagement.UI;
 using NuGet.Packaging.Core;
@@ -49,6 +50,7 @@ namespace MonoDevelop.PackageManagement
 		List<PackageDependencyMetadata> dependencies;
 		string summary;
 		bool isChecked;
+		NuGetVersion selectedVersion;
 
 		public PackageSearchResultViewModel (
 			AllPackagesViewModel parent,
@@ -59,6 +61,7 @@ namespace MonoDevelop.PackageManagement
 
 			Versions = new ObservableCollection<NuGetVersion> ();
 			SelectedVersion = Version;
+			IsLatestVersionSelected = true;
 		}
 
 		public AllPackagesViewModel Parent {
@@ -212,7 +215,16 @@ namespace MonoDevelop.PackageManagement
 			return String.Empty;
 		}
 
-		public NuGetVersion SelectedVersion { get; set; }
+		public bool IsLatestVersionSelected { get; private set; }
+
+		public NuGetVersion SelectedVersion {
+			get { return selectedVersion; }
+			set {
+				selectedVersion = value;
+				IsLatestVersionSelected = (value is LatestNuGetVersion);
+			}
+		}
+
 		public ObservableCollection<NuGetVersion> Versions { get; private set; }
 
 		protected virtual Task ReadVersions (CancellationToken cancellationToken)
@@ -317,6 +329,7 @@ namespace MonoDevelop.PackageManagement
 		{
 			IsChecked = packageViewModel.IsChecked;
 			SelectedVersion = packageViewModel.SelectedVersion;
+			IsLatestVersionSelected = packageViewModel.IsLatestVersionSelected;
 			if (SelectedVersion != Version) {
 				Versions.Add (Version);
 				Versions.Add (SelectedVersion);

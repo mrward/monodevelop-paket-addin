@@ -242,6 +242,7 @@
     <Compile Include="MonoDevelop.PackageManagement\IBuildIntegratedNuGetProject.cs" />
     <Compile Include="MonoDevelop.PackageManagement\ProjectTargetFramework.cs" />
     <Compile Include="MonoDevelop.PackageManagement\NuGetProjectExtensions.cs" />
+    <Compile Include="MonoDevelop.Paket\LatestNuGetVersion.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

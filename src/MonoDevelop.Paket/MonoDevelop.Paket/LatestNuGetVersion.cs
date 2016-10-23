@@ -1,10 +1,10 @@
 ﻿//
-// NuGetPackageToAdd.cs
+// LatestNuGetVersion.cs
 //
 // Author:
 //       Matt Ward <ward.matt@gmail.com>
 //
-// Copyright (c) 2015 Matthew Ward
+// Copyright (c) 2016 Matthew Ward
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +25,22 @@
 // THE SOFTWARE.
 //
 
-using MonoDevelop.PackageManagement;
+using NuGet.Versioning;
 
 namespace MonoDevelop.Paket
 {
-	class NuGetPackageToAdd
+	public class LatestNuGetVersion : NuGetVersion
 	{
-		public NuGetPackageToAdd (PackageSearchResultViewModel viewModel)
+		public LatestNuGetVersion ()
+			: base (0, 0, 0)
 		{
-			Id = viewModel.Id;
-
-			if (viewModel.SelectedVersion.IsPrerelease || !viewModel.IsLatestVersionSelected) {
-				Version = viewModel.SelectedVersion.ToNormalizedString ();
-			}
 		}
 
-		public string Id { get; private set; }
-		public string Version { get; private set; }
+		public override int CompareTo (SemanticVersion other, VersionComparison versionComparison)
+		{
+			if (other is LatestNuGetVersion)
+				return 0;
+			return 1;
+		}
 	}
 }
-
