@@ -37,7 +37,7 @@ namespace MonoDevelop.Paket
 		{
 			try {
 				PaketBackgroundDispatcher.Initialize ();
-				PaketSyntaxModes.Initialize ();
+				//PaketSyntaxModes.Initialize ();
 			} catch (Exception ex) {
 				LoggingService.LogError ("Error in Paket startup handler", ex);
 			}

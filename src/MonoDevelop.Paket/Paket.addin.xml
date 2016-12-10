@@ -56,7 +56,7 @@
 	<Extension path="/MonoDevelop/Ide/StartupHandlers">
 		<Class class="MonoDevelop.Paket.PaketStartupHandler" />
 	</Extension>
-
+	<!--
 	<ExtensionPoint path="/MonoDevelop/Paket/CustomSyntaxModes" name="Text editor custom syntax modes">
 		<ExtensionNode name="SyntaxMode" type="MonoDevelop.Paket.SyntaxModeCodon"/>
 	</ExtensionPoint>
@@ -75,7 +75,7 @@
 
 	<Extension path="/MonoDevelop/SourceEditor2/SyntaxModes">
 		<Templates resource="PaketReferencesSyntaxMode.xml" />
-	</Extension>
+	</Extension>-->
 
 	<Extension path="/MonoDevelop/Ide/SearchCategories">
 		<Class class="MonoDevelop.Paket.PaketSearchCategory" />
