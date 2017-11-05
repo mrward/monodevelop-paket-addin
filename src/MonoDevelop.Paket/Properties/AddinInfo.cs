@@ -2,7 +2,7 @@
 
 [assembly:Addin ("Paket",
 	Namespace = "MonoDevelop",
-	Version = "0.3",
+	Version = "0.4",
 	Category = "IDE extensions")]
 
 [assembly:AddinName ("Paket")]
