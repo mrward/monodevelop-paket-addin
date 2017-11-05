@@ -1,4 +1,4 @@
 source https://nuget.org/api/v2
 
 nuget NuGet.CommandLine 3.4.3
-nuget paket 3.23.2
+nuget paket 5.120.1

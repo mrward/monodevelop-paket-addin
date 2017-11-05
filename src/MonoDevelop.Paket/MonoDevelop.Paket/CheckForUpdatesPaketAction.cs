@@ -28,9 +28,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.FSharp.Core;
 using MonoDevelop.Core;
 using Paket;
-using MonoDevelop.Ide;
 
 namespace MonoDevelop.Paket
 {
@@ -53,7 +53,7 @@ namespace MonoDevelop.Paket
 		public override void Run ()
 		{
 			List<NuGetPackageUpdate> updates = Dependencies.Locate (dependenciesFileName)
-				.FindOutdated (false, false)
+				.FindOutdated (false, true, false, FSharpOption<string>.None)
 				.Select (update => new NuGetPackageUpdate (update.Item2, update.Item3))
 				.ToList ();
 
