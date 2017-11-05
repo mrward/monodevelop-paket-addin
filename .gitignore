@@ -3,3 +3,4 @@ bin
 *.userprefs
 paket.exe
 packages
+*.DS_Store
