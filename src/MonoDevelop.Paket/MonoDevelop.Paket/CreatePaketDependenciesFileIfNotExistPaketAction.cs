@@ -25,10 +25,11 @@
 // THE SOFTWARE.
 //
 
-using MonoDevelop.Core;
-using MonoDevelop.Projects;
 using System.IO;
-using Paket;
+using MonoDevelop.Core;
+using MonoDevelop.Core.Execution;
+using MonoDevelop.Core.ProgressMonitoring;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Paket
 {
@@ -44,9 +45,41 @@ namespace MonoDevelop.Paket
 		public override void Run ()
 		{
 			if (!File.Exists (dependenciesFileName)) {
-				string directory = Path.GetDirectoryName (dependenciesFileName);
-				Dependencies.Init (directory);
+				// Workaround Paket bug - Cannot call Dependencies.Init since this will
+				// fail if the current working directory does not match the directory for
+				// the paket.dependencies file.
+				// https://github.com/fsprojects/Paket/issues/2886
+
+				var commandLine = PaketCommandLine.CreateCommandLine ("init");
+				Run (commandLine);
 			}
+		}
+
+		void Run (PaketCommandLine commandLine)
+		{
+			var operation = Runtime.ProcessService.StartConsoleProcess (
+				commandLine.Command,
+				commandLine.Arguments,
+				commandLine.WorkingDirectory,
+				GetConsole ()
+			);
+
+			operation.Task.Wait ();
+		}
+
+		OperationConsole GetConsole ()
+		{
+			var aggregatedMonitor = Monitor as AggregatedProgressMonitor;
+			if (aggregatedMonitor == null) {
+				return null;
+			}
+
+			var outputMonitor = aggregatedMonitor.LeaderMonitor as OutputProgressMonitor;
+			if (outputMonitor?.Console == null) {
+				return null;
+			}
+
+			return new OperationConsoleWrapper (outputMonitor.Console);
 		}
 	}
 }

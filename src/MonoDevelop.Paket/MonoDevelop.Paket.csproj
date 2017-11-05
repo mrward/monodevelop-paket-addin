@@ -237,6 +237,7 @@
     <Compile Include="MonoDevelop.PackageManagement\ProjectTargetFramework.cs" />
     <Compile Include="MonoDevelop.PackageManagement\NuGetProjectExtensions.cs" />
     <Compile Include="MonoDevelop.Paket\LatestNuGetVersion.cs" />
+    <Compile Include="MonoDevelop.Paket\OperationConsoleWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
