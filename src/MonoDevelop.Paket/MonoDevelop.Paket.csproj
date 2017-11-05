@@ -41,10 +41,6 @@
       <HintPath>..\..\lib\Mono.Addins.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.TextEditor">
-      <HintPath>..\..\lib\Mono.TextEditor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Xwt">
       <HintPath>..\..\lib\Xwt.dll</HintPath>
       <Private>False</Private>
@@ -68,14 +64,14 @@
       <HintPath>..\..\lib\ICSharpCode.NRefactory.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\lib\System.Collections.Immutable.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AddinInfo.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketDependenciesSyntaxMode.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketLockSyntaxMode.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketSyntaxMode.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketTemplateSyntaxMode.cs" />
     <Compile Include="MonoDevelop.Paket\PaketSearchCategory.cs" />
     <Compile Include="MonoDevelop.Paket\PaketApplicationPath.cs" />
     <Compile Include="MonoDevelop.Paket\PaketCommandRunner.cs" />
@@ -181,8 +177,6 @@
     <Compile Include="MonoDevelop.Paket\PaketSearchDataSource.cs" />
     <Compile Include="MonoDevelop.Paket\PaketSearchResult.cs" />
     <Compile Include="MonoDevelop.Paket\PaketBackgroundDispatcher.cs" />
-    <Compile Include="MonoDevelop.Paket\PaketSyntaxModes.cs" />
-    <Compile Include="MonoDevelop.Paket\SyntaxModeCodon.cs" />
     <Compile Include="MonoDevelop.Paket\PaketStartupHandler.cs" />
     <Compile Include="MonoDevelop.PackageManagement.Gui\Styles.cs" />
     <Compile Include="MonoDevelop.PackageManagement\PackageSourceViewModel.cs" />

@@ -25,7 +25,6 @@
 // THE SOFTWARE.
 //
 
-using Mono.TextEditor;
 using MonoDevelop.Ide.CodeCompletion;
 using MonoDevelop.Ide.Editor;
 using MonoDevelop.Ide.Editor.Extension;
@@ -38,8 +37,11 @@ namespace MonoDevelop.Paket.Completion
 	{
 		PaketDependencyFileLineParser parser = new PaketDependencyFileLineParser ();
 
-		public override Task<ICompletionDataList> HandleCodeCompletionAsync (CodeCompletionContext completionContext, char completionChar, CancellationToken token)
+		public override Task<ICompletionDataList> HandleCodeCompletionAsync (CodeCompletionContext completionContext, CompletionTriggerInfo triggerInfo, CancellationToken token)
 		{
+			if (triggerInfo.CompletionTriggerReason == CompletionTriggerReason.CompletionCommand) {
+				return HandleCodeCompletionAsync (completionContext, 0);
+			}
 			return HandleCodeCompletionAsync (completionContext, 1);
 		}
 
@@ -119,11 +121,6 @@ namespace MonoDevelop.Paket.Completion
 				return null;
 
 			return parser.Parse (Editor.CreateDocumentSnapshot (), line.Offset, completionContext.TriggerOffset);
-		}
-
-		public override Task<ICompletionDataList> CodeCompletionCommand (CodeCompletionContext completionContext)
-		{
-			return HandleCodeCompletionAsync (completionContext, 0);
 		}
 	}
 }
