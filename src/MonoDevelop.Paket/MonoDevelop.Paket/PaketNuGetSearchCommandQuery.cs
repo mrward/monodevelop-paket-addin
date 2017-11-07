@@ -40,8 +40,8 @@ namespace MonoDevelop.Paket
 		{
 			query.Parse ();
 
-			PackageId = query.GetArgument (3);
-			PackageVersion = query.GetArgument (4);
+			PackageId = query.GetArgument (2);
+			PackageVersion = query.GetArgument (3);
 		}
 
 		public string PackageId { get; private set; }

@@ -79,7 +79,7 @@ namespace MonoDevelop.Paket.Commands
 		string GenerateCommandLine ()
 		{
 			return string.Format (
-				"{0} nuget {1}{2}{3}",
+				"{0} {1}{2}{3}",
 				PaketNuGetCommandName,
 				query.PackageId,
 				GetPackageVersionCommandLineArgument (),
@@ -89,7 +89,7 @@ namespace MonoDevelop.Paket.Commands
 		string GetPackageVersionCommandLineArgument ()
 		{
 			if (SupportsVersion && query.HasVersion ())
-				return " version " + query.PackageVersion;
+				return " --version " + query.PackageVersion;
 
 			return string.Empty;
 		}
@@ -97,7 +97,7 @@ namespace MonoDevelop.Paket.Commands
 		string GetProjectCommandLineArgument ()
 		{
 			if (Project != null)
-				return string.Format (" project \"{0}\"", Project.FileName);
+				return string.Format (" --project \"{0}\"", Project.FileName);
 
 			return string.Empty;
 		}
@@ -105,7 +105,7 @@ namespace MonoDevelop.Paket.Commands
 		public override string GetMarkup ()
 		{
 			return GettextCatalog.GetString (
-				"paket {0} nuget <b>{1}</b>{2}",
+				"paket {0} <b>{1}</b>{2}",
 				PaketNuGetCommandName,
 				GetPackageIdAndVersionMarkup (),
 				GetProjectNameMarkup ());
