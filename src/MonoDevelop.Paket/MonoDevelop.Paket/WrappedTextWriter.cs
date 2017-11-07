@@ -1,5 +1,5 @@
 ﻿//
-// OperationConsoleWrapper.cs
+// WrappedTextWriter.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -25,52 +25,64 @@
 // THE SOFTWARE.
 
 using System.IO;
-using MonoDevelop.Core.Execution;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MonoDevelop.Paket
 {
-	public class OperationConsoleWrapper : OperationConsole
+	class WrappedTextWriter : TextWriter
 	{
-		OperationConsole console;
-		WrappedTextWriter errorTextWriter;
+		readonly TextWriter writer;
 
-		public OperationConsoleWrapper (OperationConsole console)
+		public WrappedTextWriter (TextWriter writer)
 		{
-			this.console = console;
-			errorTextWriter = new WrappedTextWriter (console.Error);
+			this.writer = writer;
 		}
 
-		public bool DisposeWrappedOperationConsole { get; set; }
+		public bool WasWritten { get; private set; }
 
-		public bool HasWrittenErrors {
-			get { return errorTextWriter.WasWritten; }
+		public override Encoding Encoding {
+			get { return writer.Encoding; }
 		}
 
-		public override TextReader In {
-			get { return console.In; }
-		}
-
-		public override TextWriter Out {
-			get { return console.Out; }
-		}
-
-		public override TextWriter Error {
-			get { return errorTextWriter; }
-		}
-
-		public override TextWriter Log {
-			get { return console.Log; }
-		}
-
-		public override void Dispose ()
+		public override void Write (char[] buffer, int index, int count)
 		{
-			if (DisposeWrappedOperationConsole) {
-				console.Dispose ();
-			} else {
-				// Do not dispose. This prevents a null reference exception when the
-				// console is used after the external process has finished.
-				// The console will be disposed later on.
+			WasWritten = true;
+			writer.Write (buffer, index, count);
+		}
+
+		public override void Write (char value)
+		{
+			WasWritten = true;
+			writer.Write (value);
+		}
+
+		public override void Write (string value)
+		{
+			WasWritten = true;
+			writer.Write (value);
+		}
+
+		public override void Close ()
+		{
+			writer.Close ();
+		}
+
+		protected override void Dispose (bool disposing)
+		{
+			if (disposing) {
+				writer.Dispose ();
 			}
+		}
+
+		public override void Flush()
+		{
+			writer.Flush ();
+		}
+
+		public override Task FlushAsync ()
+		{
+			return writer.FlushAsync ();
 		}
 	}
 }

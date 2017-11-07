@@ -238,6 +238,7 @@
     <Compile Include="MonoDevelop.PackageManagement\NuGetProjectExtensions.cs" />
     <Compile Include="MonoDevelop.Paket\LatestNuGetVersion.cs" />
     <Compile Include="MonoDevelop.Paket\OperationConsoleWrapper.cs" />
+    <Compile Include="MonoDevelop.Paket\WrappedTextWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -327,7 +328,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <DotNetNamingPolicy DirectoryNamespaceAssociation="Flat" ResourceNamePolicy="FileFormatDefault" />
+          <DotNetNamingPolicy ResourceNamePolicy="FileFormatDefault" DirectoryNamespaceAssociation="Flat" />
         </Policies>
       </Properties>
     </MonoDevelop>
