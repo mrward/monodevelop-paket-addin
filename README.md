@@ -23,10 +23,11 @@ Mono | .NET
 
 # Requirements
 
- * MonoDevelop 5 or Xamarin Studio 5
+ * MonoDevelop 7 or Visual Studio for Mac 7
 
 # Installation
 
+## MonoDevelop
 The addin is available from the [MonoDevelop addin repository](http://addins.monodevelop.com/). To install the addin:
 
  * Open the **Add-in Manager** dialog.
@@ -38,6 +39,20 @@ The addin is available from the [MonoDevelop addin repository](http://addins.mon
  * Click **Install...** to install the addin.
 
 ![Paket addin in the addin manager dialog](doc/images/AddinManagerPaketAddin.png)
+
+## Visual Studio for Mac
+The addin is available from my [MonoDevelop Addins](https://github.com/mrward/monodevelop-addins). To install the addin:
+
+ * Open the **Add-in Manager** dialog.
+ * Select the **Gallery** tab.
+ * Open the Repository drop down list and select **Manage Repositories**.
+ * Click the **Add** button.
+ * Enter the **url** for the Visual Studio for Mac version.
+ * Click **OK**.
+ * Expand **IDE extensions**.
+ * Select **Paket**.
+ * Click the **Refresh** button if the addin is not visible.
+ * Click **Install...** to install the addin.
 
 # Features
 
