@@ -240,6 +240,7 @@
     <Compile Include="MonoDevelop.Paket\OperationConsoleWrapper.cs" />
     <Compile Include="MonoDevelop.Paket\WrappedTextWriter.cs" />
     <Compile Include="MonoDevelop.Paket\SolutionPackageRequirements.cs" />
+    <Compile Include="MonoDevelop.Paket\ProjectPackageInstallSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

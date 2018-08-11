@@ -30,12 +30,14 @@ using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 using MonoDevelop.Ide.Gui;
+using MonoDevelop.Ide.Tasks;
 
 namespace MonoDevelop.Paket.NodeBuilders
 {
 	public class ProjectPaketReferencesFolderNode
 	{
 		readonly DotNetProject project;
+		ProjectPackageInstallSettings installSettings;
 
 		public ProjectPaketReferencesFolderNode (DotNetProject project)
 		{
@@ -59,9 +61,40 @@ namespace MonoDevelop.Paket.NodeBuilders
 			return GettextCatalog.GetString ("Paket References");
 		}
 
+		public TaskSeverity? StatusSeverity {
+			get {
+				if (InstallSettings.HasError) {
+					return TaskSeverity.Error;
+				}
+				return null;
+			}
+		}
+
+		public string GetStatusMessage ()
+		{
+			if (InstallSettings.HasError) {
+				return InstallSettings.ErrorMessage;
+			}
+			return string.Empty;
+		}
+
+		public void RefreshPackageReferences ()
+		{
+			installSettings = project.GetPackageInstallSettings ();
+		}
+
+		public ProjectPackageInstallSettings InstallSettings {
+			get {
+				if (installSettings == null) {
+					RefreshPackageReferences ();
+				}
+				return installSettings;
+			}
+		}
+
 		public IEnumerable<NuGetPackageReferenceNode> GetPackageReferences ()
 		{
-			return project.GetPackageInstallSettings ()
+			return InstallSettings.InstallSettings
 				.Select (installSettings => new NuGetPackageReferenceNode (project, installSettings));
 		}
 

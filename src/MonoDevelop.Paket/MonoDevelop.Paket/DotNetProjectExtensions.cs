@@ -57,23 +57,25 @@ namespace MonoDevelop.Paket
 			return !project.GetPaketReferencesFile ().IsNull;
 		}
 
-		public static IEnumerable<PackageInstallSettings> GetPackageInstallSettings (this DotNetProject project)
+		public static ProjectPackageInstallSettings GetPackageInstallSettings (this DotNetProject project)
 		{
 			try {
 				var referencesFileName = project.GetPaketReferencesFile ();
 				if (referencesFileName.IsNotNull) {
-					return ReferencesFile
+					IEnumerable<PackageInstallSettings> installSettings = ReferencesFile
 						.FromFile (referencesFileName)
 						.Groups
 						.FirstOrDefault ()
 						.Value
 						.NugetPackages;
+					return new ProjectPackageInstallSettings (installSettings);
 				}
 			} catch (Exception ex) {
-				LoggingService.LogError ("GetPaketDependencies error.", ex);
+				LoggingService.LogError ("GetPaketReferences error.", ex);
+				return new ProjectPackageInstallSettings (ex);
 			}
 
-			return Enumerable.Empty <PackageInstallSettings> ();
+			return new ProjectPackageInstallSettings ();
 		}
 
 		public static void OpenPaketReferencesFile (this DotNetProject project)
