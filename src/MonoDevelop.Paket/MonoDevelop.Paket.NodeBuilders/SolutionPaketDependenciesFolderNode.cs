@@ -30,6 +30,7 @@ using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Projects;
+using MonoDevelop.Ide.Tasks;
 using Paket;
 
 namespace MonoDevelop.Paket.NodeBuilders
@@ -37,6 +38,7 @@ namespace MonoDevelop.Paket.NodeBuilders
 	public class SolutionPaketDependenciesFolderNode
 	{
 		readonly Solution solution;
+		SolutionPackageRequirements packageRequirements;
 
 		public SolutionPaketDependenciesFolderNode (Solution solution)
 		{
@@ -58,6 +60,23 @@ namespace MonoDevelop.Paket.NodeBuilders
 		public string GetLabel ()
 		{
 			return GettextCatalog.GetString ("Paket Dependencies") + GetUpdatedCountLabel ();
+		}
+
+		public TaskSeverity? StatusSeverity {
+			get {
+				if (PackageRequirements.HasError) {
+					return TaskSeverity.Error;
+				}
+				return null;
+			}
+		}
+
+		public string GetStatusMessage ()
+		{
+			if (PackageRequirements.HasError) {
+				return PackageRequirements.ErrorMessage;
+			}
+			return string.Empty;
 		}
 
 		string GetUpdatedCountLabel ()
@@ -83,9 +102,23 @@ namespace MonoDevelop.Paket.NodeBuilders
 			return GettextCatalog.GetString ("update");
 		}
 
+		public void RefreshPackageRequirements ()
+		{
+			packageRequirements = solution.GetPackageRequirements ();
+		}
+
+		public SolutionPackageRequirements PackageRequirements {
+			get {
+				if (packageRequirements == null) {
+					RefreshPackageRequirements ();
+				}
+				return packageRequirements;
+			}
+		}
+
 		public IEnumerable<NuGetPackageDependencyNode> GetPackageDependencies ()
 		{
-			return solution.GetPackageRequirements ()
+			return PackageRequirements.PackageRequirements
 				.Select (packageReference => CreateDependencyNode (packageReference));
 		}
 

@@ -239,6 +239,7 @@
     <Compile Include="MonoDevelop.Paket\LatestNuGetVersion.cs" />
     <Compile Include="MonoDevelop.Paket\OperationConsoleWrapper.cs" />
     <Compile Include="MonoDevelop.Paket\WrappedTextWriter.cs" />
+    <Compile Include="MonoDevelop.Paket\SolutionPackageRequirements.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

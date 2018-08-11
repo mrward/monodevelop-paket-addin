@@ -57,23 +57,25 @@ namespace MonoDevelop.Paket
 			return !solution.GetPaketDependenciesFile ().IsNull;
 		}
 
-		public static IEnumerable<Requirements.PackageRequirement> GetPackageRequirements (this Solution solution)
+		public static SolutionPackageRequirements GetPackageRequirements (this Solution solution)
 		{
 			try {
 				var dependenciesFileName = solution.GetPaketDependenciesFile ();
 				if (dependenciesFileName.IsNotNull) {
-					return DependenciesFile
+					IEnumerable<Requirements.PackageRequirement> requirements = DependenciesFile
 						.ReadFromFile (dependenciesFileName)
 						.Groups
 						.FirstOrDefault ()
 						.Value
 						.Packages;
+					return new SolutionPackageRequirements (requirements);
 				}
 			} catch (Exception ex) {
 				LoggingService.LogError ("GetPaketDependencies error.", ex);
+				return new SolutionPackageRequirements (ex);
 			}
 
-			return Enumerable.Empty <Requirements.PackageRequirement> ();
+			return new SolutionPackageRequirements ();
 		}
 
 		public static void OpenPaketDependenciesFile (this Solution solution)

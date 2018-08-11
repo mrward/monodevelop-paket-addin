@@ -52,9 +52,13 @@ namespace MonoDevelop.Paket.NodeBuilders
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
 		{
 			var node = (SolutionPaketDependenciesFolderNode)dataObject;
+			node.RefreshPackageRequirements ();
+
 			nodeInfo.Label = node.GetLabel ();
 			nodeInfo.Icon = Context.GetIcon (node.Icon);
 			nodeInfo.ClosedIcon = Context.GetIcon (node.ClosedIcon);
+			nodeInfo.StatusSeverity = node.StatusSeverity;
+			nodeInfo.StatusMessage = node.GetStatusMessage ();
 		}
 
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
