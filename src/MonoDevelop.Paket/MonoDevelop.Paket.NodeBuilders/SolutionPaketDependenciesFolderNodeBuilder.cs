@@ -61,9 +61,9 @@ namespace MonoDevelop.Paket.NodeBuilders
 			nodeInfo.StatusMessage = node.GetStatusMessage ();
 		}
 
-		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
+		public override int GetSortIndex (ITreeNavigator node)
 		{
-			return -1;
+			return -490;
 		}
 
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)

@@ -62,14 +62,9 @@ namespace MonoDevelop.Paket.NodeBuilders
 			nodeInfo.StatusMessage = node.GetStatusMessage ();
 		}
 
-		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
+		public override int GetSortIndex (ITreeNavigator node)
 		{
-			if (otherNode.DataItem is ProjectReferenceCollection) {
-				return 1;
-			} else if (otherNode.NodeName == "Packages") {
-				return 1;
-			}
-			return -1;
+			return -490; // NuGet package folder is -500;
 		}
 
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
