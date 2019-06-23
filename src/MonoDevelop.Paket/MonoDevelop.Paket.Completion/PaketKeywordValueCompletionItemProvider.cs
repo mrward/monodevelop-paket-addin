@@ -25,10 +25,12 @@
 // THE SOFTWARE.
 //
 
+using System;
 using MonoDevelop.Ide.CodeCompletion;
 
 namespace MonoDevelop.Paket.Completion
 {
+	[Obsolete]
 	public class PaketKeywordValueCompletionItemProvider
 	{
 		int triggerWordLength;

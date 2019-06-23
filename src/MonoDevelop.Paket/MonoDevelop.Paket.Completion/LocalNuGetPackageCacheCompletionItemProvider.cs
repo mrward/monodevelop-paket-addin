@@ -34,6 +34,7 @@ using MonoDevelop.Ide.CodeCompletion;
 
 namespace MonoDevelop.Paket.Completion
 {
+	[Obsolete]
 	public class LocalNuGetPackageCacheCompletionItemProvider
 	{
 		static readonly string cachePath;

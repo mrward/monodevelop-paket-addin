@@ -38,6 +38,7 @@ namespace MonoDevelop.Paket.Completion
 {
 	public class NuGetPackageSourceCompletionItemProvider
 	{
+		[Obsolete]
 		public ICompletionDataList GenerateCompletionItems (FilePath paketDependenciesFileName)
 		{
 			try {
