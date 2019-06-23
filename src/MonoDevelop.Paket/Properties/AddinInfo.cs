@@ -8,7 +8,7 @@
 [assembly:AddinName ("Paket")]
 [assembly:AddinDescription ("Adds Paket support.")]
 
-[assembly:AddinDependency ("Core", "8.0")]
-[assembly:AddinDependency ("Ide", "8.0")]
-[assembly:AddinDependency ("SourceEditor2", "8.0")]
-[assembly:AddinDependency ("DesignerSupport", "8.0")]
+[assembly:AddinDependency ("Core", "8.1")]
+[assembly:AddinDependency ("Ide", "8.1")]
+[assembly:AddinDependency ("SourceEditor2", "8.1")]
+[assembly:AddinDependency ("DesignerSupport", "8.1")]
