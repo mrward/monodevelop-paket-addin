@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 //
 
+using System;
 using MonoDevelop.Ide.CodeCompletion;
 using MonoDevelop.Ide.Editor;
 using MonoDevelop.Ide.Editor.Extension;
@@ -33,8 +34,14 @@ using System.Threading.Tasks;
 
 namespace MonoDevelop.Paket.Completion
 {
+	[Obsolete]
 	public class PaketCompletionTextEditorExtension : CompletionTextEditorExtension
 	{
+		public override bool IsValidInContext (DocumentContext context)
+		{
+			return context is PaketDocumentContext;
+		}
+
 		PaketDependencyFileLineParser parser = new PaketDependencyFileLineParser ();
 
 		public override Task<ICompletionDataList> HandleCodeCompletionAsync (CodeCompletionContext completionContext, CompletionTriggerInfo triggerInfo, CancellationToken token)

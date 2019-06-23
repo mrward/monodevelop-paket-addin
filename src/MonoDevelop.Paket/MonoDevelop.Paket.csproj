@@ -68,6 +68,10 @@
       <HintPath>..\..\lib\System.Collections.Immutable.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces">
+      <HintPath>..\..\lib\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -241,6 +245,8 @@
     <Compile Include="MonoDevelop.Paket\WrappedTextWriter.cs" />
     <Compile Include="MonoDevelop.Paket\SolutionPackageRequirements.cs" />
     <Compile Include="MonoDevelop.Paket\ProjectPackageInstallSettings.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketDocumentControllerExtension.cs" />
+    <Compile Include="MonoDevelop.Paket\PaketDocumentContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

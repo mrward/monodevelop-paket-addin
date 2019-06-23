@@ -166,10 +166,25 @@
 		<CommandItem id="MonoDevelop.Paket.Commands.AddNuGetPackagesToSelectedProject" />
 		<SeparatorItem />
 	</Extension>
-
+	
+	<!--
+	VS Mac 8.1 mimeType matching is broken. It only works for file extensions. So enable the paket
+	ext editor extension for all mime types. The text editor extension now checks that the paket document
+	context is available otherwise it is not used. The extension should only be available for mime type:
+	"application/paket-dependencies"
+	-->
 	<Extension path="/MonoDevelop/Ide/TextEditorExtensions">
 		<Class
-			mimeTypes="application/paket-dependencies"
 			class="MonoDevelop.Paket.Completion.PaketCompletionTextEditorExtension" />
+	</Extension>
+	
+	<!--
+	VS Mac 8.1 mimeType matching is broken so the document controller extension indicates it supports
+	all mime types but in code it checks for a paket.dependencies file.
+	-->
+	<Extension path="/MonoDevelop/Ide/DocumentControllerExtensions">
+		<Type
+			mimeType="*"
+			class="MonoDevelop.Paket.PaketDocumentControllerExtension" />
 	</Extension>
 </ExtensionModel>
