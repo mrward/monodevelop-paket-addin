@@ -4,3 +4,4 @@ bin
 paket.exe
 packages
 *.DS_Store
+.vs/
